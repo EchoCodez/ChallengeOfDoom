@@ -4,7 +4,7 @@ import json
 from parse_json import jsonUtils
 
 
-class RunProgram:
+class Program:
     '''Class encompassing all the functions used to run the program'''
     def __init__(self) -> None:
         '''Initilize class master root and store file names for ease of access'''
@@ -81,7 +81,7 @@ def main(erase_data = False):
     ----------
     erase_data: bool
         Debugging parameter to erase all data in preferences.json and user_data.json'''
-    program = RunProgram()
+    program = Program()
     
     if erase_data: # only for testing purposes; delete in final push
         jsonUtils.clearfile(program.preferences)
