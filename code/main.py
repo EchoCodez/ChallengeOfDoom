@@ -21,9 +21,7 @@ class RunProgram:
         
         # write appearance theme preferences to file
         if self.remember:
-            with open(self.preferences, "w") as f:
-                ob = json.dumps({"appearance_theme":self.var.get()})
-                f.write(ob)
+            jsonUtils.add({"appearance_theme":self.var.get()}, file=self.preferences)
             self.remember = False
     
     def set_appearance(self):
