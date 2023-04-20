@@ -1,4 +1,4 @@
-from tkinter import *
+import tkinter as tk
 import customtkinter as ctk
 import json
 
@@ -40,7 +40,7 @@ class RunProgram:
         
         # get user input for choice of theme
         self.root.geometry("400x300")
-        self.var = StringVar()
+        self.var = tk.StringVar()
         
         question = ctk.CTkLabel(self.root, text="Which appearance theme would you like to use?")
         label = ctk.CTkLabel(self.root, text="You have selected light mode")
