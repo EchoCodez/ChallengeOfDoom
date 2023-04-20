@@ -2,14 +2,14 @@ import json
 
 class jsonUtils:
     @staticmethod
-    def add(data: dict, file: str = "user-data.json"):
+    def add(data: dict, file: str = "user-data.json", indent=4):
         with open(file) as f:
             original_data: dict = json.load(f)
         
         modified_data = original_data | data # add data to original_data. Information in data will override original
         # print(modified_data)
         with open(file, "w") as f:
-            f.write(json.dumps(modified_data, indent=4))
+            f.write(json.dumps(modified_data, indent=indent))
             
     @staticmethod
     def clearfile(file: str = "user-data.json"):
