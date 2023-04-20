@@ -11,6 +11,7 @@ class RunProgram:
         self.preferences = "preferences.json"
         self.user_data = "user-data.json"
         self.root = ctk.CTk()
+        self.root.title("Congressional App Challenge 2023")
     
     def quit_and_clean(self):
         '''Clean the tkinter window'''
