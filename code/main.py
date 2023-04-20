@@ -5,6 +5,7 @@ from parse_json import jsonUtils
 
 
 class RunProgram:
+    '''Class encompassing all the functions used to run the program'''
     def __init__(self) -> None:
         '''Initilize class master root and store file names for ease of access'''
         self.preferences = "preferences.json"
@@ -93,4 +94,4 @@ def main(erase_data = False):
 
 
 if __name__ == "__main__":
-    main(True)
+    main()
