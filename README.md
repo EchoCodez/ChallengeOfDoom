@@ -11,3 +11,14 @@
     <li><h3>user-data.json</h3>
     .json file containing user information on previous medical conditions</li>
 </ul>
+
+# Libraries and tools used
+<ul>
+    <li>Python 3.11.2</li>
+    <li>Github</li>
+    <li>tkinter</li>
+    <li>customtkinter</li>
+    <li>json</li>
+    <li>os and sys</li>
+    <li>Other libraries like: typing, io, and dataclasses</li>
+</ul>
