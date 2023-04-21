@@ -60,7 +60,8 @@ class Program:
         label = ctk.CTkLabel(self.__root, text="You have selected light mode")
         
         dark_button = ctk.CTkRadioButton(
-            self.__root, text="Dark",
+            self.__root,
+            text="Dark",
             variable=self.__appearance,
             value="dark",
             command=change
@@ -117,7 +118,7 @@ def main(*, erase_data = False):
     Parameters
     ----------
     erase_data: bool
-        Debugging parameter to erase all data in preferences.json and user_data.json'''
+        Debugging parameter to erase all data in preferences.json and user-data.json'''
         
     program = Program()
     
