@@ -7,7 +7,7 @@
     <li><h3>preferences.json</h3>
     .json file containing all the user's aesthetic choices</l1>
     <li><h3>parse_json.py</h3>
-    File containing class `jsonUtil`. Contains methods that add to a json file, clean a json file, or get a value from json file</li>
+    File containing class jsonUtil. Contains methods that add to a json file, clean a json file, or get a value from json file</li>
     <li><h3>user-data.json</h3>
     .json file containing user information on previous medical conditions</li>
 </ul>
