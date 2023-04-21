@@ -11,6 +11,7 @@ files = ("preferences.json", "user-data.json")
 
 @dataclass
 class UserInfo:
+    '''Dataclass storing information about user and user preferences'''
     conditions: list[str]
     preferences: dict[str, bool]
     
@@ -19,7 +20,8 @@ class UserInfo:
 
 
 class jsonUtils:
-    '''Class containing custom made json file uses'''
+    '''Class containing custom made json file methods'''
+    
     @staticmethod
     def add(data: dict, file: str = "user-data.json", indent=4):
         '''
@@ -27,11 +29,12 @@ class jsonUtils:
         
         Parameters
         ----------
-        data: dict
-            The data to be added. If it is not added, raises TypeError
-        file: str = "user-data.json"
+        data (dict): The data to be added
+        
+        file (str, optional): "user-data.json"
             Which file to add data to.
         '''
+        
         with open(file) as f:
             original_data: dict = json.load(f)
         
@@ -51,7 +54,8 @@ class jsonUtils:
         Raises:
         -------
             TypeError: file must be a .json file
-        """        
+        """
+        
         if file[-5:] != ".json":
             raise TypeError(f"Invalid file\nExpected file to end in .json. Instead it ended with \"{file[-5:]}\"")
         with open(file, "w") as f:
@@ -68,7 +72,8 @@ class jsonUtils:
         Parameters:
         ----------
             files (tuple[str], optional): an iterable of file names to clear. Defaults to ("preferences.json", "user-data.json").
-        """        
+        """
+            
         for file in files:
             jsonUtils.clearfile(file=file)
     
@@ -82,7 +87,7 @@ class jsonUtils:
         -----------
             file (StringIO): the file to be searched
             sentinal (str | int): The object to look for
-            func (_type_, optional): The function to be called if the argument is found. 
+            func (Callable, optional): The function to be called if the argument is found. 
                 Must take value of file[sentinal] as first parameter. Defaults to lambda: None.
 
         Returns:
@@ -94,7 +99,8 @@ class jsonUtils:
         with open("names.json") as f:
             jsonUtils.get(f, "Bob", func=lambda name: print(name, " is famous!"))
         ```
-        """        
+        """
+        
         data: dict = json.load(file)
         if data.get(sentinal, False):
             func(data.get(sentinal))
@@ -117,7 +123,8 @@ class jsonUtils:
         print(data.conditions)
         print(data.preferences)
         ```
-        """        
+        """
+          
         with open("preferences.json") as pref, open("user-data.json") as user_data:
             prefs, data = json.load(pref), json.load(user_data)
             
