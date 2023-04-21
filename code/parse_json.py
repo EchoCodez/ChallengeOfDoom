@@ -1,6 +1,21 @@
 import json
 from typing import Callable
 from io import StringIO
+from dataclasses import dataclass
+
+
+
+preferences = ("appearance_theme", "save_data")
+files = ("preferences.json", "user-data.json")
+
+
+@dataclass
+class UserInfo:
+    conditions: list[str]
+    preferences: dict[str, bool]
+    
+    def __str__(self) -> str:
+        return f"{self.__class__.__name__}:\n\tconditions={self.conditions}\n\tpreferences={self.preferences}"
 
 
 class jsonUtils:
@@ -43,6 +58,22 @@ class jsonUtils:
             f.write("{}")
     
     @staticmethod
+    def clearfiles(files: tuple[str]=files):
+        """wrapper for doing:
+        ```
+        for file in files:
+            jsonUtils.clearfile(file=file)
+        ```
+
+        Parameters:
+        ----------
+            files (tuple[str], optional): an iterable of file names to clear. Defaults to ("preferences.json", "user-data.json").
+        """        
+        for file in files:
+            jsonUtils.clearfile(file=file)
+    
+    
+    @staticmethod
     def get(file: StringIO, sentinal: str|int, *, func: Callable = lambda: None) -> bool:
         """
         Search a json file for a string or int as a key. If found, call func() and return True. Otherwise, return False.
@@ -70,12 +101,37 @@ class jsonUtils:
             return True
         return False
 
+    @staticmethod
+    def get_values():
+        """Get all user preferences and user conditions as an instance of class UserInfo
+
+        Returns:
+        --------
+            UserInfo: dataclass containing conditions and preferances in the preferences.json and user-data.json files
+        
+        Example Usage:
+        ------------
+        ```
+        data = jsonUtil.get_values()
+        print(data)
+        print(data.conditions)
+        print(data.preferences)
+        ```
+        """        
+        with open("preferences.json") as pref, open("user-data.json") as user_data:
+            prefs, data = json.load(pref), json.load(user_data)
+            
+        return UserInfo(
+            conditions=data.get("conditions", []),
+            preferences={preference: prefs.get(preference) for preference in preferences}
+            )
+
 
 def main():
     j = jsonUtils
     j.clearfile()
-    j.add({"name": "Bob"})
-    j.add({"age": 2})
+    j.add({"conditions": ["asthma", "cancer"]})
+    print(j.get_values())
             
 
 if __name__ == "__main__":         
