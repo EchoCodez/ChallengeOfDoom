@@ -79,13 +79,15 @@ class Program:
             command=self.quit_and_clean
             )
         remember_button = ctk.CTkRadioButton(
-            self.__root, text="Remember my choice", 
+            self.__root,
+            text="Remember my choice", 
             variable=self.__remember, 
             value=True, 
             command=swap_bool
             )
         dont_remember_button = ctk.CTkRadioButton(
-            self.__root, text="Don't remember my choice", 
+            self.__root,
+            text="Don't remember my choice", 
             variable=self.__remember, 
             value=False, 
             command=swap_bool
