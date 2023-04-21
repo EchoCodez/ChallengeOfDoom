@@ -7,7 +7,8 @@ from parse_json import jsonUtils
 preferences = "preferences.json"
 user_data = "user-data.json"
 
-class RunProgram:
+
+class Program:
     '''Class encompassing all the functions used to run the program'''
     def __init__(self) -> None:
         '''Initilize class master __root and store file names for ease of access'''
@@ -102,7 +103,7 @@ class RunProgram:
 
     def setup(self):
         self.set_appearance()
-        # TODO: Ask user what previous conditions they have
+        # TODO: Ask user what previous medical conditions they have
     
     def run(self):
         '''Main function that executes the program'''
@@ -118,11 +119,11 @@ def main(*, erase_data = False):
     erase_data: bool
         Debugging parameter to erase all data in preferences.json and user_data.json'''
         
-    program = RunProgram()
+    program = Program()
     
     if erase_data: # only for testing purposes; delete in final push
-        jsonUtils.clearfile(program.preferences)
-        jsonUtils.clearfile(program.user_data)
+        jsonUtils.clearfile(preferences)
+        jsonUtils.clearfile(user_data)
     
     program.setup()
     program.run()
@@ -130,5 +131,5 @@ def main(*, erase_data = False):
 
 
 if __name__ == "__main__":
-    main()
+    main(erase_data=True)
     
