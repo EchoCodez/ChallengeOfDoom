@@ -137,7 +137,7 @@ class jsonUtils:
 
 def main() -> None:
     j = jsonUtils
-    j.clearfile()
+    j.clearfiles()
     j.add({"conditions": ["asthma", "cancer"]})
     print(j.get_values())
             

@@ -142,8 +142,7 @@ def main(*, erase_data = False) -> None:
     program = Program()
     
     if erase_data: # only for testing purposes; delete in final push
-        jsonUtils.clearfile(preferences)
-        jsonUtils.clearfile(user_data)
+        jsonUtils.clearfiles()
     
     program.setup()
     program.run()
