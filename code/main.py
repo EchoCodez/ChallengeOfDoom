@@ -23,14 +23,14 @@ class Program:
         self.__root.title("Congressional App Challenge 2023")
         self.__root.protocol("WM_DELETE_WINDOW", self.on_closing)
     
-    def on_closing(self):
+    def on_closing(self) -> None:
         '''Confirm if user wanted to end application'''
         
         if tk.messagebox.askokcancel("Quit", "Do you want to quit?"):
             self.__root.quit()
             self.__root.destroy()
     
-    def clean(self, quit_root=True):
+    def clean(self, quit_root=True) -> None:
         '''
         Clean the tkinter window\n
         If quit_root is true, it will also run self.__root.quit()
@@ -47,10 +47,10 @@ class Program:
             jsonUtils.add({"appearance_theme":self.__appearance.get()}, file=preferences)
             self.__remember = False
     
-    def set_appearance(self):
+    def set_appearance(self) -> None:
         '''Choose dark or light theme for custom tkinter'''
         
-        def change():
+        def change() -> None:
             '''Toggle light and dark theme'''
             
             label.configure(text=f"You have selected {self.__appearance.get()} mode")
@@ -59,7 +59,7 @@ class Program:
             else:
                 ctk.set_appearance_mode("light")
         
-        def swap_bool():
+        def swap_bool() -> None:
             self.__remember = not self.__remember
         
         # check if theme preference in file already
@@ -121,17 +121,17 @@ class Program:
         
         self.__root.mainloop()
 
-    def setup(self):
+    def setup(self) -> None:
         self.set_appearance()
         # TODO: Ask user what previous medical conditions they have
     
-    def run(self):
+    def run(self) -> None:
         '''Main function that executes the program'''
         self.__root.geometry(f"{self.__root.winfo_screenwidth()}x{self.__root.winfo_screenheight()}+0+0")
         self.__root.mainloop()
 
 
-def main(*, erase_data = False):
+def main(*, erase_data = False) -> None:
     '''Wrapper for running the program
     
     Parameters

@@ -23,7 +23,7 @@ class jsonUtils:
     '''Class containing custom made json file methods'''
     
     @staticmethod
-    def add(data: dict, file: str = "user-data.json", indent=4):
+    def add(data: dict, file: str = "user-data.json", indent=4) -> None:
         '''
         Adds data to a file
         
@@ -44,7 +44,7 @@ class jsonUtils:
             f.write(json.dumps(modified_data, indent=indent))
             
     @staticmethod
-    def clearfile(file: str = "user-data.json"):
+    def clearfile(file: str = "user-data.json") -> None:
         """Resets json files
 
         Paramters:
@@ -62,7 +62,7 @@ class jsonUtils:
             f.write("{}")
     
     @staticmethod
-    def clearfiles(files: tuple[str]=files):
+    def clearfiles(files: tuple[str]=files) -> None:
         """wrapper for doing:
         ```
         for file in files:
@@ -106,9 +106,10 @@ class jsonUtils:
             func(data.get(sentinal))
             return True
         return False
+    
 
     @staticmethod
-    def get_values():
+    def get_values() -> UserInfo:
         """Get all user preferences and user conditions as an instance of class UserInfo
 
         Returns:
@@ -134,7 +135,7 @@ class jsonUtils:
             )
 
 
-def main():
+def main() -> None:
     j = jsonUtils
     j.clearfile()
     j.add({"conditions": ["asthma", "cancer"]})
