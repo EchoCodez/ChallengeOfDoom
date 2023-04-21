@@ -1,6 +1,10 @@
 import tkinter as tk
 import customtkinter as ctk
+from os.path import dirname
 from parse_json import jsonUtils
+
+
+basedir = dirname(__file__)
 
 
 preferences = "preferences.json"
