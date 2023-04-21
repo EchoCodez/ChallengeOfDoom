@@ -14,21 +14,33 @@ user_data = "user-data.json"
 class Program:
     '''Class encompassing all the functions used to run the program'''
     def __init__(self) -> None:
-        '''Initilize class master __root and store file names for ease of access'''
-        self.__root = ctk.CTk() # active variable name mangling to make it harder to access value outside of class
+        '''
+        Initilize self.__root and store file names for ease of access
+        Name mangling is used to ensure root cannot be used outside of class
+        '''
+        
+        self.__root = ctk.CTk()
         self.__root.title("Congressional App Challenge 2023")
         self.__root.protocol("WM_DELETE_WINDOW", self.on_closing)
     
     def on_closing(self):
+        '''Confirm if user wanted to end application'''
+        
         if tk.messagebox.askokcancel("Quit", "Do you want to quit?"):
             self.__root.quit()
             self.__root.destroy()
     
-    def quit_and_clean(self):
-        '''Clean the tkinter window'''
+    def clean(self, quit_root=True):
+        '''
+        Clean the tkinter window\n
+        If quit_root is true, it will also run self.__root.quit()
+        '''
+        
         for widget in self.__root.winfo_children():
             widget.destroy()
-        self.__root.quit()
+        
+        if quit_root:
+            self.__root.quit()
         
         # write appearance theme preferences to file
         if self.__remember:
@@ -37,8 +49,10 @@ class Program:
     
     def set_appearance(self):
         '''Choose dark or light theme for custom tkinter'''
+        
         def change():
             '''Toggle light and dark theme'''
+            
             label.configure(text=f"You have selected {self.__appearance.get()} mode")
             if self.__appearance.get() == 'dark':
                 ctk.set_appearance_mode("dark")
@@ -79,7 +93,7 @@ class Program:
         next_button = ctk.CTkButton(
             self.__root, 
             text="Next", 
-            command=self.quit_and_clean
+            command=self.clean
             )
         remember_button = ctk.CTkRadioButton(
             self.__root,
