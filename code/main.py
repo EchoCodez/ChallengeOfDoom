@@ -117,30 +117,82 @@ class Program:
         
         self.__root.mainloop()
     
+    def __checkboxes(self) -> dict:
+        '''Creates the checkboxes'''
+        width, height = self.__root.winfo_screenwidth(), self.__root.winfo_screenheight()
+        print("Winwidth=", width)
+        conditions = {}
+        width_counter = 0
+        condition_names = (d["disease"] for d in jsonUtils.open(conditions_list))
+        for j in range(100): # choose arbitrarily large value
+            checkboxes = []
+            widths = 0
+            for i in range(2, (height-30)//37):
+                name = next(condition_names, None)
+                if name is None:
+                    print("StopIteration")
+                    return conditions
+                
+                conditions[name]=tk.BooleanVar(value=False)
+                checkbox = ctk.CTkCheckBox(
+                    self.__root, 
+                    text=name,
+                    variable=conditions[name],
+                    onvalue=True,
+                    offvalue=False,
+                    font=("Arial", 15)
+                    )
+                checkbox.grid(
+                    row=i, 
+                    column=j, 
+                    pady=5, 
+                    padx=20,
+                    sticky=tk.W
+                    )
+                
+                checkbox.update_idletasks() # update the widget size
+                widths = max(widths, checkbox.winfo_width()) # height is always 24
+                checkboxes.append(checkbox)
+            print(widths)
+                
+            width_counter+=widths
+            if width_counter>width:
+                print("width: ", width_counter)
+                print(*(box.cget("text") for box in checkboxes))
+                for box in checkboxes:
+                    box.destroy()
+                return conditions
+            
+        return conditions
+    
     def get_previous_medical_conditions(self) -> None:
+        def continue_button():
+            conditions = {key: value.get() for key, value in conditions.items()}
+            print(conditions)
+            self.clean(quit_root=False)
+            
         width, height = self.__root.winfo_screenwidth(), self.__root.winfo_screenheight()
         self.__root.geometry(f"{width}x{height}+0+0")
         title = ctk.CTkLabel(
             self.__root,
             text="What previous medical conditions do you have?",
-            font=("Default", 25)
+            font=("Default", 50)
             )
         next_button = ctk.CTkButton(
             self.__root,
             text="Continue",
-            command=lambda: print({key: value.get() for key, value in conditions.items()})
+            command=continue_button
             )
-        title.grid(column=0, columnspan=5, padx=5, pady=5)
-        conditions = {}
-        for name in (d["disease"] for d in jsonUtils.open(conditions_list)):
-            conditions[name]=tk.BooleanVar(value=False)
-            checkbox = ctk.CTkCheckBox(
-                self.__root, text=name,
-                variable=conditions[name],
-                onvalue=True,
-                offvalue=False
-                )
-            checkbox.grid(pady=5, sticky=tk.W, padx=10) # goes off screen because only 29 diseases are allowed
+        title.grid(
+            column=0, 
+            columnspan=10, 
+            padx=5, 
+            pady=5,
+            sticky=tk.E
+            )
+        
+        conditions = self.__checkboxes()
+        
         next_button.grid(pady=5)
             
         self.__root.mainloop()
@@ -148,7 +200,6 @@ class Program:
     def setup(self) -> None:
         self.set_appearance()
         self.get_previous_medical_conditions()
-        # TODO: Ask user what previous medical conditions they have
     
     def run(self) -> None:
         '''Main function that executes the program'''
@@ -175,5 +226,5 @@ def main(*, erase_data = False) -> None:
 
 
 if __name__ == "__main__":
-    main(erase_data=True)
+    main(erase_data=False)
     
