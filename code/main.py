@@ -167,8 +167,8 @@ class Program:
     
     def get_previous_medical_conditions(self) -> None:
         def continue_button():
-            conditions = {key: value.get() for key, value in conditions.items()}
-            print(conditions)
+            self.__conditions = {key: value.get() for key, value in self.__conditions.items()}
+            print(self.__conditions)
             self.clean(quit_root=False)
             
         width, height = self.__root.winfo_screenwidth(), self.__root.winfo_screenheight()
@@ -191,7 +191,7 @@ class Program:
             sticky=tk.E
             )
         
-        conditions = self.__checkboxes()
+        self.__conditions = self.__checkboxes()
         
         next_button.grid(pady=5)
             
