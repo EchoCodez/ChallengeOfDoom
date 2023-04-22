@@ -79,7 +79,7 @@ class jsonUtils:
     
     
     @staticmethod
-    def get(file: StringIO, sentinal: str|int, *, func: Callable = lambda: None) -> bool:
+    def get(file: StringIO, sentinal: str|int, *, func: Callable = lambda x: None) -> bool:
         """
         Search a json file for a string or int as a key. If found, call func() and return True. Otherwise, return False.
 
@@ -88,7 +88,7 @@ class jsonUtils:
             file (StringIO): the file to be searched
             sentinal (str | int): The object to look for
             func (Callable, optional): The function to be called if the argument is found. 
-                Must take value of file[sentinal] as first parameter. Defaults to lambda: None.
+                Must take value of file[sentinal] as first parameter. Defaults to lambda x: None.
 
         Returns:
             bool: Whether or not the file was found
