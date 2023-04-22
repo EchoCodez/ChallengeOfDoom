@@ -1,5 +1,6 @@
 import tkinter as tk
 import customtkinter as ctk
+import sys
 from os.path import dirname
 from parse_json import jsonUtils
 
@@ -9,6 +10,7 @@ basedir = dirname(__file__)
 
 preferences = "preferences.json"
 user_data = "user-data.json"
+conditions_list = "conditions.json" # https://github.com/Shivanshu-Gupta/web-scrapers/blob/master/medical_ner/medicinenet-diseases.json
 
 
 class Program:
@@ -27,8 +29,7 @@ class Program:
         '''Confirm if user wanted to end application'''
         
         if tk.messagebox.askokcancel("Quit", "Do you want to quit?"):
-            self.__root.quit()
-            self.__root.destroy()
+            sys.exit(0)
     
     def clean(self, quit_root=True) -> None:
         '''
@@ -43,9 +44,9 @@ class Program:
             self.__root.quit()
         
         # write appearance theme preferences to file
-        if self.__remember:
+        if self.__remember.get():
             jsonUtils.add({"appearance_theme":self.__appearance.get()}, file=preferences)
-            self.__remember = False
+            self.__remember = tk.BooleanVar(value=False)
     
     def set_appearance(self) -> None:
         '''Choose dark or light theme for custom tkinter'''
@@ -58,9 +59,6 @@ class Program:
                 ctk.set_appearance_mode("dark")
             else:
                 ctk.set_appearance_mode("light")
-        
-        def swap_bool() -> None:
-            self.__remember = not self.__remember
         
         # check if theme preference in file already
         with open(preferences) as f:
@@ -99,15 +97,13 @@ class Program:
             self.__root,
             text="Remember my choice", 
             variable=self.__remember, 
-            value=True, 
-            command=swap_bool
+            value=True
             )
         dont_remember_button = ctk.CTkRadioButton(
             self.__root,
             text="Don't remember my choice", 
             variable=self.__remember, 
-            value=False, 
-            command=swap_bool
+            value=False
             )
     
     
@@ -120,9 +116,38 @@ class Program:
         dont_remember_button.pack()
         
         self.__root.mainloop()
+    
+    def get_previous_medical_conditions(self) -> None:
+        width, height = self.__root.winfo_screenwidth(), self.__root.winfo_screenheight()
+        self.__root.geometry(f"{width}x{height}+0+0")
+        title = ctk.CTkLabel(
+            self.__root,
+            text="What previous medical conditions do you have?",
+            font=("Default", 25)
+            )
+        next_button = ctk.CTkButton(
+            self.__root,
+            text="Continue",
+            command=lambda: print({key: value.get() for key, value in conditions.items()})
+            )
+        title.grid(column=0, columnspan=5, padx=5, pady=5)
+        conditions = {}
+        for name in (d["disease"] for d in jsonUtils.open(conditions_list)):
+            conditions[name]=tk.BooleanVar(value=False)
+            checkbox = ctk.CTkCheckBox(
+                self.__root, text=name,
+                variable=conditions[name],
+                onvalue=True,
+                offvalue=False
+                )
+            checkbox.grid(pady=5, sticky=tk.W, padx=10) # goes off screen because only 29 diseases are allowed
+        next_button.grid(pady=5)
+            
+        self.__root.mainloop()
 
     def setup(self) -> None:
         self.set_appearance()
+        self.get_previous_medical_conditions()
         # TODO: Ask user what previous medical conditions they have
     
     def run(self) -> None:

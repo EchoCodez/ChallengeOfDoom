@@ -133,6 +133,24 @@ class jsonUtils:
             conditions=data.get("conditions", []),
             preferences={preference: prefs.get(preference) for preference in preferences}
             )
+    
+    @staticmethod
+    def open(file: str) -> list[dict] | dict:
+        """returns the json loaded file of a file path
+
+        Parameters:
+        -----------
+            file (str): file path
+        
+        Implementation:
+        ---------------
+        ```
+        with open(file) as f:
+            return json.load(f)
+        ``` 
+        """        
+        with open(file) as f:
+            return json.load(f)
 
 
 def main() -> None:
