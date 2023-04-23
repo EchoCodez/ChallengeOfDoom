@@ -6,7 +6,7 @@ from dataclasses import dataclass
 
 
 preferences = ("appearance_theme", "save_data")
-files = ("json/preferences.json", "json/user-data.json")
+files = ("json_files/preferences.json", "json_files/user-data.json")
 
 
 @dataclass
@@ -24,7 +24,7 @@ class jsonUtils:
     '''Class containing custom made json file methods'''
     
     @staticmethod
-    def add(data: dict, file: str = "json/user-data.json", indent=4) -> None:
+    def add(data: dict, file: str = "json_files/user-data.json", indent=4) -> None:
         '''
         Adds data to a file
         
@@ -45,7 +45,7 @@ class jsonUtils:
             f.write(json.dumps(modified_data, indent=indent))
             
     @staticmethod
-    def clearfile(file: str = "json/user-data.json") -> None:
+    def clearfile(file: str = "json_files/user-data.json") -> None:
         """Resets json files
 
         Paramters:
@@ -166,7 +166,7 @@ class jsonUtils:
 def main() -> None:
     j = jsonUtils
     j.clearfiles()
-    print(j.search("json/symptoms.json", 17))
+    print(j.search("json_files/symptoms.json", 17))
             
 
 if __name__ == "__main__":         

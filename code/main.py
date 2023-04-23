@@ -8,9 +8,9 @@ from parse_json import jsonUtils
 basedir = dirname(__file__)
 
 
-preferences = "json/preferences.json"
-user_data = "json/user-data.json"
-conditions_list = "json/conditions.json" # https://github.com/Shivanshu-Gupta/web-scrapers/blob/master/medical_ner/medicinenet-diseases.json
+preferences = "json_files/preferences.json"
+user_data = "json_files/user-data.json"
+conditions_list = "json_files/conditions.json" # https://github.com/Shivanshu-Gupta/web-scrapers/blob/master/medical_ner/medicinenet-diseases.json
 
 
 class Program:
