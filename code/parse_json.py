@@ -153,6 +153,11 @@ class jsonUtils:
           
         with open(file) as f:
             return json.load(f)
+        
+    @staticmethod
+    def search(file: str) -> str:
+        data = jsonUtils.open(file)
+        
 
 
 def main() -> None:
