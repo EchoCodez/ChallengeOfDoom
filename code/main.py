@@ -118,16 +118,24 @@ class Program:
         self.__root.mainloop()
     
     def __checkboxes(self) -> dict:
-        '''Creates the checkboxes'''
+        '''Creates the checkboxes
+        
+        Returns:
+        --------
+        dict: which conditions were checkmarked
+        '''
+        
+        
         width, height = self.__root.winfo_screenwidth(), self.__root.winfo_screenheight()
         print("Winwidth=", width)
+        
         conditions = {}
         width_counter = 0
         condition_names = (d["disease"] for d in jsonUtils.open(conditions_list))
-        for j in range(100): # choose arbitrarily large value
+        for j in range(100): # choose arbitrarily large value for columns
             checkboxes = []
             widths = 0
-            for i in range(2, (height-30)//37):
+            for i in range(2, (height-30)//37): # calculate amount of rows based off of window height
                 name = next(condition_names, None)
                 if name is None:
                     print("StopIteration")
@@ -157,7 +165,6 @@ class Program:
                 
             width_counter+=widths
             if width_counter>width:
-                print("width: ", width_counter)
                 print(*(box.cget("text") for box in checkboxes))
                 for box in checkboxes:
                     box.destroy()
