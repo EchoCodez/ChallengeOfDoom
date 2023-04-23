@@ -258,5 +258,5 @@ def main(*, erase_data = False) -> None:
 
 
 if __name__ == "__main__":
-    main(erase_data=True)
+    main(erase_data=False)
     
