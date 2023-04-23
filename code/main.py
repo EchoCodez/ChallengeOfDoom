@@ -15,17 +15,25 @@ conditions_list = "conditions.json" # https://github.com/Shivanshu-Gupta/web-scr
 
 class Program:
     '''Class encompassing all the functions used to run the program'''
-    def __init__(self) -> None:
+    def __init__(self, add_attributes = True) -> None:
         '''
         Initilize self.__root and store file names for ease of access
+        
         Name mangling is used to ensure root cannot be used outside of class
+        
+        Parameters:
+        -----------
+        add_attributes (bool, optional): Add class vari
         '''
         
         self.__root = ctk.CTk()
         self.__root.title("Congressional App Challenge 2023")
         self.__root.protocol("WM_DELETE_WINDOW", self.on_closing)
-        self.__appearance = tk.StringVar(value="light")
-        self.__remember = tk.BooleanVar(value=True)
+        width, height = self.__root.winfo_screenwidth(), self.__root.winfo_screenheight()
+        self.__root.geometry(f"{width}x{height}+0+0")
+        if add_attributes:
+            self.__appearance = tk.StringVar(value="light")
+            self.__remember = tk.BooleanVar(value=True)
     
     def on_closing(self) -> None:
         '''Confirm if user wanted to end application'''
@@ -33,7 +41,7 @@ class Program:
         if tk.messagebox.askokcancel("Quit", "Do you want to quit?"):
             sys.exit(0)
     
-    def clean(self, quit_root=True) -> None:
+    def clean(self, quit_root=True, destroy=False) -> None:
         '''
         Clean the tkinter window\n
         If quit_root is true, it will also run self.__root.quit()
@@ -44,6 +52,8 @@ class Program:
         
         if quit_root:
             self.__root.quit()
+        if destroy:
+            self.__root.destroy()
         
         # write appearance theme preferences to file
         if self.__remember.get():
@@ -69,51 +79,64 @@ class Program:
         
         # get user input for choice of theme
         
-        self.__root.geometry("400x300")
+        # self.__root.geometry("400x300")
         
-        question = ctk.CTkLabel(self.__root, text="Which appearance theme would you like to use?")
-        label = ctk.CTkLabel(self.__root, text="You have selected light mode")
+        question = ctk.CTkLabel(
+            self.__root,
+            text="Which appearance theme would you like to use?",
+            font=("Default", 50)
+            )
+        label = ctk.CTkLabel(
+            self.__root,
+            text="You have selected light mode",
+            font=("Default", 35),
+            )
         
         dark_button = ctk.CTkRadioButton(
             self.__root,
             text="Dark",
             variable=self.__appearance,
             value="dark",
-            command=change
+            command=change,
+            font=("Default", 25),
             ) 
         light_button = ctk.CTkRadioButton(
             self.__root, 
             text="Light", 
             variable=self.__appearance, 
             value="light", 
-            command=change
+            command=change,
+            font=("Default", 25),
             )
         next_button = ctk.CTkButton(
             self.__root, 
             text="Next", 
-            command=self.clean
+            command=self.clean,
+            font=("Default", 25),
             )
         remember_button = ctk.CTkRadioButton(
             self.__root,
             text="Remember my choice", 
             variable=self.__remember, 
-            value=True
+            value=True,
+            font=("Default", 25),
             )
         dont_remember_button = ctk.CTkRadioButton(
             self.__root,
             text="Don't remember my choice", 
             variable=self.__remember, 
-            value=False
+            value=False,
+            font=("Default", 25),
             )
     
     
-        question.pack()
-        dark_button.pack()
-        light_button.pack()
-        label.pack()
-        next_button.pack()
-        remember_button.pack()
-        dont_remember_button.pack()
+        question.pack(pady=20)
+        dark_button.pack(pady=20)
+        light_button.pack(pady=20)
+        label.pack(pady=20)
+        next_button.pack(pady=20)
+        remember_button.pack(pady=20)
+        dont_remember_button.pack(pady=20)
         
         self.__root.mainloop()
     
@@ -177,7 +200,8 @@ class Program:
             self.__conditions = {key: value.get() for key, value in self.__conditions.items() if value.get()}
             print(self.__conditions)
             self.clean(quit_root=False)
-            
+
+             
         width, height = self.__root.winfo_screenwidth(), self.__root.winfo_screenheight()
         self.__root.geometry(f"{width}x{height}+0+0")
         title = ctk.CTkLabel(
