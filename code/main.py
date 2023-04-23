@@ -235,9 +235,8 @@ class Program:
     
     def run(self) -> None:
         '''Main function that executes the program'''
-        
-        self.__root.geometry(f"{self.__root.winfo_screenwidth()}x{self.__root.winfo_screenheight()}+0+0")
-        self.__root.mainloop()
+           
+        pass
 
 
 def main(*, erase_data = False) -> None:
