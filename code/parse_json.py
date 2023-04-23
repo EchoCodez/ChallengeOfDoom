@@ -12,6 +12,7 @@ files = ("preferences.json", "user-data.json")
 @dataclass
 class UserInfo:
     '''Dataclass storing information about user and user preferences'''
+    
     conditions: list[str]
     preferences: dict[str, bool]
     
@@ -148,7 +149,8 @@ class jsonUtils:
         with open(file) as f:
             return json.load(f)
         ``` 
-        """        
+        """
+          
         with open(file) as f:
             return json.load(f)
 

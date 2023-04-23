@@ -15,6 +15,7 @@ conditions_list = "conditions.json" # https://github.com/Shivanshu-Gupta/web-scr
 
 class Program:
     '''Class encompassing all the functions used to run the program'''
+    
     def __init__(self, add_attributes = True) -> None:
         '''
         Initilize self.__root and store file names for ease of access
@@ -245,7 +246,8 @@ def main(*, erase_data = False) -> None:
     Parameters
     ----------
     erase_data: bool
-        Debugging parameter to erase all data in preferences.json and user-data.json'''
+        Debugging parameter to erase all data in preferences.json and user-data.json
+    '''
         
     program = Program()
     
