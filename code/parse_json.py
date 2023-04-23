@@ -6,7 +6,7 @@ from dataclasses import dataclass
 
 
 preferences = ("appearance_theme", "save_data")
-files = ("preferences.json", "user-data.json")
+files = ("json/preferences.json", "json/user-data.json")
 
 
 @dataclass
@@ -24,7 +24,7 @@ class jsonUtils:
     '''Class containing custom made json file methods'''
     
     @staticmethod
-    def add(data: dict, file: str = "user-data.json", indent=4) -> None:
+    def add(data: dict, file: str = "json/user-data.json", indent=4) -> None:
         '''
         Adds data to a file
         
@@ -45,7 +45,7 @@ class jsonUtils:
             f.write(json.dumps(modified_data, indent=indent))
             
     @staticmethod
-    def clearfile(file: str = "user-data.json") -> None:
+    def clearfile(file: str = "json/user-data.json") -> None:
         """Resets json files
 
         Paramters:
@@ -127,7 +127,7 @@ class jsonUtils:
         ```
         """
           
-        with open("preferences.json") as pref, open("user-data.json") as user_data:
+        with open("json/preferences.json") as pref, open("json/user-data.json") as user_data:
             prefs, data = json.load(pref), json.load(user_data)
             
         return UserInfo(
@@ -155,16 +155,18 @@ class jsonUtils:
             return json.load(f)
         
     @staticmethod
-    def search(file: str) -> str:
+    def search(file: str, id: int) -> str:
         data = jsonUtils.open(file)
+        for symptom in data:
+            if symptom.get("ID") == id:
+                return symptom.get("Name")
         
 
 
 def main() -> None:
     j = jsonUtils
     j.clearfiles()
-    j.add({"conditions": ["asthma", "cancer"]})
-    print(j.get_values())
+    print(j.search("json/symptoms.json", 17))
             
 
 if __name__ == "__main__":         

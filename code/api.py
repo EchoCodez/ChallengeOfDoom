@@ -16,13 +16,13 @@ params = {
 response = requests.get(url + action, params=params)
 
 # Print the response content
-with open("symptoms.json", "w") as f:
+with open("json/symptoms.json", "w") as f:
     f.write(json.dumps(response.json(), indent=4))
 
-with open("symptoms.json") as f:
+with open("json/symptoms.json") as f:
     data = json.load(f)
     data.sort(key=lambda x: int(x["ID"]))
     print("\n".join(map(str, data)))
     
-with open("symptoms.json", "w") as f:
+with open("json/symptoms.json", "w") as f:
     f.write(json.dumps(data, indent=4))
