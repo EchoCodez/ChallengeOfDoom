@@ -24,6 +24,8 @@ class Program:
         self.__root = ctk.CTk()
         self.__root.title("Congressional App Challenge 2023")
         self.__root.protocol("WM_DELETE_WINDOW", self.on_closing)
+        self.__appearance = tk.StringVar(value="light")
+        self.__remember = tk.BooleanVar(value=True)
     
     def on_closing(self) -> None:
         '''Confirm if user wanted to end application'''
@@ -68,8 +70,6 @@ class Program:
         # get user input for choice of theme
         
         self.__root.geometry("400x300")
-        self.__appearance = tk.StringVar()
-        self.__remember = tk.BooleanVar(value=True)
         
         question = ctk.CTkLabel(self.__root, text="Which appearance theme would you like to use?")
         label = ctk.CTkLabel(self.__root, text="You have selected light mode")
@@ -167,7 +167,7 @@ class Program:
     
     def get_previous_medical_conditions(self) -> None:
         def continue_button():
-            self.__conditions = {key: value.get() for key, value in self.__conditions.items()}
+            self.__conditions = {key: value.get() for key, value in self.__conditions.items() if value.get()}
             print(self.__conditions)
             self.clean(quit_root=False)
             
@@ -203,6 +203,7 @@ class Program:
     
     def run(self) -> None:
         '''Main function that executes the program'''
+        
         self.__root.geometry(f"{self.__root.winfo_screenwidth()}x{self.__root.winfo_screenheight()}+0+0")
         self.__root.mainloop()
 
@@ -226,5 +227,5 @@ def main(*, erase_data = False) -> None:
 
 
 if __name__ == "__main__":
-    main(erase_data=False)
+    main(erase_data=True)
     
