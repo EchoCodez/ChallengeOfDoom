@@ -143,6 +143,10 @@ class jsonUtils:
         -----------
             file (str): file path
         
+        Returns:
+        --------
+        list[dict]: a list containing all entries in the json file as dictionaries
+        
         Implementation:
         ---------------
         ```
