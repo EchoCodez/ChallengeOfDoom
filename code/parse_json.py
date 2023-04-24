@@ -155,11 +155,44 @@ class jsonUtils:
             return json.load(f)
         
     @staticmethod
-    def search(file: str, id: int) -> str:
+    def search(file: str, sentinal: int, **kwargs) -> str:
+        '''
+        Search for a given string in a json file
+        
+        Parameters:
+        -----------
+        file (str): the file path to the json file to search
+        sentinal (int): The ID to search for
+        kwargs (dict[str, str], optional): Valid kwargs include "search_for", "return". they default to "ID" and "Name" respectively.
+        
+        Example Use:
+        ------------
+        ```
+        def look_for_id():
+            ID = 9
+            disease_name = jsonUtils.search("json_files/symptoms.json", sentinal=ID)
+            return disease_name
+        ```
+        ```
+        def look_for_name():
+            name="Bad Breath"
+            disease_id = jsonUtils.search("json_files/symptoms.json", sentinal=name, search_for="Name", return="ID")
+            return disease_id
+        ```
+        
+        Implementation:
+        ---------------
         data = jsonUtils.open(file)
+        
         for symptom in data:
-            if symptom.get("ID") == id:
-                return symptom.get("Name")
+            if symptom.get(kwargs.get("search_for", "ID")) == sentinal:
+                return symptom.get(kwargs.get("return", "Name"))
+        '''
+        data = jsonUtils.open(file)
+        
+        for symptom in data:
+            if symptom.get(kwargs.get("search_for", "ID")) == sentinal:
+                return symptom.get(kwargs.get("return", "Name"))
         
 
 
