@@ -165,6 +165,7 @@ class jsonUtils:
         sentinal (`int`): The ID to search for
         kwargs (`dict[str, str]`, optional): Valid kwargs include "search_for", "return", and "return_dict".
             They default to "ID", "Name" and False respectively.
+            See implementation for details on their function
         
         Returns:
         --------
