@@ -136,7 +136,7 @@ class jsonUtils:
             )
     
     @staticmethod
-    def open(file: str) -> list[dict] | dict:
+    def open(file: str) -> list[dict]:
         """returns the json loaded file of a file path
 
         Parameters:
