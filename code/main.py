@@ -24,7 +24,7 @@ class Program:
         
         Parameters:
         -----------
-        add_attributes (bool, optional): Add class vari
+        add_attributes (bool, optional): Add class variables __appearance & __remember
         '''
         
         self.__root = ctk.CTk()
