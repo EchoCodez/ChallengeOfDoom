@@ -10,7 +10,7 @@ basedir = dirname(__file__)
 
 preferences = "json_files/preferences.json"
 user_data = "json_files/user-data.json"
-conditions_list = "json_files/conditions.json" # https://github.com/Shivanshu-Gupta/web-scrapers/blob/master/medical_ner/medicinenet-diseases.json
+conditions_list = "json_files/symptoms.json" # https://github.com/Shivanshu-Gupta/web-scrapers/blob/master/medical_ner/medicinenet-diseases.json
 
 
 class Program:
@@ -141,7 +141,7 @@ class Program:
         
         self.__root.mainloop()
     
-    def __checkboxes(self) -> dict:
+    def __checkboxes(self, fontsize: int = 25, font="Arial") -> dict:
         '''Creates the checkboxes
         
         Returns:
@@ -151,15 +151,14 @@ class Program:
         
         
         width, height = self.__root.winfo_screenwidth(), self.__root.winfo_screenheight()
-        print("Winwidth=", width)
         
         conditions = {}
         width_counter = 0
-        condition_names = (d["disease"] for d in jsonUtils.open(conditions_list))
+        condition_names = (d["Name"] for d in jsonUtils.open(conditions_list))
         for j in range(100): # choose arbitrarily large value for columns
             checkboxes = []
             widths = 0
-            for i in range(2, (height-30)//37): # calculate amount of rows based off of window height
+            for i in range(2, (height-300)//37): # calculate amount of rows based off of window height
                 name = next(condition_names, None)
                 if name is None:
                     print("StopIteration")
@@ -172,7 +171,7 @@ class Program:
                     variable=conditions[name],
                     onvalue=True,
                     offvalue=False,
-                    font=("Arial", 15)
+                    font=(font, fontsize)
                     )
                 checkbox.grid(
                     row=i, 
@@ -196,7 +195,7 @@ class Program:
             
         return conditions
     
-    def get_previous_medical_conditions(self) -> None:
+    def get_previous_medical_conditions(self, font="Default") -> None:
         def continue_button():
             self.__conditions = {key: value.get() for key, value in self.__conditions.items() if value.get()}
             print(self.__conditions)
@@ -207,25 +206,29 @@ class Program:
         self.__root.geometry(f"{width}x{height}+0+0")
         title = ctk.CTkLabel(
             self.__root,
-            text="What previous medical conditions do you have?",
-            font=("Default", 50)
+            text="Do you have any previous medical conditions from the list?",
+            font=(font, 50)
             )
         next_button = ctk.CTkButton(
             self.__root,
             text="Continue",
-            command=continue_button
+            command=continue_button,
+            width=280,
+            height=56,
+            font=(font, 40)
             )
+        
         title.grid(
             column=0, 
             columnspan=10, 
             padx=5, 
             pady=5,
-            sticky=tk.E
+            sticky=tk.N
             )
         
-        self.__conditions = self.__checkboxes()
+        self.__conditions = self.__checkboxes(fontsize=30, font=font)
         
-        next_button.grid(pady=5)
+        next_button.grid(pady=10)
             
         self.__root.mainloop()
 
@@ -259,5 +262,5 @@ def main(*, erase_data = False) -> None:
 
 
 if __name__ == "__main__":
-    main(erase_data=True)
+    main(erase_data=False)
     
