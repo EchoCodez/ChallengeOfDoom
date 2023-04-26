@@ -1,1 +1,12 @@
-{}
+{
+    "conditions": [
+        "Sore throat",
+        "Runny nose",
+        "weakness",
+        "Sputum",
+        "Itching eyes",
+        "Cold sweats",
+        "Dry eyes",
+        "Eye pain"
+    ]
+}

@@ -127,7 +127,7 @@ class jsonUtils:
         ```
         """
           
-        with open("json/preferences.json") as pref, open("json/user-data.json") as user_data:
+        with open("json_files/preferences.json") as pref, open("json_files/user-data.json") as user_data:
             prefs, data = json.load(pref), json.load(user_data)
             
         return UserInfo(

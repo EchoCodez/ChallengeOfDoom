@@ -11,7 +11,7 @@ basedir = dirname(__file__)
 preferences = "json_files/preferences.json"
 user_data = "json_files/user-data.json"
 conditions_list = "json_files/symptoms.json" # https://github.com/Shivanshu-Gupta/web-scrapers/blob/master/medical_ner/medicinenet-diseases.json
-
+conditions = "json_files/symptoms.json"
 
 class Program:
     '''Class encompassing all the functions used to run the program'''
@@ -198,7 +198,8 @@ class Program:
     def get_previous_medical_conditions(self, font="Default") -> None:
         def continue_button():
             self.__conditions = {key: value.get() for key, value in self.__conditions.items() if value.get()}
-            print(self.__conditions)
+            jsonUtils.add({"conditions": list(self.__conditions.keys())})
+            print(jsonUtils.get_values())
             self.clean(quit_root=False)
 
              
