@@ -47,8 +47,8 @@ class Program:
             option_1="Cancel",
             option_2="Yes"
             )
-        print(answer.get())
-        sys.exit(0)
+        if answer.get() == "Yes":
+            sys.exit(0)
     
     def clean(self, quit_root=True, destroy=False) -> None:
         '''
