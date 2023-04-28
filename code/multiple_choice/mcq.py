@@ -6,7 +6,7 @@ from dataclasses import dataclass
 class Question:
     question: str
     answers: list[str]
-    correct_answer: int
+    correct_answer: int | None
 
 @dataclass
 class Answer:
@@ -44,10 +44,14 @@ class MCQbuiler:
         next_button.place(relx=0.5, rely=0.6, anchor=tk.CENTER)
         self.root.mainloop()
     
-    def start_questions(self):
+    def start_questions(self, scored_quiz = False) -> list[bool] | None:
+        score = []
         for question in self.questions:
             self.__create_question(question)
             self.clean()
+            if scored_quiz:
+                score.append(self.correct)
+        return score if scored_quiz else None
     
     def __create_question(self, question: Question, **kwargs):
         answers: list[str] = question.answers
