@@ -3,6 +3,7 @@ import customtkinter as ctk
 import sys
 from os.path import dirname
 from parse_json import jsonUtils
+from multiple_choice.mcq import MCQbuilder
 
 
 basedir = dirname(__file__)
