@@ -77,11 +77,6 @@ class MCQbuiler:
                 )
 
             button.pack(pady=10)
-            
-        def restart():
-            self.clean()
-            self.__create_question(question, **kwargs)
-            self.root.quit()
         
         def leave():
             self.root.quit()
@@ -95,14 +90,7 @@ class MCQbuiler:
             command=leave
         )
         
-        clear_button = ctk.CTkButton(
-            self.root,
-            text="clear",
-            command=restart
-        )
-        
         next_button.pack(pady=10)
-        clear_button.pack(pady=10)
 
         self.root.mainloop()
         
