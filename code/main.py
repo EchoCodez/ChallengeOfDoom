@@ -4,7 +4,7 @@ import sys
 from os.path import dirname
 from parse_json import jsonUtils
 from CTkMessagebox import CTkMessagebox
-# from multiple_choice.mcq import MCQbuilder
+from multiple_choice.mcq import MCQbuiler, Question
 
 
 basedir = dirname(__file__)
@@ -12,7 +12,7 @@ basedir = dirname(__file__)
 
 preferences = "json_files/preferences.json"
 user_data = "json_files/user-data.json"
-conditions_list = "json_files/symptoms.json" # https://github.com/Shivanshu-Gupta/web-scrapers/blob/master/medical_ner/medicinenet-diseases.json
+conditions_list = "json_files/symptoms.json"
 conditions = "json_files/symptoms.json"
 
 class Program:
@@ -84,6 +84,7 @@ class Program:
         # check if theme preference in file already
         with open(preferences) as f:
             if jsonUtils.get(f, "appearance_theme", func = ctk.set_appearance_mode):
+                self.__remember.set(False)
                 return
         
         # get user input for choice of theme

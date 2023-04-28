@@ -1,12 +1,7 @@
 {
     "conditions": [
-        "Sore throat",
-        "Runny nose",
-        "weakness",
-        "Sputum",
-        "Itching eyes",
-        "Cold sweats",
-        "Dry eyes",
-        "Eye pain"
+        "Feeling of foreign body in the eye",
+        "Sneezing",
+        "Itching in the nose"
     ]
 }
