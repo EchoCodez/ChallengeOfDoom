@@ -6,7 +6,7 @@ from dataclasses import dataclass
 class Question:
     question: str
     answers: list[str]
-    correct_answer: int | None
+    correct_answer: int | None = None
 
 class MCQbuiler:
     def __init__(self, root: ctk.CTk, name, *questions: Question) -> None:
@@ -114,9 +114,11 @@ def main():
     mcq = MCQbuiler(
         ctk.CTk(),
         "My MCQ Test",
-        (Question("What is 1+1", ["1", "2", "3"], 2)),
-        Question("What is 2+2", ["1", "3", "7", "4"], 4)
+        (Question("Are you male or female?", ["Male", "Female", "Other"])),
+        Question("What is 2+2?", ["1", "3", "7", "4"])
         )
+    # TODO: Add support for other types of questions, like "pick from the list" questions. Possible Implementation includes
+    # asking dev to create that function and add it to the MCQbuilder class
     # TODO: Creating matching patter so that mcq.start_questions results matches up with the question answer selected
     mcq.begin()
     
