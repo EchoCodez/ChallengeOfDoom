@@ -1,5 +1,6 @@
 import tkinter as tk
 import customtkinter as ctk
+import typing
 from dataclasses import dataclass
 
 @dataclass
@@ -9,11 +10,11 @@ class Question:
     Parameters:
     -----------
     question (str): The Question title. Ex) What is 1+1?
-    answers (list[str]): A list of the multiple choice question answers
+    answers (Iterable[str]): A list of the multiple choice question answers
     correct_answer (int, None, optional): The index correct answer (starting index is 1). Defaults to None, meaning it is a survey question
     """    
     question: str
-    answers: list[str]
+    answers: typing.Iterable[str]
     correct_answer: int | None = None
     
 @dataclass
@@ -22,10 +23,17 @@ class CustomQuestion:
     
     Parameters:
     -----------
-    question (Callable): A method or function that can be called to create the question'''
+    question (`Callable`): A method or function that can be called to create the question
     
-    from typing import Callable
-    question: Callable
+    args (`Iterable`): Iterable of question arguments. Defaults to `tuple()`
+    
+    kwargs (`dict`): kwargs for question. Defaults to `dict()`
+    '''
+    
+    question: typing.Callable
+    args: typing.Iterable = ()
+    kwargs: dict = {}
+    
     
 
 class MCQbuiler:
@@ -63,8 +71,15 @@ class MCQbuiler:
         score = []
         corrects = []
         for question in self.questions:
-            self.__create_question(question)
+            if isinstance(question, Question):
+                self.__create_question(question)
+            elif isinstance(question, CustomQuestion):
+                question.question(*question.args, **question.kwargs)
+            else:
+                raise TypeError("Invalid Question {0}".format(question))
+            
             self.clean()
+            
             if scored_quiz:
                 corrects.append(self.correct==question.correct_answer)
             else:
