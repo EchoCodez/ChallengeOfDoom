@@ -3,7 +3,8 @@ import customtkinter as ctk
 import sys
 from os.path import dirname
 from parse_json import jsonUtils
-from multiple_choice.mcq import MCQbuilder
+from CTkMessagebox import CTkMessagebox
+# from multiple_choice.mcq import MCQbuilder
 
 
 basedir = dirname(__file__)
@@ -39,9 +40,15 @@ class Program:
     
     def on_closing(self) -> None:
         '''Confirm if user wanted to end application'''
-        
-        if tk.messagebox.askokcancel("Quit", "Do you want to quit?"):
-            sys.exit(0)
+        answer = CTkMessagebox(
+            title="Quit?",
+            icon="question",
+            message="Do you want to close the program?",
+            option_1="Cancel",
+            option_2="Yes"
+            )
+        print(answer.get())
+        sys.exit(0)
     
     def clean(self, quit_root=True, destroy=False) -> None:
         '''
