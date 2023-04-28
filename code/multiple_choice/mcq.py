@@ -41,12 +41,15 @@ class MCQbuiler:
     
     def start_questions(self, scored_quiz = False) -> list[bool] | None:
         score = []
+        corrects = []
         for question in self.questions:
             self.__create_question(question)
             self.clean()
             if scored_quiz:
+                corrects.append(self.correct==question.correct_answer)
+            else:
                 score.append(self.correct)
-        return score if scored_quiz else None
+        return corrects if scored_quiz else score
     
     def __create_question(self, question: Question, **kwargs):
         answers: list[str] = question.answers
@@ -81,8 +84,7 @@ class MCQbuiler:
         def leave():
             self.root.quit()
             print(option.get())
-            print(option.get()==question.correct_answer)
-            self.correct = (option.get()==question.correct_answer)
+            self.correct = (option.get())
         
         next_button = ctk.CTkButton(
             self.root,
@@ -115,6 +117,7 @@ def main():
         (Question("What is 1+1", ["1", "2", "3"], 2)),
         Question("What is 2+2", ["1", "3", "7", "4"], 4)
         )
+    # TODO: Creating matching patter so that mcq.start_questions results matches up with the question answer selected
     mcq.begin()
     
 
