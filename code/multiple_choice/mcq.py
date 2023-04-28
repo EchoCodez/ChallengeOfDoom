@@ -18,6 +18,7 @@ class MCQbuiler:
         self.questions = questions
         self.root = root
         self.name = name
+        self.correct = False
     
     def clean(self):
         for widget in self.root.winfo_children():
@@ -46,6 +47,7 @@ class MCQbuiler:
     def start_questions(self):
         for question in self.questions:
             self.__create_question(question)
+            self.clean()
     
     def __create_question(self, question: Question, **kwargs):
         answers: list[str] = question.answers
@@ -57,33 +59,36 @@ class MCQbuiler:
         )
         q.pack()
         
-        screen_answers = [None]*len(answers)
-        selected_vars = [None]*len(answers)
+        option = tk.IntVar(value=1) # what option number they chose
+        
         for num, answer in enumerate(answers):
-            answer_selected = tk.BooleanVar(value=True)
+            var = tk.BooleanVar(value=True)
             
-            def swap_selected(answer_selected = answer_selected):
-                answer_selected.set(True)
+            
+            def swap_selected(answer_selected = var): # for visual effect
+                answer_selected.set(not answer_selected.get())
                 
             
-            screen_answers[num] = ctk.CTkRadioButton(
+            button = ctk.CTkRadioButton(
                 self.root,
                 text=answer,
-                value=False,
+                variable=option,
+                value=num+1,
                 command=swap_selected
                 )
 
-            screen_answers[num].pack(pady=10)
-            selected_vars[num] = answer_selected
+            button.pack(pady=10)
             
         def restart():
             self.clean()
             self.__create_question(question, **kwargs)
+            self.root.quit()
         
         def leave():
             self.root.quit()
-            self.result = [a.get() for a in selected_vars]
-            print(self.result)
+            print(option.get())
+            print(option.get()==question.correct_answer)
+            self.correct = (option.get()==question.correct_answer)
         
         next_button = ctk.CTkButton(
             self.root,
@@ -99,7 +104,6 @@ class MCQbuiler:
         
         next_button.pack(pady=10)
         clear_button.pack(pady=10)
-        #TODO: Raise GUI warning if user tries to enter more than 1 answer
 
         self.root.mainloop()
         
@@ -118,7 +122,12 @@ class MCQbuiler:
         
         
 def main():
-    mcq = MCQbuiler(ctk.CTk(), "My MCQ Test", (Question("What is 1+1", ["1", "2", "3"], 2)))
+    mcq = MCQbuiler(
+        ctk.CTk(),
+        "My MCQ Test",
+        (Question("What is 1+1", ["1", "2", "3"], 2)),
+        Question("What is 2+2", ["1", "3", "7", "4"], 4)
+        )
     mcq.begin()
     
 
