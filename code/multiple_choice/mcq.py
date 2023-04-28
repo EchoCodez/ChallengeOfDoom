@@ -4,9 +4,29 @@ from dataclasses import dataclass
 
 @dataclass
 class Question:
+    """A Question for the Multiple Choice Quiz Builder
+    
+    Parameters:
+    -----------
+    question (str): The Question title. Ex) What is 1+1?
+    answers (list[str]): A list of the multiple choice question answers
+    correct_answer (int, None, optional): The index correct answer (starting index is 1). Defaults to None, meaning it is a survey question
+    """    
     question: str
     answers: list[str]
     correct_answer: int | None = None
+    
+@dataclass
+class CustomQuestion:
+    '''A Custom question
+    
+    Parameters:
+    -----------
+    question (Callable): A method or function that can be called to create the question'''
+    
+    from typing import Callable
+    question: Callable
+    
 
 class MCQbuiler:
     def __init__(self, root: ctk.CTk, name, *questions: Question) -> None:
