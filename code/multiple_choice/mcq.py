@@ -8,11 +8,6 @@ class Question:
     answers: list[str]
     correct_answer: int | None
 
-@dataclass
-class Answer:
-    text: str
-    is_correct: bool = False
-
 class MCQbuiler:
     def __init__(self, root: ctk.CTk, name, *questions: Question) -> None:
         self.questions = questions
