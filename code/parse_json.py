@@ -222,6 +222,9 @@ class jsonUtils:
         
         data = jsonUtils.open(file)
         search_for = kwargs.get("search_for", "ID")
+        if isinstance(data, dict):
+            return data if kwargs.get("return_dict", False) else data[kwargs.get("_return", "Name")]
+        
         for symptom in data:
             if symptom.get(search_for) == sentinal:
                 if kwargs.get("return_dict", False):

@@ -245,6 +245,12 @@ class Program:
             
         self.__root.mainloop()
 
+    def __set_color(self, light: str, dark: str):
+        appearance = jsonUtils.search(preferences, "appearance_theme", _return="appearance_theme")
+        print(appearance)
+        return dark if appearance == "dark" else light
+        
+
     def setup(self) -> None:
         """Sets up the multiple choice quiz and appearance theme
         """        
@@ -258,13 +264,16 @@ class Program:
             # Question("When were you born?", []), # TODO: Make this a CustomQuestion, and make them type it in
             # CustomQuestion(self.get_previous_medical_conditions)
         )
-        answers = prequiz.begin()
+        # answers = prequiz.begin()
         self.clean(quit_root=False)
     
     def run(self) -> None:
         '''Main function that executes the program'''
-        ctk.CTkLabel(self.__root, text="Running").pack()
-        self.__root.mainloop()
+        
+        
+        # ctk.CTkButton(self.__root, text="Break", command=self.__root.quit).pack()
+        # self.__root.mainloop()
+        self.__set_color("", "")
 
 
 def main(*, erase_data = False) -> None:
