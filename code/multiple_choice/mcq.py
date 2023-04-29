@@ -1,7 +1,7 @@
 import tkinter as tk
 import customtkinter as ctk
 import typing
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 @dataclass
 class Question:
@@ -32,7 +32,7 @@ class CustomQuestion:
     
     question: typing.Callable
     args: typing.Iterable = ()
-    kwargs: dict = {}
+    kwargs: dict = field(default_factory=dict)
     
     
 
@@ -96,22 +96,14 @@ class MCQbuiler:
         )
         q.pack()
         
-        option = tk.IntVar(value=1) # what option number they chose
+        option = tk.StringVar() # what option number they chose
         
-        for num, answer in enumerate(answers):
-            var = tk.BooleanVar(value=True)
-            
-            
-            def swap_selected(answer_selected = var): # for visual effect
-                answer_selected.set(not answer_selected.get())
-                
-            
+        for answer in answers:
             button = ctk.CTkRadioButton(
                 self.root,
                 text=answer,
                 variable=option,
-                value=num+1,
-                command=swap_selected
+                value=answer
                 )
 
             button.pack(pady=10)
