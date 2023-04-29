@@ -69,7 +69,7 @@ class MCQbuiler:
 
         Returns:
         --------
-            list[bool] | list[str]: list of correct and incorrect answers | list of user results as strings
+            `list[bool] | list[str]`: list of correct and incorrect answers | list of user results as strings
         """
         
         score = []
@@ -146,9 +146,9 @@ class MCQbuiler:
             
             continue_text (str, optional): Finish button text. Defaults to "Finish".
             
-            title_font (tuple, optional): Font options for title. Defaults to ("DEFAULT", 50).
+            title_font (tuple, optional): Font options for title. Defaults to `("DEFAULT", 50)`.
             
-            continue_font (tuple, optional): Font options for button. Defaults to ("DEFAULT", 30).
+            continue_font (tuple, optional): Font options for button. Defaults to `("DEFAULT", 30)`.
         """        
         
         width, height = self.root.winfo_screenwidth(), self.root.winfo_screenheight()
