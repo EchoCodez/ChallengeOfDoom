@@ -26,7 +26,7 @@ class Program:
         
         Parameters:
         -----------
-        add_attributes (bool, optional): Add class variables __appearance & __remember
+            add_attributes (bool, optional): Add class variables __appearance & __remember
         '''
         
         self.__root = ctk.CTk()
@@ -155,7 +155,7 @@ class Program:
         
         Returns:
         --------
-        dict: which conditions were checkmarked
+            dict: which conditions were checkmarked
         '''
         
         
@@ -205,6 +205,13 @@ class Program:
         return conditions
     
     def get_previous_medical_conditions(self, font="Default") -> None:
+        """Create checkboxes of previous medical conditions
+
+        Parameters:
+        -----------
+            font (str, optional): font options for title and next button. Font size is immutable. Defaults to "Default".
+        """
+        
         def continue_button():
             self.__conditions = {key: value.get() for key, value in self.__conditions.items() if value.get()}
             jsonUtils.add({"conditions": list(self.__conditions.keys())})
@@ -243,18 +250,20 @@ class Program:
         self.__root.mainloop()
 
     def setup(self) -> None:
+        """Sets up the multiple choice quiz and appearance theme
+        """        
+        
         self.set_appearance()
+        # TODO: Check if they have already answered the multiple choice quiz
         prequiz = MCQbuiler(
             self.__root,
-            "Pre-quiz",
+            "Pre-quiz", # title
             CustomQuestion(self.get_previous_medical_conditions)
         )
         prequiz.begin()
     
     def run(self) -> None:
         '''Main function that executes the program'''
-           
-        pass
 
 
 def main(*, erase_data = False) -> None:

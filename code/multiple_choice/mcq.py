@@ -9,9 +9,11 @@ class Question:
     
     Parameters:
     -----------
-    question (str): The Question title. Ex) What is 1+1?
-    answers (Iterable[str]): A list of the multiple choice question answers
-    correct_answer (int, None, optional): The index correct answer (starting index is 1). Defaults to None, meaning it is a survey question
+        question (str): The Question title. Ex) What is 1+1?
+        
+        answers (Iterable[str]): A list of the multiple choice question answers
+        
+        correct_answer (int, None, optional): The index correct answer (starting index is 1). Defaults to None, meaning it is a survey question
     """    
     question: str
     answers: typing.Iterable[str]
@@ -23,11 +25,11 @@ class CustomQuestion:
     
     Parameters:
     -----------
-    question (`Callable`): A method or function that can be called to create the question
-    
-    args (`Iterable`): Iterable of question arguments. Defaults to `tuple()`
-    
-    kwargs (`dict`): kwargs for question. Defaults to `dict()`
+        question (`Callable`): A method or function that can be called to create the question
+        
+        args (`Iterable`): Iterable of question arguments. Defaults to `tuple()`
+        
+        kwargs (`dict`): kwargs for question. Defaults to `dict()`
     '''
     
     question: typing.Callable
@@ -38,16 +40,37 @@ class CustomQuestion:
 
 class MCQbuiler:
     def __init__(self, root: ctk.CTk, name, *questions: Question) -> None:
+        """Initialize Multiple Choice Quiz
+
+        Parameters:
+        -----------
+            root (ctk.CTk): customtkinter root
+            
+            name (_type_): Name of test
+        """
+        
         self.questions = questions
         self.root = root
         self.name = name
         self.correct = False
     
     def clean(self):
+        """Remove all widgets from the screen
+        """
+        
         for widget in self.root.winfo_children():
             widget.destroy()
     
     def start(self, title_font= ("DEFAULT", 50), continue_font=("DEFAULT", 30), **kwargs):
+        """Creates the start page of the quiz
+
+        Parameters:
+        -----------
+            title_font (tuple, optional): Font of the quiz title. Defaults to ("DEFAULT", 50).
+            
+            continue_font (tuple, optional): Font options of the continue button. Defaults to ("DEFAULT", 30).
+        """
+        
         width, height = self.root.winfo_screenwidth(), self.root.winfo_screenheight()
         self.root.geometry("{0}x{1}+0+0".format(width, height))
         
@@ -67,9 +90,24 @@ class MCQbuiler:
         next_button.place(relx=0.5, rely=0.6, anchor=tk.CENTER)
         self.root.mainloop()
     
-    def start_questions(self, scored_quiz = False) -> list[bool] | None:
+    def start_questions(self, scored_quiz = False) -> list[bool] | list[str]:
+        """Wrapper for iterating through and creating questions
+
+        Parameters:
+        -----
+            scored_quiz (bool, optional): Whether or not to score the quiz. Defaults to False.
+
+        Raises:
+        -------
+            TypeError: If question is not instance of Question or CustomQuestion
+
+        Returns:
+        --------
+            list[bool] | list[str]: list of correct and incorrect answers | list of user results as strings
+        """
+        
         score = []
-        corrects = []
+        corrects: list[bool] = []
         for question in self.questions:
             if isinstance(question, Question):
                 self.__create_question(question)
@@ -87,6 +125,13 @@ class MCQbuiler:
         return corrects if scored_quiz else score
     
     def __create_question(self, question: Question, **kwargs):
+        """Creates question if `isinstance(question, Question)`
+
+        Parameters:
+        -----------
+            question (Question): The question
+        """
+        
         answers: list[str] = question.answers
         
         q = ctk.CTkLabel(
@@ -127,6 +172,19 @@ class MCQbuiler:
         
     
     def end(self, title_next="The End!", continue_text = "Finish", title_font= ("DEFAULT", 50), continue_font=("DEFAULT", 30), **kwargs):
+        """Creates the end screen of quiz
+
+        Parameters:
+        -----------
+            title_next (str, optional): Title of the ending screen. Defaults to "The End!".
+            
+            continue_text (str, optional): Finish button text. Defaults to "Finish".
+            
+            title_font (tuple, optional): Font options for title. Defaults to ("DEFAULT", 50).
+            
+            continue_font (tuple, optional): Font options for button. Defaults to ("DEFAULT", 30).
+        """        
+        
         width, height = self.root.winfo_screenwidth(), self.root.winfo_screenheight()
         self.root.geometry("{0}x{1}+0+0".format(width, height))
         
@@ -147,6 +205,9 @@ class MCQbuiler:
         self.root.mainloop()
     
     def begin(self, **kwargs):
+        """Wrapper for creating start screen, going through questions, and creating end screen
+        """        
+        
         self.start(**kwargs)
         self.clean()
         self.start_questions(**kwargs)
@@ -156,6 +217,9 @@ class MCQbuiler:
         
         
 def main():
+    """Testing/Debugging function
+    """
+    
     mcq = MCQbuiler(
         ctk.CTk(),
         "My MCQ Test",
