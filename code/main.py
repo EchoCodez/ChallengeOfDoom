@@ -4,7 +4,7 @@ import sys
 from os.path import dirname
 from parse_json import jsonUtils
 from CTkMessagebox import CTkMessagebox
-from multiple_choice.mcq import MCQbuiler, Question
+from multiple_choice.mcq import MCQbuiler, Question, CustomQuestion
 
 
 basedir = dirname(__file__)
@@ -244,7 +244,12 @@ class Program:
 
     def setup(self) -> None:
         self.set_appearance()
-        self.get_previous_medical_conditions()
+        prequiz = MCQbuiler(
+            self.__root,
+            "Pre-quiz",
+            CustomQuestion(self.get_previous_medical_conditions)
+        )
+        prequiz.begin()
     
     def run(self) -> None:
         '''Main function that executes the program'''
