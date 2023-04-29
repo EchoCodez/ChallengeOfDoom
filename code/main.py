@@ -1,13 +1,9 @@
 import tkinter as tk
 import customtkinter as ctk
 import sys
-from os.path import dirname
 from parse_json import jsonUtils
 from CTkMessagebox import CTkMessagebox
 from multiple_choice.mcq import MCQbuiler, Question, CustomQuestion
-
-
-basedir = dirname(__file__)
 
 
 preferences = "json_files/preferences.json"
