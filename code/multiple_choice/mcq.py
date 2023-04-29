@@ -174,9 +174,11 @@ class MCQbuiler:
         
         self.start(**kwargs)
         self.clean()
-        self.start_questions(**kwargs)
+        answers = self.start_questions(**kwargs)
         self.clean()
         self.end(**kwargs)
+        
+        return answers
         
         
         
