@@ -1,8 +1,6 @@
 import tkinter as tk
 import customtkinter as ctk
-from multiple_choice.questions import Question, CustomQuestion
-    
-    
+from questions import Question, CustomQuestion
 
 class MCQbuiler:
     def __init__(self, root: ctk.CTk, name, *questions: Question) -> None:
