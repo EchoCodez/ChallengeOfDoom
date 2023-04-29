@@ -118,9 +118,9 @@ class MCQbuiler:
             button.pack(pady=10)
         
         def leave():
-            self.root.quit()
             print(option.get())
-            self.correct = (option.get())
+            self.correct = option.get()
+            self.root.quit()
         
         next_button = ctk.CTkButton(
             self.root,
@@ -147,7 +147,8 @@ class MCQbuiler:
             title_font (tuple, optional): Font options for title. Defaults to `("DEFAULT", 50)`.
             
             continue_font (tuple, optional): Font options for button. Defaults to `("DEFAULT", 30)`.
-        """        
+        """
+        print("ended")
         
         width, height = self.root.winfo_screenwidth(), self.root.winfo_screenheight()
         self.root.geometry("{0}x{1}+0+0".format(width, height))
@@ -175,6 +176,7 @@ class MCQbuiler:
         self.start(**kwargs)
         self.clean()
         answers = self.start_questions(**kwargs)
+        print("Cleaned")
         self.clean()
         self.end(**kwargs)
         

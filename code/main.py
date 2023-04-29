@@ -255,13 +255,16 @@ class Program:
             self.__root,
             "Pre-quiz", # title
             Question("What is your gender?", ["Male", "Female"]),
-            Question("When were you born?", []), # TODO: Make this a CustomQuestion, and make them type it in
-            CustomQuestion(self.get_previous_medical_conditions)
+            # Question("When were you born?", []), # TODO: Make this a CustomQuestion, and make them type it in
+            # CustomQuestion(self.get_previous_medical_conditions)
         )
         answers = prequiz.begin()
+        self.clean(quit_root=False)
     
     def run(self) -> None:
         '''Main function that executes the program'''
+        ctk.CTkLabel(self.__root, text="Running").pack()
+        self.__root.mainloop()
 
 
 def main(*, erase_data = False) -> None:
