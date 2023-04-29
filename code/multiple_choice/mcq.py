@@ -126,13 +126,31 @@ class MCQbuiler:
         
         
     
-    def end(self):
-        pass
+    def end(self, title_next="The End!", continue_text = "Finish", title_font= ("DEFAULT", 50), continue_font=("DEFAULT", 30), **kwargs):
+        width, height = self.root.winfo_screenwidth(), self.root.winfo_screenheight()
+        self.root.geometry("{0}x{1}+0+0".format(width, height))
+        
+        ctk_title = ctk.CTkLabel(
+            self.root,
+            text=title_next,
+            font=title_font
+        )
+        next_button = ctk.CTkButton(
+            self.root,
+            text=continue_text,
+            font=continue_font,
+            command=self.root.quit
+        )
+        
+        ctk_title.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+        next_button.place(relx=0.5, rely=0.6, anchor=tk.CENTER)
+        self.root.mainloop()
     
     def begin(self, **kwargs):
         self.start(**kwargs)
         self.clean()
         self.start_questions(**kwargs)
+        self.clean()
         self.end(**kwargs)
         
         
