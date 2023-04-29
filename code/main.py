@@ -254,9 +254,11 @@ class Program:
         prequiz = MCQbuiler(
             self.__root,
             "Pre-quiz", # title
+            Question("What is your gender?", ["Male", "Female"]),
+            Question("When were you born?", []), # TODO: Make this a CustomQuestion, and make them type it in
             CustomQuestion(self.get_previous_medical_conditions)
         )
-        prequiz.begin()
+        answers = prequiz.begin()
     
     def run(self) -> None:
         '''Main function that executes the program'''
