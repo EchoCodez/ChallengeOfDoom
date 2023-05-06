@@ -3,7 +3,7 @@ import customtkinter as ctk
 from multiple_choice.questions import Question, CustomQuestion
 
 class MCQbuiler:
-    def __init__(self, root: ctk.CTk, name, *questions: Question) -> None:
+    def __init__(self, root: ctk.CTk, name, logger, *questions: Question) -> None:
         """Initialize Multiple Choice Quiz
 
         Parameters:
@@ -16,6 +16,7 @@ class MCQbuiler:
         self.questions = questions
         self.root = root
         self.name = name
+        self.logger = logger
         self.correct = False
     
     def clean(self):
@@ -118,7 +119,7 @@ class MCQbuiler:
             button.pack(pady=10)
         
         def leave():
-            print(option.get())
+            self.logger.debug(option.get())
             self.correct = option.get()
             self.root.quit()
         
@@ -148,7 +149,7 @@ class MCQbuiler:
             
             continue_font (tuple, optional): Font options for button. Defaults to `("DEFAULT", 30)`.
         """
-        print("ended")
+        self.logger.debug("ended")
         
         width, height = self.root.winfo_screenwidth(), self.root.winfo_screenheight()
         self.root.geometry("{0}x{1}+0+0".format(width, height))
@@ -176,7 +177,7 @@ class MCQbuiler:
         self.start(**kwargs)
         self.clean()
         answers = self.start_questions(**kwargs)
-        print("Cleaned")
+        self.logger.debug("Cleaned")
         self.clean()
         self.end(**kwargs)
         

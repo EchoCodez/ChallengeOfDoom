@@ -3,6 +3,7 @@ import customtkinter as ctk
 import sys
 from parse_json import jsonUtils
 from CTkMessagebox import CTkMessagebox
+from setup import setup_logging
 from multiple_choice.mcq import MCQbuiler, Question, CustomQuestion
 
 
@@ -25,6 +26,7 @@ class Program:
             add_attributes (bool, optional): Add class variables __appearance & __remember
         '''
         
+        self.logger = setup_logging()
         self.__root = ctk.CTk()
         self.__root.title("Congressional App Challenge 2023")
         self.__root.protocol("WM_DELETE_WINDOW", self.on_closing)
@@ -36,6 +38,7 @@ class Program:
     
     def on_closing(self) -> None:
         '''Confirm if user wanted to end application'''
+        self.logger.debug("User clicked X button")
         answer = CTkMessagebox(
             title="Quit?",
             icon="question",
@@ -44,7 +47,10 @@ class Program:
             option_2="Yes"
             )
         if answer.get() == "Yes":
+            self.logger.debug("Exited program")
             sys.exit(0)
+        else:
+            self.logger.debug("Canceled exiting program")
     
     def clean(self, quit_root=True, destroy=False) -> None:
         '''
@@ -166,7 +172,7 @@ class Program:
             for i in range(2, (height-300)//37): # calculate amount of rows based off of window height
                 name = next(condition_names, None)
                 if name is None:
-                    print("StopIteration")
+                    self.logger.debug("StopIteration")
                     return conditions
                 
                 conditions[name]=tk.BooleanVar(value=False)
@@ -189,11 +195,11 @@ class Program:
                 checkbox.update_idletasks() # update the widget size
                 widths = max(widths, checkbox.winfo_width()) # height is always 24
                 checkboxes.append(checkbox)
-            print(widths)
+            self.logger.debug(widths)
                 
             width_counter+=widths
             if width_counter>width:
-                print(*(box.cget("text") for box in checkboxes))
+                self.logger.debug(*(box.cget("text") for box in checkboxes))
                 for box in checkboxes:
                     box.destroy()
                 return conditions
@@ -247,7 +253,7 @@ class Program:
 
     def __set_color(self, light: str, dark: str):
         appearance = jsonUtils.search(preferences, "appearance_theme", _return="appearance_theme")
-        print(appearance)
+        self.logger.debug(appearance)
         return dark if appearance == "dark" else light
         
 
@@ -260,11 +266,12 @@ class Program:
         prequiz = MCQbuiler(
             self.__root,
             "Pre-quiz", # title
+            self.logger,
             Question("What is your gender?", ["Male", "Female"]),
-            # Question("When were you born?", []), # TODO: Make this a CustomQuestion, and make them type it in
-            # CustomQuestion(self.get_previous_medical_conditions)
+            Question("When were you born?", []), # TODO: Make this a CustomQuestion, and make them type it in
+            CustomQuestion(self.get_previous_medical_conditions)
         )
-        # answers = prequiz.begin()
+        answers = prequiz.begin()
         self.clean(quit_root=False)
     
     def run(self) -> None:
@@ -284,7 +291,8 @@ def main(*, erase_data = False) -> None:
     erase_data: bool
         Debugging parameter to erase all data in preferences.json and user-data.json
     '''
-        
+
+    logger = setup_logging()
     program = Program()
     
     if erase_data: # only for testing purposes; delete in final push
@@ -296,5 +304,5 @@ def main(*, erase_data = False) -> None:
 
 
 if __name__ == "__main__":
-    main(erase_data=False)
+    main(erase_data=True)
     
