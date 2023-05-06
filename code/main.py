@@ -295,7 +295,7 @@ class Program:
     def run(self) -> None:
         '''Main function that executes the program'''
         
-        
+        ctk.CTkFrame(self.__root, fg_color="#00FF00", corner_radius=40).place(relx=0.5, rely=0.5, anchor=tk.CENTER)
         self.__root.mainloop()
     
     def execute(self):
