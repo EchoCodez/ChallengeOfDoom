@@ -265,13 +265,7 @@ class Program:
         
         next_button.grid(pady=10)
             
-        self.__root.mainloop()
-
-    def _set_color(self, light: str, dark: str):
-        appearance = jsonUtils.search(preferences, "appearance_theme", _return="appearance_theme")
-        self.logger.debug(appearance)
-        return dark if appearance == "dark" else light
-        
+        self.__root.mainloop()       
 
     def setup(self) -> None:
         """Sets up the multiple choice quiz and appearance theme
@@ -302,9 +296,7 @@ class Program:
         '''Main function that executes the program'''
         
         
-        # ctk.CTkButton(self.__root, text="Break", command=self.__root.quit).pack()
-        # self.__root.mainloop()
-        self._set_color("", "")
+        self.__root.mainloop()
     
     def execute(self):
         if not self.__setup_finished:
