@@ -1,7 +1,10 @@
 {
     "conditions": [
-        "Feeling of foreign body in the eye",
-        "Sneezing",
-        "Itching in the nose"
-    ]
+        "Eye redness",
+        "Lip swelling",
+        "Itching in the nose",
+        "Menstruation disorder"
+    ],
+    "gender": "Male",
+    "birth_year": "1572"
 }

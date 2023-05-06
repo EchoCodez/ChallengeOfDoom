@@ -1,23 +1,12 @@
 import json
 from typing import Callable
 from io import StringIO
-from dataclasses import dataclass
+from data_classes import UserInfo
 
 
 
 preferences = ("appearance_theme", "save_data")
 files = ("json_files/preferences.json", "json_files/user-data.json")
-
-
-@dataclass
-class UserInfo:
-    '''Dataclass storing information about user and user preferences'''
-    
-    conditions: list[str]
-    preferences: dict[str, bool]
-    
-    def __str__(self) -> str:
-        return f"{self.__class__.__name__}:\n\tconditions={self.conditions}\n\tpreferences={self.preferences}"
 
 
 class jsonUtils:
@@ -126,13 +115,13 @@ class jsonUtils:
         print(data.preferences)
         ```
         """
-          
-        with open("json_files/preferences.json") as pref, open("json_files/user-data.json") as user_data:
-            prefs, data = json.load(pref), json.load(user_data)
-            
+        
+        prefs, data = jsonUtils.open("json_files/preferences.json"), jsonUtils.open("json_files/user-data.json") 
         return UserInfo(
             conditions=data.get("conditions", []),
-            preferences={preference: prefs.get(preference) for preference in preferences}
+            preferences={preference: prefs.get(preference) for preference in preferences},
+            gender=data.get("gender"),
+            birthyear=data.get("birth_year")
             )
     
     @staticmethod

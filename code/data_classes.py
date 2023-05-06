@@ -1,7 +1,7 @@
-from dataclasses import dataclass, field
+import dataclasses
 import typing
 
-@dataclass
+@dataclasses.dataclass
 class Question:
     """A Question for the Multiple Choice Quiz Builder
     
@@ -16,8 +16,11 @@ class Question:
     question: str
     answers: typing.Iterable[str]
     correct_answer: int | None = None
+
+    def __str__(self):
+        return f"Question {self.question}"
     
-@dataclass
+@dataclasses.dataclass
 class CustomQuestion:
     '''A Custom question
     
@@ -32,4 +35,28 @@ class CustomQuestion:
     
     question: typing.Callable
     args: typing.Iterable = ()
-    kwargs: dict = field(default_factory=dict)
+    kwargs: dict = dataclasses.field(default_factory=dict)
+    
+    def __str__(self):
+        return f"CustomQuestion {self.question.__name__}"
+
+@dataclasses.dataclass
+class UserInfo:
+    '''Dataclass storing information about user and user preferences'''
+    
+    conditions: list[str]
+    preferences: dict[str, bool]
+    gender: str
+    birthyear: str
+    
+    def __iter__(self):
+        return iter({
+            "conditions": self.conditions,
+            "preferences":self.preferences,
+            "gender":self.gender,
+            "birth_year":self.birthyear
+            }.items())
+    
+    def __str__(self) -> str:
+        x = '\n\t'.join(f"{k}={v}" for k, v in self)
+        return f"{self.__class__.__name__}:\n\t{x}"

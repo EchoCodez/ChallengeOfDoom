@@ -218,8 +218,7 @@ class Program:
         def continue_button():
             self.__conditions = {key: value.get() for key, value in self.__conditions.items() if value.get()}
             jsonUtils.add({"conditions": list(self.__conditions.keys())})
-            print(jsonUtils.get_values())
-            self.clean(quit_root=False)
+            self.clean(quit_root=True)
 
              
         width, height = self.__root.winfo_screenwidth(), self.__root.winfo_screenheight()
@@ -269,11 +268,16 @@ class Program:
             self.logger,
             CustomQuestion(self.set_appearance if not self._appearance_is_set() else lambda: None),
             Question("What is your gender?", ["Male", "Female"]),
-            Question("When were you born?", []), # TODO: Make this a CustomQuestion, and make them type it in
+            Question("When were you born?", ["1998", "1572"]), # TODO: Make this a CustomQuestion, and make them type it in
             CustomQuestion(self.get_previous_medical_conditions)
         )
         answers = prequiz.begin()
+        jsonUtils.add({
+                "gender": answers[1],
+                "birth_year": answers[2]
+            }) # self.get_previous_medical_conditions already writes to file
         self.clean(quit_root=False)
+        self.logger.debug(jsonUtils.get_values())
     
     def run(self) -> None:
         '''Main function that executes the program'''
@@ -293,7 +297,6 @@ def main(*, erase_data = False) -> None:
         Debugging parameter to erase all data in preferences.json and user-data.json
     '''
 
-    logger = setup_logging()
     program = Program()
     
     if erase_data: # only for testing purposes; delete in final push

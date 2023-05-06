@@ -1,6 +1,6 @@
 import tkinter as tk
 import customtkinter as ctk
-from multiple_choice.questions import Question, CustomQuestion
+from data_classes import Question, CustomQuestion
 
 class MCQbuiler:
     def __init__(self, root: ctk.CTk, name, logger, *questions: Question) -> None:
@@ -78,10 +78,11 @@ class MCQbuiler:
                 self.__create_question(question)
             elif isinstance(question, CustomQuestion):
                 question.question(*question.args, **question.kwargs)
-            else:
+            elif question() is not None:
                 raise TypeError("Invalid Question {0}".format(question))
             
             self.clean()
+            self.logger.debug("Next Question")
             
             if scored_quiz:
                 corrects.append(self.correct==question.correct_answer)
