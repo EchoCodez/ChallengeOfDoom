@@ -88,7 +88,7 @@ class Program:
             self.__remember = tk.BooleanVar(value=False)
     
     def _appearance_is_set(self) -> bool:
-        # check if theme preference in file already
+        '''check if theme preference in file already. If it is, update current'''
         with open(preferences) as f:
             if jsonUtils.get(f, "appearance_theme", func = ctk.set_appearance_mode):
                 self.__remember.set(False)
@@ -301,6 +301,9 @@ class Program:
     def execute(self):
         if not self.__setup_finished:
             self.setup()
+        else:
+            self._appearance_is_set()
+            
         self.run()
 
 
