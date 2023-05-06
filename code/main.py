@@ -71,6 +71,15 @@ class Program:
             jsonUtils.add({"appearance_theme":self.__appearance.get()}, file=preferences)
             self.__remember = tk.BooleanVar(value=False)
     
+    def _appearance_is_set(self) -> bool:
+        # check if theme preference in file already
+        with open(preferences) as f:
+            if jsonUtils.get(f, "appearance_theme", func = ctk.set_appearance_mode):
+                self.__remember.set(False)
+                return True
+        return False
+        
+    
     def set_appearance(self) -> None:
         '''Choose dark or light theme for custom tkinter'''
         
@@ -83,15 +92,7 @@ class Program:
             else:
                 ctk.set_appearance_mode("light")
         
-        # check if theme preference in file already
-        with open(preferences) as f:
-            if jsonUtils.get(f, "appearance_theme", func = ctk.set_appearance_mode):
-                self.__remember.set(False)
-                return
-        
         # get user input for choice of theme
-        
-        # self.__root.geometry("400x300")
         
         question = ctk.CTkLabel(
             self.__root,
@@ -251,7 +252,7 @@ class Program:
             
         self.__root.mainloop()
 
-    def __set_color(self, light: str, dark: str):
+    def _set_color(self, light: str, dark: str):
         appearance = jsonUtils.search(preferences, "appearance_theme", _return="appearance_theme")
         self.logger.debug(appearance)
         return dark if appearance == "dark" else light
@@ -261,12 +262,12 @@ class Program:
         """Sets up the multiple choice quiz and appearance theme
         """        
         
-        self.set_appearance()
         # TODO: Check if they have already answered the multiple choice quiz
         prequiz = MCQbuiler(
             self.__root,
-            "Pre-quiz", # title
+            "Let's set up the program!", # title
             self.logger,
+            CustomQuestion(self.set_appearance if not self._appearance_is_set() else lambda: None),
             Question("What is your gender?", ["Male", "Female"]),
             Question("When were you born?", []), # TODO: Make this a CustomQuestion, and make them type it in
             CustomQuestion(self.get_previous_medical_conditions)
@@ -280,7 +281,7 @@ class Program:
         
         # ctk.CTkButton(self.__root, text="Break", command=self.__root.quit).pack()
         # self.__root.mainloop()
-        self.__set_color("", "")
+        self._set_color("", "")
 
 
 def main(*, erase_data = False) -> None:
@@ -304,5 +305,5 @@ def main(*, erase_data = False) -> None:
 
 
 if __name__ == "__main__":
-    main(erase_data=True)
+    main(erase_data=False)
     

@@ -55,7 +55,7 @@ class MCQbuiler:
         next_button.place(relx=0.5, rely=0.6, anchor=tk.CENTER)
         self.root.mainloop()
     
-    def start_questions(self, scored_quiz = False) -> list[bool] | list[str]:
+    def _start_questions(self, scored_quiz = False) -> list[bool] | list[str]:
         """Wrapper for iterating through and creating questions
 
         Parameters:
@@ -176,7 +176,7 @@ class MCQbuiler:
         
         self.start(**kwargs)
         self.clean()
-        answers = self.start_questions(**kwargs)
+        answers = self._start_questions(**kwargs)
         self.logger.debug("Cleaned")
         self.clean()
         self.end(**kwargs)
