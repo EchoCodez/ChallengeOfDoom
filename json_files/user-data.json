@@ -1,9 +1,9 @@
 {
     "conditions": [
-        "Eye redness",
-        "Lip swelling",
-        "Itching in the nose",
-        "Menstruation disorder"
+        "Weight gain",
+        "Stuffy nose",
+        "Shortness of breath",
+        "Wheezing"
     ],
     "gender": "Male",
     "birth_year": "1572"

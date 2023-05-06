@@ -30,6 +30,7 @@ class Program:
         self.__root.geometry(f"{width}x{height}+0+0")
         
         self.__setup_quiz = False
+        self.__setup_finished = jsonUtils.open(preferences).get("setup_finished", False)
         self.__appearance = tk.StringVar(value="light")
         self.__remember = tk.BooleanVar(value=True)
     
@@ -294,6 +295,7 @@ class Program:
             }) # self.get_previous_medical_conditions already writes to file
         self.clean(quit_root=False)
         self.__setup_quiz = False
+        jsonUtils.add({"setup_finished": True}, file=preferences)
         self.logger.debug(jsonUtils.get_values())
     
     def run(self) -> None:
@@ -303,6 +305,11 @@ class Program:
         # ctk.CTkButton(self.__root, text="Break", command=self.__root.quit).pack()
         # self.__root.mainloop()
         self._set_color("", "")
+    
+    def execute(self):
+        if not self.__setup_finished:
+            self.setup()
+        self.run()
 
 
 def main(*, erase_data = False) -> None:
@@ -319,8 +326,7 @@ def main(*, erase_data = False) -> None:
     if erase_data: # only for testing purposes; delete in final push
         jsonUtils.clearfiles()
     
-    program.setup()
-    program.run()
+    program.execute()
     
 
 
