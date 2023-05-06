@@ -135,8 +135,6 @@ class MCQbuiler:
         self.root.mainloop()
         
         
-        
-    
     def end(self, title_next="The End!", continue_text = "Finish", title_font= ("DEFAULT", 50), continue_font=("DEFAULT", 30), **kwargs):
         """Creates the end screen of quiz
 
@@ -176,11 +174,13 @@ class MCQbuiler:
         """        
         
         self.start(**kwargs)
+        self.logger.debug("Started Quiz")
         self.clean()
         answers = self._start_questions(**kwargs)
-        self.logger.debug("Cleaned")
         self.clean()
+        self.logger.debug("Cleaned")
         self.end(**kwargs)
+        self.logger.debug("Ended Quiz")
         
         return answers
         

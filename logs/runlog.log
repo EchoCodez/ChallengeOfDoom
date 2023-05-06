@@ -1,2 +1,6 @@
-2023-05-06 16:10:18 (main.py) DEBUG: User clicked X button
-2023-05-06 16:10:18 (main.py) INFO: Exited program
+2023-05-06 16:28:20 (mcq.py) DEBUG: Started Quiz
+2023-05-06 16:28:20 (mcq.py) DEBUG: Next Question
+2023-05-06 16:28:21 (main.py) INFO: User clicked X button
+2023-05-06 16:28:25 (main.py) INFO: User choose to continue with the setup quiz
+2023-05-06 16:28:28 (main.py) INFO: User clicked X button
+2023-05-06 16:28:29 (main.py) WARNING: User chose to force application to shut down

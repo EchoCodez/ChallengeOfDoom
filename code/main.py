@@ -15,15 +15,11 @@ conditions = "json_files/symptoms.json"
 class Program:
     '''Class encompassing all the functions used to run the program'''
     
-    def __init__(self, add_attributes = True) -> None:
+    def __init__(self) -> None:
         '''
         Initilize self.__root and store file names for ease of access
         
         Name mangling is used to ensure root cannot be used outside of class
-        
-        Parameters:
-        -----------
-            add_attributes (bool, optional): Add class variables __appearance & __remember
         '''
         
         self.logger = setup_logging()
@@ -32,25 +28,44 @@ class Program:
         self.__root.protocol("WM_DELETE_WINDOW", self.on_closing)
         width, height = self.__root.winfo_screenwidth(), self.__root.winfo_screenheight()
         self.__root.geometry(f"{width}x{height}+0+0")
-        if add_attributes:
-            self.__appearance = tk.StringVar(value="light")
-            self.__remember = tk.BooleanVar(value=True)
+        
+        self.__setup_quiz = False
+        self.__appearance = tk.StringVar(value="light")
+        self.__remember = tk.BooleanVar(value=True)
     
     def on_closing(self) -> None:
         '''Confirm if user wanted to end application'''
-        self.logger.debug("User clicked X button")
-        answer = CTkMessagebox(
-            title="Quit?",
-            icon="question",
-            message="Do you want to close the program?",
-            option_1="Cancel",
-            option_2="Yes"
+        
+        self.logger.info("User clicked X button")
+        
+        if self.__setup_quiz:
+            force_quit = CTkMessagebox(
+                title="Unsuccessful Quit",
+                icon="cancel",
+                message=
+                "Sorry, you cannot exit the application until you finish the setup quiz.\
+                    \nForcing a shutdown may result in the application no longer working the next time you open it.",
+                option_1="Force Quit",
+                option_2="Understood"
             )
-        if answer.get() == "Yes":
+            if force_quit.get() == "Force Quit":
+                self.logger.warning("User chose to force application to shut down")
+                sys.exit(0)
+            self.logger.info("User choose to continue with the setup quiz")
+            return
+        else:
+            answer = CTkMessagebox(
+                title="Quit?",
+                icon="question",
+                message="Do you want to close the program?",
+                option_1="Cancel",
+                option_2="Yes"
+            )
+        if answer.get() == "Yes" and not self.__setup_quiz:
             self.logger.info("Exited program")
             sys.exit(0)
         else:
-            self.logger.debug("Canceled exiting program")
+            self.logger.info("Canceled exiting program")
     
     def clean(self, quit_root=True, destroy=False) -> None:
         '''
@@ -271,12 +286,14 @@ class Program:
             Question("When were you born?", ["1998", "1572"]), # TODO: Make this a CustomQuestion, and make them type it in
             CustomQuestion(self.get_previous_medical_conditions)
         )
+        self.__setup_quiz = True
         answers = prequiz.begin()
         jsonUtils.add({
                 "gender": answers[1],
                 "birth_year": answers[2]
             }) # self.get_previous_medical_conditions already writes to file
         self.clean(quit_root=False)
+        self.__setup_quiz = False
         self.logger.debug(jsonUtils.get_values())
     
     def run(self) -> None:
