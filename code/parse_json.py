@@ -212,24 +212,27 @@ class jsonUtils:
         def search(file: str, sentinal: int, **kwargs) -> str | dict:
             data = jsonUtils.open(file)
             search_for = kwargs.get("search_for", "ID")
+            return_dict = kwargs.get("return_dict", False)
+            
+            if isinstance(data, dict):
+                return data if return_dict else data[kwargs.get("_return", "Name")]
+            
             for symptom in data:
                 if symptom.get(search_for) == sentinal:
-                    if kwargs.get("return_dict", False):
-                        return symptom
-                    return symptom[kwargs.get("_return", "Name")]
+                    return symptom if return_dict else symptom[kwargs.get("_return", "Name")]
         ```
         '''
         
         data = jsonUtils.open(file)
         search_for = kwargs.get("search_for", "ID")
+        return_dict = kwargs.get("return_dict", False)
+        
         if isinstance(data, dict):
-            return data if kwargs.get("return_dict", False) else data[kwargs.get("_return", "Name")]
+            return data if return_dict else data[kwargs.get("_return", "Name")]
         
         for symptom in data:
             if symptom.get(search_for) == sentinal:
-                if kwargs.get("return_dict", False):
-                    return symptom
-                return symptom[kwargs.get("_return", "Name")]
+                return symptom if return_dict else symptom[kwargs.get("_return", "Name")]
         
 
 
