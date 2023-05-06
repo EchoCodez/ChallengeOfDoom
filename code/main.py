@@ -47,7 +47,7 @@ class Program:
             option_2="Yes"
             )
         if answer.get() == "Yes":
-            self.logger.debug("Exited program")
+            self.logger.info("Exited program")
             sys.exit(0)
         else:
             self.logger.debug("Canceled exiting program")

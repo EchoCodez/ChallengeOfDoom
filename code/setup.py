@@ -12,7 +12,7 @@ def setup_logging(log_file: str = "logs/runlog.log") -> lg.Logger:
         datefmt="%Y-%m-%d %H:%M:%S"
     )
     file_handler = lg.FileHandler(log_file)
-    formatter = lg.Formatter("%(asctime)s (%(filename)s) %(name)s: %(levelname)s: %(message)s")
+    formatter = lg.Formatter("%(asctime)s (%(filename)s) %(levelname)s: %(message)s")
     file_handler.setFormatter(formatter)
     logger = lg.getLogger(__name__)
     if logger.hasHandlers():

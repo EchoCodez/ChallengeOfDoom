@@ -1,18 +1,2 @@
-2023-05-06 15:50:32,989 (mcq.py) setup: DEBUG: Next Question
-2023-05-06 15:50:34,381 (mcq.py) setup: DEBUG: Male
-2023-05-06 15:50:34,398 (mcq.py) setup: DEBUG: Next Question
-2023-05-06 15:50:35,828 (mcq.py) setup: DEBUG: 1572
-2023-05-06 15:50:35,861 (mcq.py) setup: DEBUG: Next Question
-2023-05-06 15:50:36,136 (main.py) setup: DEBUG: 288
-2023-05-06 15:50:36,378 (main.py) setup: DEBUG: 468
-2023-05-06 15:50:36,718 (main.py) setup: DEBUG: 392
-2023-05-06 15:50:36,829 (main.py) setup: DEBUG: StopIteration
-2023-05-06 15:50:42,027 (mcq.py) setup: DEBUG: Next Question
-2023-05-06 15:50:42,027 (mcq.py) setup: DEBUG: Cleaned
-2023-05-06 15:50:42,027 (mcq.py) setup: DEBUG: ended
-2023-05-06 15:50:43,806 (main.py) setup: DEBUG: UserInfo:
-	conditions=['Eye redness', 'Lip swelling', 'Itching in the nose', 'Menstruation disorder']
-	preferences={'appearance_theme': 'dark', 'save_data': None}
-	gender=Male
-	birth_year=1572
-2023-05-06 15:50:43,808 (main.py) setup: DEBUG: dark
+2023-05-06 16:08:42,667 ::(main.py):: DEBUG: User clicked X button
+2023-05-06 16:08:44,453 ::(main.py):: INFO: Exited program
