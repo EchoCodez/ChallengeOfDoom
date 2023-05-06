@@ -1,29 +1,19 @@
 import json
 from typing import Callable
 from io import StringIO
-from dataclasses import dataclass
+from data_classes import UserInfo
 
 
 
 preferences = ("appearance_theme", "save_data")
-files = ("preferences.json", "user-data.json")
-
-
-@dataclass
-class UserInfo:
-    '''Dataclass storing information about user and user preferences'''
-    conditions: list[str]
-    preferences: dict[str, bool]
-    
-    def __str__(self) -> str:
-        return f"{self.__class__.__name__}:\n\tconditions={self.conditions}\n\tpreferences={self.preferences}"
+files = ("json_files/preferences.json", "json_files/user-data.json")
 
 
 class jsonUtils:
     '''Class containing custom made json file methods'''
     
     @staticmethod
-    def add(data: dict, file: str = "user-data.json", indent=4) -> None:
+    def add(data: dict, file: str = "json_files/user-data.json", indent=4) -> None:
         '''
         Adds data to a file
         
@@ -44,7 +34,7 @@ class jsonUtils:
             f.write(json.dumps(modified_data, indent=indent))
             
     @staticmethod
-    def clearfile(file: str = "user-data.json") -> None:
+    def clearfile(file: str = "json_files/user-data.json") -> None:
         """Resets json files
 
         Paramters:
@@ -79,7 +69,7 @@ class jsonUtils:
     
     
     @staticmethod
-    def get(file: StringIO, sentinal: str|int, *, func: Callable = lambda: None) -> bool:
+    def get(file: StringIO, sentinal: str|int, *, func: Callable = lambda x: None) -> bool:
         """
         Search a json file for a string or int as a key. If found, call func() and return True. Otherwise, return False.
 
@@ -88,7 +78,7 @@ class jsonUtils:
             file (StringIO): the file to be searched
             sentinal (str | int): The object to look for
             func (Callable, optional): The function to be called if the argument is found. 
-                Must take value of file[sentinal] as first parameter. Defaults to lambda: None.
+                Must take value of file[sentinal] as first parameter. Defaults to lambda x: None.
 
         Returns:
             bool: Whether or not the file was found
@@ -125,21 +115,120 @@ class jsonUtils:
         print(data.preferences)
         ```
         """
-          
-        with open("preferences.json") as pref, open("user-data.json") as user_data:
-            prefs, data = json.load(pref), json.load(user_data)
-            
+        
+        prefs, data = jsonUtils.open("json_files/preferences.json"), jsonUtils.open("json_files/user-data.json") 
         return UserInfo(
             conditions=data.get("conditions", []),
-            preferences={preference: prefs.get(preference) for preference in preferences}
+            preferences={preference: prefs.get(preference) for preference in preferences},
+            gender=data.get("gender"),
+            birthyear=data.get("birth_year")
             )
+    
+    @staticmethod
+    def open(file: str) -> list[dict] | dict:
+        """returns the json loaded file of a file path
+
+        Parameters:
+        -----------
+            file (str): file path
+        
+        Returns:
+        --------
+        list[dict]: a list containing all entries in the json file as dictionaries
+        
+        Implementation:
+        ---------------
+        ```
+        with open(file) as f:
+            return json.load(f)
+        ``` 
+        """
+          
+        with open(file) as f:
+            return json.load(f)
+        
+    @staticmethod
+    def search(file: str, sentinal: int, **kwargs) -> str | dict:
+        '''
+        Search for a given string in a json file
+        
+        Parameters:
+        -----------
+        file (`str`): the file path to the json file to search
+        sentinal (`int`): The ID to search for
+        kwargs (`dict[str, str]`, optional): Valid kwargs include "search_for", "return", and "return_dict".
+            They default to "ID", "Name" and False respectively.
+            See implementation for details on their function
+        
+        Returns:
+        --------
+        str | dict: string if `symptom[kwargs[_return]]` is string, and dict if `kwargs[return_dict]` is True
+        
+        Example Use:
+        ------------
+        ```
+        def look_for_id():
+            ID = 9
+            disease_name = jsonUtils.search(
+                file = "json_files/symptoms.json",
+                sentinal = ID
+                )
+            return disease_name
+
+        def look_for_name():
+            name="Bad Breath"
+            disease_id = jsonUtils.search(
+                file = "json_files/symptoms.json",
+                sentinal = name,
+                search_for = "Name",
+                _return = "ID"
+                )
+            return disease_id
+        
+        def get_id_symptom():
+            ID = 9
+            symptom = jsonUtils.search(
+                file = "json_files/symptoms.json",
+                sentinal = ID
+                )
+            return symptom
+        ```
+        
+        Implementation:
+        ---------------
+        ```
+        @staticmethod
+        def search(file: str, sentinal: int, **kwargs) -> str | dict:
+            data = jsonUtils.open(file)
+            search_for = kwargs.get("search_for", "ID")
+            return_dict = kwargs.get("return_dict", False)
+            
+            if isinstance(data, dict):
+                return data if return_dict else data[kwargs.get("_return", "Name")]
+            
+            for symptom in data:
+                if symptom.get(search_for) == sentinal:
+                    return symptom if return_dict else symptom[kwargs.get("_return", "Name")]
+        ```
+        '''
+        
+        data = jsonUtils.open(file)
+        search_for = kwargs.get("search_for", "ID")
+        return_dict = kwargs.get("return_dict", False)
+        
+        if isinstance(data, dict):
+            return data if return_dict else data[kwargs.get("_return", "Name")]
+        
+        for symptom in data:
+            if symptom.get(search_for) == sentinal:
+                return symptom if return_dict else symptom[kwargs.get("_return", "Name")]
+        
 
 
 def main() -> None:
     j = jsonUtils
     j.clearfiles()
-    j.add({"conditions": ["asthma", "cancer"]})
-    print(j.get_values())
+    print(j.search("json_files/symptoms.json", 17))
             
 
 if __name__ == "__main__":         
