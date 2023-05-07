@@ -26,8 +26,8 @@ class Program:
         self.__root = ctk.CTk()
         self.__root.title("Congressional App Challenge 2023")
         self.__root.protocol("WM_DELETE_WINDOW", self.on_closing)
-        width, height = self.__root.winfo_screenwidth(), self.__root.winfo_screenheight()
-        self.__root.geometry(f"{width}x{height}+0+0")
+        self.width, self.height = self.__root.winfo_screenwidth(), self.__root.winfo_screenheight()
+        self.__root.geometry(f"{self.width}x{self.height}+0+0")
         
         self.__setup_quiz = False
         self.__setup_finished = jsonUtils.open(preferences).get("setup_finished", False)
@@ -292,10 +292,45 @@ class Program:
         jsonUtils.add({"setup_finished": True}, file=preferences)
         self.logger.debug(jsonUtils.get_values())
     
-    def run(self) -> None:
+    def home(self) -> None:
         '''Main function that executes the program'''
         
-        ctk.CTkFrame(self.__root, fg_color="#00FF00", corner_radius=40).place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+        # Frames
+        ctk.CTkFrame( # top left
+            self.__root,
+            fg_color="#ADD8E6",
+            corner_radius=40,
+            height=self.height*0.55,
+            width=self.width*0.2
+            ).place(relx=0.15, rely=0.3, anchor=tk.CENTER)
+        ctk.CTkFrame( # bottom right
+            self.__root,
+            fg_color="#ADD8E6",
+            corner_radius=40,
+            height=self.height*0.55,
+            width=self.width*0.2
+            ).place(relx=0.85, rely=0.6, anchor=tk.CENTER)
+        ctk.CTkFrame( # bottom left
+            self.__root,
+            fg_color="#ADD8E6",
+            corner_radius=40,
+            height=self.height*0.25,
+            width=self.width*0.2
+            ).place(relx=0.15, rely=0.75, anchor=tk.CENTER)
+        ctk.CTkFrame( # top right
+            self.__root,
+            fg_color="#ADD8E6",
+            corner_radius=40,
+            height=self.height*0.25,
+            width=self.width*0.2
+            ).place(relx=0.85, rely=0.15, anchor=tk.CENTER)
+        
+        # Buttons
+        ctk.CTkButton(
+            self.__root,
+            text="Daily Diagnosis",
+            command=lambda: self.logger.debug("Button Pressed")
+            ).place(relx=0.85, rely=0.6, anchor=tk.CENTER)
         self.__root.mainloop()
     
     def execute(self):
@@ -304,7 +339,7 @@ class Program:
         else:
             self._appearance_is_set()
             
-        self.run()
+        self.home()
 
 
 def main(*, erase_data = False) -> None:
