@@ -1,7 +1,7 @@
 import json
 from typing import Callable
 from io import StringIO
-from data_classes import UserInfo
+from utils.data_classes import UserInfo
 
 
 
