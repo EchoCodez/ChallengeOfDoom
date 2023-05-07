@@ -1,8 +1,6 @@
 import logging as lg
 
 def setup_logging(log_file: str = "logs/runlog.log", logger_name = __name__) -> lg.Logger:
-    level = lg.DEBUG
-    
     with open(log_file, "w"): # create file if it doesn't exist. Otherwise, clear file
         pass
     
@@ -21,6 +19,6 @@ def setup_logging(log_file: str = "logs/runlog.log", logger_name = __name__) -> 
     
     logger.handlers.clear()
     logger.addHandler(file_handler)
-    logger.setLevel(level)
+    logger.setLevel(lg.DEBUG)
         
     return logger
