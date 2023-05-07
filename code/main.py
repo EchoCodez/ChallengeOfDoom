@@ -300,7 +300,6 @@ class Program:
     def _diagnose(self):
         results = Diagnosis(jsonUtils.get_values()).make_call()
         self.logger.info("User made daily diagnosis call.")
-        # TODO: make hashing system to write it to file
         jsonUtils.overwrite(
             data=results,
             file = f"logs/{date.today().strftime('%d_%m_%y')}.log"
