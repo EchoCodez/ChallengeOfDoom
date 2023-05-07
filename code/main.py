@@ -228,7 +228,7 @@ class Program:
             
         return conditions
     
-    def get_previous_medical_conditions(self, font="Default") -> None:
+    def get_previous_medical_conditions(self, font="Default") -> None: # CustomQuestion
         """Create checkboxes of previous medical conditions
 
         Parameters:
@@ -242,8 +242,6 @@ class Program:
             self.clean(quit_root=True)
 
              
-        width, height = self.__root.winfo_screenwidth(), self.__root.winfo_screenheight()
-        self.__root.geometry(f"{width}x{height}+0+0")
         title = ctk.CTkLabel(
             self.__root,
             text="Do you have any previous medical conditions from the list?",
@@ -271,6 +269,37 @@ class Program:
         next_button.grid(pady=10)
             
         self.__root.mainloop()       
+
+    def get_year_of_birth(self, font = ("None", 50)): # CustomQuestion
+        def verify_and_continue():
+            typed = typer.get(1.0, tk.END).strip()
+            year = datetime.now().year
+            self.logger.info(f"User typed {typed} as input for date of birth")
+            
+            if not typed.isnumeric():
+                self.logger.info("User entered a non numeric string")
+                CTkMessagebox(self.__root, message="Must be a number", icon="cancel")
+            elif year<int(typed)<1930:
+                self.logger.info(f"User entered date of birth outside 1930 and {year}")
+                CTkMessagebox(self.__root, message=f"Must be a year between 1930 and {year}", icon="cancel")
+            else:
+                self.logger.info("User entered valid date of birth")
+                # TODO: store data
+                self.__root.quit()
+        
+        typer = ctk.CTkTextbox(self.__root)
+        typer.insert(tk.END, "Type Here")
+        
+        title = ctk.CTkLabel(
+            self.__root,
+            text="What year were you born?",
+            font=font
+            )
+        next_button = ctk.CTkButton(
+            self.__root,
+            text="Next",
+            command=verify_and_continue
+        )
 
     def setup(self) -> None:
         """Sets up the multiple choice quiz and appearance theme

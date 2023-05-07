@@ -1,23 +1,27 @@
-# import customtkinter as ctk
-# import tkinter as tk
+import customtkinter as ctk
+import tkinter as tk
+from CTkMessagebox import CTkMessagebox
 
-# ctk.set_appearance_mode("dark")
-# r = ctk.CTk()
-# r.geometry("400x400")
-# ctk.CTkFrame(r, fg_color="#00FF00", corner_radius=40).place(relx=0.5, rely=0.5, anchor=tk.CENTER) #  rounded frame
-# r.mainloop()
-import requests
 
-url = "https://priaid-symptom-checker-v1.p.rapidapi.com/body/locations/15"
+ctk.set_appearance_mode("dark")
+root = ctk.CTk()
+root.geometry("700x350")
 
-querystring = {"language":"en-gb"}
+def configure_label():
+    if text.get(1.0, tk.END).strip().isnumeric():
+        b.configure(text=text.get(1.0, tk.END))
+    else:
+        print(text.get(1.0, tk.END))
+        CTkMessagebox(root, message="Must be a number", icon="cancel")
 
-headers = {
-	"X-RapidAPI-Key": "43a51db6fdmsh6723745eb2e12c3p190edcjsnc405e75fdbbb",
-	"X-RapidAPI-Host": "priaid-symptom-checker-v1.p.rapidapi.com"
-}
+text = ctk.CTkTextbox(root, width=240, height=45)
+text.insert(tk.END, "Type Here")
+text.pack()
 
-response = requests.get(url, headers=headers, params=querystring)
+b = ctk.CTkLabel(root, text="Sample")
+b.pack()
 
-print(response.json())
+l = ctk.CTkButton(root, text="Update", command=configure_label)
+l.pack()
 
+root.mainloop()
