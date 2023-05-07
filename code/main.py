@@ -1,6 +1,10 @@
+# library imports
 import tkinter as tk
 import customtkinter as ctk
 import sys
+from datetime import datetime, date
+
+# file imports
 from utils.parse_json import jsonUtils
 from CTkMessagebox import CTkMessagebox
 from utils.setup import setup_logging
@@ -294,9 +298,14 @@ class Program:
         self.logger.debug(jsonUtils.get_values())
     
     def _diagnose(self):
-        Diagnosis(jsonUtils.get_values()).make_call()
-        self.logger.debug("User made daily diagnosis call.")
+        results = Diagnosis(jsonUtils.get_values()).make_call()
+        self.logger.info("User made daily diagnosis call.")
         # TODO: make hashing system to write it to file
+        jsonUtils.overwrite(
+            data=results,
+            file = f"logs/{date.today().strftime('%d_%m_%y')}.log"
+            )
+        self.logger.info(f"Writing to log file 'logs/{date.today().strftime('%d_%m_%y')}.log' completed successfully")
     
     def home(self) -> None:
         '''Main function that executes the program'''

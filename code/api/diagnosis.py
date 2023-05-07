@@ -6,7 +6,7 @@ class Diagnosis:
     def __init__(self, user: UserInfo) -> None:
         self.user = user
 
-    def make_call(self):
+    def make_call(self, file: str = "json_files/possible_diseases.json"):
         import requests
         import json
 
@@ -27,7 +27,8 @@ class Diagnosis:
 
         # Make a GET request to the API endpoint
         response = requests.get(url + action, params=params)
-        jsonUtils.overwrite(response.json(), "json_files/possible_diseases.json")
+        jsonUtils.overwrite(response.json(), file)
+        return jsonUtils.open(file)
 
 
 if __name__ == "__main__":
