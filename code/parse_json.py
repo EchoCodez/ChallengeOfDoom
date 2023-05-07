@@ -222,8 +222,38 @@ class jsonUtils:
         for symptom in data:
             if symptom.get(search_for) == sentinal:
                 return symptom if return_dict else symptom[kwargs.get("_return", "Name")]
-        
+    
+    @staticmethod
+    def overwrite(data, file: str, *, dumps = True):
+        """Overwrite data in a file
 
+        Parameters:
+        ----------
+            data (dict | dumps): the data to overwrite the file with
+            
+            file (str): the file path
+            
+            dumps (bool, optional): whether to write `json.dumps(data)`. Defaults to True.
+        """
+            
+        with open(file, "w") as f:
+            if dumps:
+                f.write(json.dumps(data, indent=4))
+            else:
+                f.write(data)
+
+    @staticmethod
+    def read(file: str):
+        """Wrapper for jsonUtils.open
+
+        Args:
+            file (str): file path to json file
+
+        Returns:
+            dict | list[dict]: The json file
+        """
+        
+        return jsonUtils.open(file)
 
 def main() -> None:
     j = jsonUtils

@@ -16,10 +16,17 @@ def setup_logging(log_file: str = "logs/runlog.log") -> lg.Logger:
         "%(asctime)s (%(filename)s) %(levelname)s: %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S"
         )
+    
     file_handler.setFormatter(formatter)
     logger = lg.getLogger(__name__)
+    
     if logger.hasHandlers():
         logger.handlers.clear()
     logger.addHandler(file_handler)
     logger.setLevel(level)
+    
+    # disable library logging
+    for lib in ("urllib3", "requests", "PIL"):
+        lg.getLogger(lib).setLevel(lg.WARNING)
+        
     return logger

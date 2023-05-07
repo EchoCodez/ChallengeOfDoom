@@ -5,6 +5,7 @@ from parse_json import jsonUtils
 from CTkMessagebox import CTkMessagebox
 from setup import setup_logging
 from multiple_choice.mcq import MCQbuiler, Question, CustomQuestion
+from api.diagnosis import Diagnosis
 
 
 preferences = "json_files/preferences.json"
@@ -292,6 +293,10 @@ class Program:
         jsonUtils.add({"setup_finished": True}, file=preferences)
         self.logger.debug(jsonUtils.get_values())
     
+    def _diagnose(self):
+        Diagnosis(jsonUtils.get_values()).make_call()
+        print("\n".join(str(x) for x in jsonUtils.open("json_files/possible_diseases.json")))
+    
     def home(self) -> None:
         '''Main function that executes the program'''
         
@@ -329,7 +334,7 @@ class Program:
         ctk.CTkButton(
             self.__root,
             text="Daily Diagnosis",
-            command=lambda: self.logger.debug("Button Pressed")
+            command=self._diagnose
             ).place(relx=0.85, rely=0.6, anchor=tk.CENTER)
         self.__root.mainloop()
     
