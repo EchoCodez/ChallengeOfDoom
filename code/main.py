@@ -1,9 +1,9 @@
 import tkinter as tk
 import customtkinter as ctk
 import sys
-from parse_json import jsonUtils
+from utils.parse_json import jsonUtils
 from CTkMessagebox import CTkMessagebox
-from setup import setup_logging
+from utils.setup import setup_logging
 from multiple_choice.mcq import MCQbuiler, Question, CustomQuestion
 from api.diagnosis import Diagnosis
 
@@ -295,7 +295,8 @@ class Program:
     
     def _diagnose(self):
         Diagnosis(jsonUtils.get_values()).make_call()
-        self.logger.debug("\n".join(str(x) for x in jsonUtils.open("json_files/possible_diseases.json")))
+        self.logger.debug("User made daily diagnosis call.")
+        # TODO: make hashing system to write it to file
     
     def home(self) -> None:
         '''Main function that executes the program'''
