@@ -1,3 +1,5 @@
-2023-05-07 13:30:58 (main.py) DEBUG: User made daily diagnosis call.
-2023-05-07 13:31:15 (main.py) INFO: User clicked X button
-2023-05-07 13:31:16 (main.py) INFO: Exited program
+2023-05-07 14:01:57 (main.py) INFO: User made daily diagnosis call.
+2023-05-07 14:01:57 (main.py) INFO: Writing to log file 'logs/07_05_23.log' completed successfully
+2023-05-07 14:01:57 (main.py) INFO: Added log file name to logs.json
+2023-05-07 14:02:01 (main.py) INFO: User clicked X button
+2023-05-07 14:02:02 (main.py) INFO: Exited program

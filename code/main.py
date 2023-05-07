@@ -300,11 +300,22 @@ class Program:
     def _diagnose(self):
         results = Diagnosis(jsonUtils.get_values()).make_call()
         self.logger.info("User made daily diagnosis call.")
+        file = f"logs/{date.today().strftime('%d_%m_%y')}.log"
         jsonUtils.overwrite(
             data=results,
-            file = f"logs/{date.today().strftime('%d_%m_%y')}.log"
+            file = file
             )
-        self.logger.info(f"Writing to log file 'logs/{date.today().strftime('%d_%m_%y')}.log' completed successfully")
+        self.logger.info(f"Writing to log file '{file}' completed successfully")
+        
+        # writes it to list of logs
+        logs = set(jsonUtils.open("json_files/logs.json")["logs_list"]).union((file,))
+        jsonUtils.add(
+            data={"logs_list": list(logs)},
+            file="json_files/logs.json"
+        )
+        
+        self.logger.info("Added log file name to logs.json")
+        
     
     def home(self) -> None:
         '''Main function that executes the program'''
