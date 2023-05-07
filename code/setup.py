@@ -1,13 +1,12 @@
 import logging as lg
 
-def setup_logging(log_file: str = "logs/runlog.log") -> lg.Logger:
+def setup_logging(log_file: str = "logs/runlog.log", logger_name = __name__) -> lg.Logger:
     level = lg.DEBUG
     
     with open(log_file, "w"): # create file if it doesn't exist. Otherwise, clear file
         pass
     
     lg.basicConfig(
-        level=level,
         format="%(asctime)s (%(filename)s) %(name)s: %(levelname)s: %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S"
     )
@@ -18,15 +17,10 @@ def setup_logging(log_file: str = "logs/runlog.log") -> lg.Logger:
         )
     
     file_handler.setFormatter(formatter)
-    logger = lg.getLogger(__name__)
+    logger = lg.getLogger(logger_name)
     
-    if logger.hasHandlers():
-        logger.handlers.clear()
+    logger.handlers.clear()
     logger.addHandler(file_handler)
     logger.setLevel(level)
-    
-    # disable library logging
-    for lib in ("urllib3", "requests", "PIL"):
-        lg.getLogger(lib).setLevel(lg.WARNING)
         
     return logger

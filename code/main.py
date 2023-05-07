@@ -295,7 +295,7 @@ class Program:
     
     def _diagnose(self):
         Diagnosis(jsonUtils.get_values()).make_call()
-        print("\n".join(str(x) for x in jsonUtils.open("json_files/possible_diseases.json")))
+        self.logger.debug("\n".join(str(x) for x in jsonUtils.open("json_files/possible_diseases.json")))
     
     def home(self) -> None:
         '''Main function that executes the program'''
