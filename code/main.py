@@ -86,11 +86,6 @@ class Program:
             self.__root.quit()
         if destroy:
             self.__root.destroy()
-        
-        # write appearance theme preferences to file
-        if self.__remember.get():
-            jsonUtils.add({"appearance_theme":self.__appearance.get()}, file=preferences)
-            self.__remember = tk.BooleanVar(value=False)
     
     def _appearance_is_set(self) -> bool:
         '''check if theme preference in file already. If it is, update current'''
@@ -112,6 +107,10 @@ class Program:
                 ctk.set_appearance_mode("dark")
             else:
                 ctk.set_appearance_mode("light")
+        
+        def cont():
+            jsonUtils.add({"appearance_theme":self.__appearance.get()}, file=preferences)
+            self.clean(quit_root=True)
         
         # get user input for choice of theme
         
@@ -145,21 +144,7 @@ class Program:
         next_button = ctk.CTkButton(
             self.__root, 
             text="Next", 
-            command=self.clean,
-            font=("Default", 25),
-            )
-        remember_button = ctk.CTkRadioButton(
-            self.__root,
-            text="Remember my choice", 
-            variable=self.__remember, 
-            value=True,
-            font=("Default", 25),
-            )
-        dont_remember_button = ctk.CTkRadioButton(
-            self.__root,
-            text="Don't remember my choice", 
-            variable=self.__remember, 
-            value=False,
+            command=cont,
             font=("Default", 25),
             )
     
@@ -169,8 +154,6 @@ class Program:
         light_button.pack(pady=20)
         label.pack(pady=20)
         next_button.pack(pady=20)
-        remember_button.pack(pady=20)
-        dont_remember_button.pack(pady=20)
         
         self.__root.mainloop()
     
@@ -279,12 +262,15 @@ class Program:
             if not typed.isnumeric():
                 self.logger.info("User entered a non numeric string")
                 CTkMessagebox(self.__root, message="Must be a number", icon="cancel")
-            elif year<int(typed)<1930:
+            elif int(typed) not in range(1930, year+1):
                 self.logger.info(f"User entered date of birth outside 1930 and {year}")
                 CTkMessagebox(self.__root, message=f"Must be a year between 1930 and {year}", icon="cancel")
             else:
                 self.logger.info("User entered valid date of birth")
-                # TODO: store data
+                jsonUtils.add(
+                    data={"birth_year": typed}
+                )
+                self.logger.info(f"Birth year ::{typed}:: succesfully written to file")
                 self.__root.quit()
         
         typer = ctk.CTkTextbox(self.__root)
@@ -300,6 +286,10 @@ class Program:
             text="Next",
             command=verify_and_continue
         )
+        title.pack()
+        typer.pack()
+        next_button.pack()
+        self.__root.mainloop()
 
     def setup(self) -> None:
         """Sets up the multiple choice quiz and appearance theme
@@ -312,15 +302,16 @@ class Program:
             self.logger,
             CustomQuestion(self.set_appearance if not self._appearance_is_set() else lambda: None),
             Question("What is your gender?", ["Male", "Female"]),
-            Question("When were you born?", ["1998", "1572"]), # TODO: Make this a CustomQuestion, and make them type it in
+            CustomQuestion(self.get_year_of_birth),
             CustomQuestion(self.get_previous_medical_conditions)
         )
         self.__setup_quiz = True
         answers = prequiz.begin()
+        
         jsonUtils.add({
                 "gender": answers[1],
-                "birth_year": answers[2]
-            }) # self.get_previous_medical_conditions already writes to file
+            })
+        
         self.clean(quit_root=False)
         self.__setup_quiz = False
         jsonUtils.add({"setup_finished": True}, file=preferences)
@@ -405,15 +396,15 @@ def main(*, erase_data = False) -> None:
         Debugging parameter to erase all data in preferences.json and user-data.json
     '''
 
-    program = Program()
-    
     if erase_data: # only for testing purposes; delete in final push
         jsonUtils.clearfiles()
+
+    program = Program()
     
     program.execute()
     
 
 
 if __name__ == "__main__":
-    main(erase_data=False)
+    main(erase_data=True)
     
