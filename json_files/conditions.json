@@ -1,3 +1,6 @@
-[
-    
-]
+{
+    "conditions": [
+        "Chest pain",
+        "Weight gain"
+    ]
+}

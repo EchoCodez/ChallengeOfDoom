@@ -8,14 +8,14 @@ from datetime import datetime, date
 from utils.parse_json import jsonUtils
 from CTkMessagebox import CTkMessagebox
 from utils.setup import setup_logging
-from multiple_choice.mcq import MCQbuiler, Question, CustomQuestion
+from utils.mcq import MCQbuiler
+from utils.data_classes import Question, CustomQuestion, UserInfo
 from api.diagnosis import Diagnosis
 
 
 preferences = "json_files/preferences.json"
 user_data = "json_files/user-data.json"
 conditions_list = "json_files/symptoms.json"
-conditions = "json_files/symptoms.json"
 
 class Program:
     '''Class encompassing all the functions used to run the program'''
@@ -210,7 +210,7 @@ class Program:
             
         return conditions
     
-    def get_previous_medical_conditions(self, font="Default") -> None: # CustomQuestion
+    def get_previous_medical_conditions(self, font="Default", file="json_files/conditions.json") -> None: # CustomQuestion
         """Create checkboxes of previous medical conditions
 
         Parameters:
@@ -220,13 +220,16 @@ class Program:
         
         def continue_button():
             self.__conditions = {key: value.get() for key, value in self.__conditions.items() if value.get()}
-            jsonUtils.add({"conditions": list(self.__conditions.keys())})
+            jsonUtils.overwrite(
+                {"conditions": list(self.__conditions.keys())},
+                file=file
+                )
             self.clean(quit_root=True)
 
              
         title = ctk.CTkLabel(
             self.__root,
-            text="Do you have any previous medical conditions from the list?",
+            text="Are you experiencing any of the above from this list?",
             font=(font, 50)
             )
         next_button = ctk.CTkButton(
@@ -294,15 +297,13 @@ class Program:
         """Sets up the multiple choice quiz and appearance theme
         """        
         
-        # TODO: Check if they have already answered the multiple choice quiz
         prequiz = MCQbuiler(
             self.__root,
             "Let's set up the program!", # title
             self.logger,
             CustomQuestion(self.set_appearance if not self._appearance_is_set() else lambda: None),
             Question("What is your gender?", ["Male", "Female"]),
-            CustomQuestion(self.get_year_of_birth),
-            CustomQuestion(self.get_previous_medical_conditions)
+            CustomQuestion(self.get_year_of_birth)
         )
         self.__setup_quiz = True
         answers = prequiz.begin()
@@ -317,7 +318,16 @@ class Program:
         self.logger.debug(jsonUtils.get_values())
     
     def _diagnose(self):
-        results = Diagnosis(jsonUtils.get_values()).make_call()
+        MCQbuiler(
+            self.__root,
+            "Daily Checkup",
+            self.logger,
+            CustomQuestion(self.get_previous_medical_conditions, kwargs={"file": "json_files/conditions.json"})
+        ).begin()
+        test_results = jsonUtils.read("json_files/conditions.json")
+        user = jsonUtils.get_values()
+        user.conditions = test_results
+        results = Diagnosis(user=user).make_call()
         self.logger.info("User made daily diagnosis call.")
         file = f"logs/{date.today().strftime('%d_%m_%y')}.log"
         jsonUtils.overwrite(

@@ -1,6 +1,7 @@
 {
     "logs_list": [
-        "logs/runlog.log",
-        "logs/07_05_23.log"
+        "logs/07_05_23.log",
+        "logs/08_05_23.log",
+        "logs/runlog.log"
     ]
 }
