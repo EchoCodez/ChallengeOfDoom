@@ -95,7 +95,6 @@ class Program:
                 return True
         return False
         
-    
     def set_appearance(self) -> None:
         '''Choose dark or light theme for custom tkinter'''
         
@@ -334,8 +333,7 @@ class Program:
             file="json_files/logs.json"
         )
         
-        self.logger.info("Added log file name to logs.json")
-        
+        self.logger.info("Added log file name to logs.json")       
     
     def home(self) -> None:
         '''Main function that executes the program'''

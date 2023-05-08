@@ -255,6 +255,38 @@ class jsonUtils:
         
         return jsonUtils.open(file)
 
+    @staticmethod
+    def open_json(path: str, action: str = "r"):
+        """Context manager for opening json files. 
+        Instead of returning a file object, the object returned is a json.load(file) object. 
+        This should mainly be used for readability
+
+        Parameters:
+        -----------
+            path (str): Path to the file
+            action (str, optional): What action to take with the file. Options include any of the parameters from open.
+            Defaults to "r". If anything other than "r" is used, it returns the file object as well.
+
+        Returns:
+        --------
+            Any | tuple[Any, fp]: json loaded version of file, or tuple of json loaded version of file and file object (only if `action != r`)
+        """        
+        return open_json(path, action)
+
+
+class open_json:
+    def __init__(self, path: str, action: str = "r") -> None:
+        self.path = path
+        self.action = action
+        self.return_file = (self.action != "r")
+    
+    def __enter__(self):
+        self.file = open(self.path, self.action)
+        return (json.load(self.file), self.file) if self.return_file else json.load(self.file)
+    
+    def __exit__(self):
+        self.file.close()
+
 def main() -> None:
     j = jsonUtils
     j.clearfiles()
