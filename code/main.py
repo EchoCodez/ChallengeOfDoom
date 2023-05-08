@@ -318,12 +318,15 @@ class Program:
         self.logger.debug(jsonUtils.get_values())
     
     def _diagnose(self):
+        self.clean(quit_root=False)
+        
         MCQbuiler(
             self.__root,
             "Daily Checkup",
             self.logger,
             CustomQuestion(self.get_previous_medical_conditions, kwargs={"file": "json_files/conditions.json"})
         ).begin()
+        
         test_results = jsonUtils.read("json_files/conditions.json")
         user = jsonUtils.get_values()
         user.conditions = test_results
@@ -331,7 +334,7 @@ class Program:
         self.logger.info("User made daily diagnosis call.")
         file = f"logs/{date.today().strftime('%d_%m_%y')}.log"
         jsonUtils.overwrite(
-            data=results,
+            data = results,
             file = file
             )
         self.logger.info(f"Writing to log file '{file}' completed successfully")
