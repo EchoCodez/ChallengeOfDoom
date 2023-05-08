@@ -263,13 +263,15 @@ class jsonUtils:
 
         Parameters:
         -----------
-            path (str): Path to the file
-            action (str, optional): What action to take with the file. Options include any of the parameters from open.
+            path (`str`): Path to the file
+            
+            action (`str`, optional): What action to take with the file. Options include any of the parameters from open.
+            
             Defaults to "r". If anything other than "r" is used, it returns the file object as well.
 
         Returns:
         --------
-            Any | tuple[Any, fp]: json loaded version of file, or tuple of json loaded version of file and file object (only if `action != r`)
+            `Any | tuple[Any, fp]`: json loaded version of file, or tuple of json loaded version of file and file object (only if `action != r`)
         """        
         return open_json(path, action)
 
