@@ -260,10 +260,10 @@ class Program:
             
             if not typed.isnumeric():
                 self.logger.info("User entered a non numeric string")
-                CTkMessagebox(self.__root, message="Must be a number", icon="cancel")
+                CTkMessagebox(self.__root, title="Date of Birth Submission Error",message="Must be a number", icon="cancel")
             elif int(typed) not in range(1930, year+1):
                 self.logger.info(f"User entered date of birth outside 1930 and {year}")
-                CTkMessagebox(self.__root, message=f"Must be a year between 1930 and {year}", icon="cancel")
+                CTkMessagebox(self.__root, title="Date of Birth Submission Error",message=f"Must be a year between 1930 and {year}", icon="cancel")
             else:
                 self.logger.info("User entered valid date of birth")
                 jsonUtils.add(
@@ -272,7 +272,7 @@ class Program:
                 self.logger.info(f"Birth year ::{typed}:: succesfully written to file")
                 self.__root.quit()
         
-        typer = ctk.CTkTextbox(self.__root)
+        typer = ctk.CTkTextbox(self.__root, width=400, font=("Times New Roman", 25))
         typer.insert(tk.END, "Type Here")
         
         title = ctk.CTkLabel(
@@ -285,9 +285,9 @@ class Program:
             text="Next",
             command=verify_and_continue
         )
-        title.pack()
-        typer.pack()
-        next_button.pack()
+        title.pack(pady=10)
+        typer.pack(pady=10)
+        next_button.pack(pady=10)
         self.__root.mainloop()
 
     def setup(self) -> None:
