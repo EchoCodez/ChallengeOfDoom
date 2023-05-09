@@ -57,7 +57,7 @@ class Program:
             if force_quit.get() == "Force Quit":
                 self.logger.warning("User chose to force application to shut down")
                 sys.exit(0)
-            self.logger.info("User choose to continue with the setup quiz")
+            self.logger.debug("User choose to continue with the setup quiz")
             return
         else:
             answer = CTkMessagebox(
@@ -67,8 +67,8 @@ class Program:
                 option_1="Cancel",
                 option_2="Yes"
             )
-        if answer.get() == "Yes" and not self.__setup_quiz:
-            self.logger.info("Exited program")
+        if answer.get() == "Yes":
+            self.logger.debug("Exited program")
             sys.exit(0)
         else:
             self.logger.info("Canceled exiting program")
