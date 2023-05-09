@@ -18,7 +18,6 @@ class Diagnosis:
 
 
         # Set the query parameters
-        print(self.user.conditions)
         params = {
             "token": token,
             "language": language,

@@ -316,6 +316,26 @@ class Program:
         self.logger.debug(jsonUtils.get_values())
     
     def _diagnose(self):
+        def call_api(user):
+            results = Diagnosis(user=user).make_call()
+            
+            self.logger.info("User made daily diagnosis call.")
+            file = f"json_files/logs/{date.today().strftime('%d_%m_%y')}.json"
+            jsonUtils.overwrite(
+                data = results,
+                file = file
+                )
+            self.logger.info(f"Writing to log file '{file}' completed successfully")
+            
+            # writes it to list of logs
+            logs = set(jsonUtils.open("json_files/logs.json")["logs_list"]).union((file,))
+            jsonUtils.add(
+                data={"logs_list": list(logs)},
+                file="json_files/logs.json"
+            )
+            
+            self.logger.info("Added log file name to logs.json")
+        
         self.clean(quit_root=False)
         
         MCQbuiler(
@@ -325,8 +345,18 @@ class Program:
             CustomQuestion(self.get_previous_medical_conditions, kwargs={"file": "json_files/conditions.json"})
         ).begin()
         
+        self.clean()
+        
+        loading = ctk.CTkLabel(
+            self.__root,
+            text="Saving results to health log", # TODO
+            font=("Times New Roman", 50)
+        )
+        loading.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+        
         test_results = jsonUtils.read("json_files/conditions.json")
         user = jsonUtils.get_values()
+        
         for condition in test_results["conditions"]:
             user.conditions+= [jsonUtils.search(
                 conditions_list,
@@ -334,27 +364,10 @@ class Program:
                 search_for="Name",
                 _return="ID"
                 )]
-        self.logger.debug(user.conditions)
+        call_api(user=user)
         
-        results = Diagnosis(user=user).make_call()
+        loading.destroy()
         
-        self.logger.info("User made daily diagnosis call.")
-        file = f"json_files/logs/{date.today().strftime('%d_%m_%y')}.json"
-        jsonUtils.overwrite(
-            data = results,
-            file = file
-            )
-        self.logger.info(f"Writing to log file '{file}' completed successfully")
-        
-        # writes it to list of logs
-        logs = set(jsonUtils.open("json_files/logs.json")["logs_list"]).union((file,))
-        jsonUtils.add(
-            data={"logs_list": list(logs)},
-            file="json_files/logs.json"
-        )
-        
-        self.logger.info("Added log file name to logs.json")
-        self.clean()
         self.home()     
     
     def home(self) -> None:
