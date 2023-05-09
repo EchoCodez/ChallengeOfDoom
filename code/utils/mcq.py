@@ -1,21 +1,23 @@
 import tkinter as tk
 import customtkinter as ctk
-from multiple_choice.questions import Question, CustomQuestion
+from logging import Logger
+from utils.data_classes import Question, CustomQuestion
 
 class MCQbuiler:
-    def __init__(self, root: ctk.CTk, name, *questions: Question) -> None:
+    def __init__(self, root: ctk.CTk, name: str, logger: Logger, *questions: Question) -> None:
         """Initialize Multiple Choice Quiz
 
         Parameters:
         -----------
             root (ctk.CTk): customtkinter root
             
-            name (_type_): Name of test
+            name (str): Name of test
         """
         
         self.questions = questions
         self.root = root
         self.name = name
+        self.logger = logger
         self.correct = False
     
     def clean(self):
@@ -54,7 +56,7 @@ class MCQbuiler:
         next_button.place(relx=0.5, rely=0.6, anchor=tk.CENTER)
         self.root.mainloop()
     
-    def start_questions(self, scored_quiz = False) -> list[bool] | list[str]:
+    def _start_questions(self, scored_quiz = False) -> list[bool] | list[str]:
         """Wrapper for iterating through and creating questions
 
         Parameters:
@@ -77,10 +79,11 @@ class MCQbuiler:
                 self.__create_question(question)
             elif isinstance(question, CustomQuestion):
                 question.question(*question.args, **question.kwargs)
-            else:
+            elif question() is not None:
                 raise TypeError("Invalid Question {0}".format(question))
             
             self.clean()
+            self.logger.debug("Next Question")
             
             if scored_quiz:
                 corrects.append(self.correct==question.correct_answer)
@@ -118,9 +121,9 @@ class MCQbuiler:
             button.pack(pady=10)
         
         def leave():
+            self.logger.debug(option.get())
+            self.correct = option.get()
             self.root.quit()
-            print(option.get())
-            self.correct = (option.get())
         
         next_button = ctk.CTkButton(
             self.root,
@@ -133,8 +136,6 @@ class MCQbuiler:
         self.root.mainloop()
         
         
-        
-    
     def end(self, title_next="The End!", continue_text = "Finish", title_font= ("DEFAULT", 50), continue_font=("DEFAULT", 30), **kwargs):
         """Creates the end screen of quiz
 
@@ -147,7 +148,8 @@ class MCQbuiler:
             title_font (tuple, optional): Font options for title. Defaults to `("DEFAULT", 50)`.
             
             continue_font (tuple, optional): Font options for button. Defaults to `("DEFAULT", 30)`.
-        """        
+        """
+        self.logger.debug("ended")
         
         width, height = self.root.winfo_screenwidth(), self.root.winfo_screenheight()
         self.root.geometry("{0}x{1}+0+0".format(width, height))
@@ -173,10 +175,13 @@ class MCQbuiler:
         """        
         
         self.start(**kwargs)
+        self.logger.debug("Started Quiz")
         self.clean()
-        answers = self.start_questions(**kwargs)
+        answers = self._start_questions(**kwargs)
         self.clean()
+        self.logger.debug("Cleaned")
         self.end(**kwargs)
+        self.logger.debug("Ended Quiz")
         
         return answers
         
