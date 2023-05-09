@@ -1,7 +1,7 @@
 {
     "logs_list": [
-        "logs/07_05_23.log",
-        "logs/08_05_23.log",
-        "logs/runlog.log"
+        "json_files/logs/09_05_23.json",
+        "json_files/logs/07_05_23.json",
+        "json_files/runlog.log"
     ]
 }

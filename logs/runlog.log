@@ -1,30 +1,13 @@
-2023-05-08 16:32:26 (mcq.py) DEBUG: Started Quiz
-2023-05-08 16:32:28 (mcq.py) DEBUG: Next Question
-2023-05-08 16:32:29 (mcq.py) DEBUG: Male
-2023-05-08 16:32:29 (mcq.py) DEBUG: Next Question
-2023-05-08 16:32:33 (main.py) INFO: User typed 1980 as input for date of birth
-2023-05-08 16:32:33 (main.py) INFO: User entered valid date of birth
-2023-05-08 16:32:33 (main.py) INFO: Birth year ::1980:: succesfully written to file
-2023-05-08 16:32:33 (mcq.py) DEBUG: Next Question
-2023-05-08 16:32:33 (mcq.py) DEBUG: Cleaned
-2023-05-08 16:32:33 (mcq.py) DEBUG: ended
-2023-05-08 16:32:34 (mcq.py) DEBUG: Ended Quiz
-2023-05-08 16:32:34 (main.py) DEBUG: UserInfo:
-	conditions=[]
-	preferences={'appearance_theme': 'dark', 'save_data': None}
-	gender=Male
-	birth_year=1980
-2023-05-08 16:32:36 (mcq.py) DEBUG: Started Quiz
-2023-05-08 16:32:36 (main.py) DEBUG: 288
-2023-05-08 16:32:36 (main.py) DEBUG: 468
-2023-05-08 16:32:37 (main.py) DEBUG: 392
-2023-05-08 16:32:37 (main.py) DEBUG: StopIteration
-2023-05-08 16:32:40 (mcq.py) DEBUG: Next Question
-2023-05-08 16:32:40 (mcq.py) DEBUG: Cleaned
-2023-05-08 16:32:40 (mcq.py) DEBUG: ended
-2023-05-08 16:32:42 (mcq.py) DEBUG: Ended Quiz
-2023-05-08 16:32:43 (main.py) INFO: User made daily diagnosis call.
-2023-05-08 16:32:43 (main.py) INFO: Writing to log file 'logs/08_05_23.log' completed successfully
-2023-05-08 16:32:43 (main.py) INFO: Added log file name to logs.json
-2023-05-08 16:33:01 (main.py) INFO: User clicked X button
-2023-05-08 16:33:02 (main.py) INFO: Exited program
+2023-05-09 17:19:04 (main.py) INFO: Attempting to save memory by deleting last months checkup results
+2023-05-09 17:19:04 (main.py) INFO: Last months checkup was not found. AKA file path json_files/logs/09_04_23.json was not found.
+2023-05-09 17:19:06 (mcq.py) DEBUG: Started Quiz
+2023-05-09 17:19:13 (mcq.py) DEBUG: Next Question
+2023-05-09 17:19:13 (mcq.py) DEBUG: Cleaned
+2023-05-09 17:19:13 (mcq.py) DEBUG: ended
+2023-05-09 17:19:14 (mcq.py) DEBUG: Ended Quiz
+2023-05-09 17:19:14 (main.py) DEBUG: [40, 44, 273]
+2023-05-09 17:19:15 (main.py) INFO: User made daily diagnosis call.
+2023-05-09 17:19:15 (main.py) INFO: Writing to log file 'json_files/logs/09_05_23.json' completed successfully
+2023-05-09 17:19:15 (main.py) INFO: Added log file name to logs.json
+2023-05-09 17:19:27 (main.py) INFO: User clicked X button
+2023-05-09 17:19:28 (main.py) INFO: Exited program

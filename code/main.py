@@ -176,7 +176,6 @@ class Program:
             for i in range(2, (height-300)//37): # calculate amount of rows based off of window height
                 name = next(condition_names, None)
                 if name is None:
-                    self.logger.debug("StopIteration")
                     return conditions
                 
                 conditions[name]=tk.BooleanVar(value=False)
@@ -199,7 +198,6 @@ class Program:
                 checkbox.update_idletasks() # update the widget size
                 widths = max(widths, checkbox.winfo_width()) # height is always 24
                 checkboxes.append(checkbox)
-            self.logger.debug(widths)
                 
             width_counter+=widths
             if width_counter>width:
@@ -329,10 +327,19 @@ class Program:
         
         test_results = jsonUtils.read("json_files/conditions.json")
         user = jsonUtils.get_values()
-        user.conditions = test_results
+        for condition in test_results["conditions"]:
+            user.conditions+= [jsonUtils.search(
+                conditions_list,
+                sentinal=condition,
+                search_for="Name",
+                _return="ID"
+                )]
+        self.logger.debug(user.conditions)
+        
         results = Diagnosis(user=user).make_call()
+        
         self.logger.info("User made daily diagnosis call.")
-        file = f"logs/{date.today().strftime('%d_%m_%y')}.log"
+        file = f"json_files/logs/{date.today().strftime('%d_%m_%y')}.json"
         jsonUtils.overwrite(
             data = results,
             file = file
@@ -346,7 +353,9 @@ class Program:
             file="json_files/logs.json"
         )
         
-        self.logger.info("Added log file name to logs.json")       
+        self.logger.info("Added log file name to logs.json")
+        self.clean()
+        self.home()     
     
     def home(self) -> None:
         '''Main function that executes the program'''
@@ -394,6 +403,23 @@ class Program:
             self.setup()
         else:
             self._appearance_is_set()
+        
+        logs = jsonUtils.open("json_files/logs.json")["logs_list"]
+        
+        self.logger.info("Attempting to save memory by deleting last months checkup results")
+        
+        current_date = date.today()
+        current_month = current_date.month
+        last_month = current_month - 1 if current_month != 1 else 12  
+        today_a_month_ago = date(current_date.year, last_month, current_date.day).strftime("%d_%m_%y")
+        
+        last_months_checkup = f"json_files/logs/{today_a_month_ago}.json"
+        try:
+            jsonUtils.delete_file(last_months_checkup)
+        except FileNotFoundError:
+            self.logger.info(f"Last months checkup was not found. AKA file path {last_months_checkup} was not found.")
+        else:
+            self.logger.info("Deletion of last months diagnosis was successfull")
             
         self.home()
 
@@ -417,5 +443,5 @@ def main(*, erase_data = False) -> None:
 
 
 if __name__ == "__main__":
-    main(erase_data=True)
+    main(erase_data=False)
     

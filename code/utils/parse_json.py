@@ -1,4 +1,5 @@
 import json
+import os
 from typing import Callable
 from io import StringIO
 from utils.data_classes import UserInfo
@@ -274,6 +275,10 @@ class jsonUtils:
             `Any | tuple[Any, fp]`: json loaded version of file, or tuple of json loaded version of file and file object (only if `action != r`)
         """        
         return open_json(path, action)
+
+    @staticmethod
+    def delete_file(path: str):
+        os.remove(path)
 
 
 class open_json:
