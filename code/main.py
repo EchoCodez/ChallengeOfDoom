@@ -2,6 +2,7 @@
 import tkinter as tk
 import customtkinter as ctk
 import sys
+import webbrowser
 from datetime import datetime, date
 
 # file imports
@@ -371,9 +372,16 @@ class Program:
         self._show_diagnosis_results()
         self.home()
     
-    def _show_diagnosis_results(self):
+    def _show_diagnosis_results(self, font: str | tuple[str, int] = ("Times New Roman", 35)):
+        ctk.CTkLabel(
+            self.__root,
+            text="Diagnosis results",
+            font=(font[0], font[1]+5) if isinstance(font, (tuple, list)) else (font, 40)
+        ).pack(pady=20)
         tabview = ctk.CTkTabview(
-            self.__root
+            self.__root,
+            width=600,
+            height=500
         )
         tabview.pack(padx=20, pady=20)
         
@@ -391,9 +399,17 @@ class Program:
             tab = tabview.add(name)
             label = ctk.CTkLabel(
                 tab,
-                text=f"Accuracy rating: {round(accuracy, 2)}%\nSee doctors specialized in {', '.join(x['Name'] for x in specialization)}"
+                text=f"Name:\n{name}\n\nAccuracy rating:\n{round(accuracy, 2)}%\n\nSee doctors specialized in:\n{', '.join(x['Name'] for x in specialization)}",
+                font=font
             )
             label.pack()
+        
+            ctk.CTkButton(
+                tab,
+                text="What is this?",
+                command=lambda name=name: webbrowser.open_new_tab(f"https://www.google.com/search?q={name.replace(' ', '%20')}")
+            ).pack(pady=50)
+        
         ctk.CTkButton(
             self.__root,
             text="Back to homepage",

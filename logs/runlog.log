@@ -1,15 +1,13 @@
-2023-05-10 08:21:35 (main.py) INFO: Attempting to save memory by deleting last months checkup results
-2023-05-10 08:21:35 (main.py) INFO: Last months checkup was not found. AKA file path json/logs/10_04_23.json was not found.
-2023-05-10 08:21:36 (mcq.py) DEBUG: Started Quiz
-2023-05-10 08:21:39 (mcq.py) DEBUG: Next Question
-2023-05-10 08:21:39 (mcq.py) DEBUG: Cleaned
-2023-05-10 08:21:39 (mcq.py) DEBUG: ended
-2023-05-10 08:21:39 (mcq.py) DEBUG: Ended Quiz
-2023-05-10 08:21:40 (main.py) DEBUG: User made daily diagnosis call.
-2023-05-10 08:21:40 (main.py) INFO: Writing to log file 'json/logs/10_05_23.json' completed successfully
-2023-05-10 08:21:40 (main.py) INFO: Added log file name to logs.json
-2023-05-10 08:21:40 (main.py) DEBUG: {'Issue': {'ID': 281, 'Name': 'Food poisoning', 'Accuracy': 90, 'Icd': 'A05;A02;A03;A04', 'IcdName': 'Other bacterial foodborne intoxications, not elsewhere classified;Other salmonella infections;Shigellosis;Other bacterial intestinal infections', 'ProfName': 'Foodborne illness', 'Ranking': 1}, 'Specialisation': [{'ID': 15, 'Name': 'General practice', 'SpecialistID': 0}, {'ID': 19, 'Name': 'Internal medicine', 'SpecialistID': 0}]}
-2023-05-10 08:21:40 (main.py) DEBUG: {'Issue': {'ID': 59, 'Name': 'Urinary tract infection', 'Accuracy': 21.8571434, 'Icd': 'N39.0', 'IcdName': 'Urinary tract infection, site not specified', 'ProfName': 'Cystitis', 'Ranking': 2}, 'Specialisation': [{'ID': 15, 'Name': 'General practice', 'SpecialistID': 0}, {'ID': 18, 'Name': 'Gynecology', 'SpecialistID': 0}, {'ID': 19, 'Name': 'Internal medicine', 'SpecialistID': 0}]}
-2023-05-10 08:21:40 (main.py) DEBUG: {'Issue': {'ID': 166, 'Name': 'Listeria infection', 'Accuracy': 14.9142847, 'Icd': 'A32', 'IcdName': 'Listeriosis', 'ProfName': 'Listeriosis', 'Ranking': 3}, 'Specialisation': [{'ID': 15, 'Name': 'General practice', 'SpecialistID': 0}, {'ID': 19, 'Name': 'Internal medicine', 'SpecialistID': 0}]}
-2023-05-10 08:21:44 (main.py) INFO: User clicked X button
-2023-05-10 08:21:45 (main.py) DEBUG: Exited program
+2023-05-10 16:36:19 (main.py) INFO: Attempting to save memory by deleting last months checkup results
+2023-05-10 16:36:19 (main.py) INFO: Deletion of last months diagnosis was successfull
+2023-05-10 16:36:42 (mcq.py) DEBUG: Started Quiz
+2023-05-10 16:36:57 (mcq.py) DEBUG: Next Question
+2023-05-10 16:36:57 (mcq.py) DEBUG: Cleaned
+2023-05-10 16:36:57 (mcq.py) DEBUG: ended
+2023-05-10 16:36:58 (mcq.py) DEBUG: Ended Quiz
+2023-05-10 16:36:59 (main.py) DEBUG: User made daily diagnosis call.
+2023-05-10 16:36:59 (main.py) INFO: Writing to log file 'json/logs/10_05_23.json' completed successfully
+2023-05-10 16:36:59 (main.py) INFO: Added log file name to logs.json
+2023-05-10 16:36:59 (main.py) ERROR: Unable to get diagnosis results: Invalid token
+2023-05-10 16:37:37 (main.py) INFO: User clicked X button
+2023-05-10 16:37:38 (main.py) DEBUG: Exited program
