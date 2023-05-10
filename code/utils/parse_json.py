@@ -7,14 +7,14 @@ from utils.data_classes import UserInfo
 
 
 preferences = ("appearance_theme", "save_data")
-files = ("json_files/preferences.json", "json_files/user-data.json")
+files = ("json/preferences.json", "json/user-data.json")
 
 
 class jsonUtils:
     '''Class containing custom made json file methods'''
     
     @staticmethod
-    def add(data: dict, file: str = "json_files/user-data.json", indent=4) -> None:
+    def add(data: dict, file: str = "json/user-data.json", indent=4) -> None:
         '''
         Adds data to a file
         
@@ -35,7 +35,7 @@ class jsonUtils:
             f.write(json.dumps(modified_data, indent=indent))
             
     @staticmethod
-    def clearfile(file: str = "json_files/user-data.json") -> None:
+    def clearfile(file: str = "json/user-data.json") -> None:
         """Resets json files
 
         Paramters:
@@ -117,7 +117,7 @@ class jsonUtils:
         ```
         """
         
-        prefs, data = jsonUtils.open("json_files/preferences.json"), jsonUtils.open("json_files/user-data.json") 
+        prefs, data = jsonUtils.open("json/preferences.json"), jsonUtils.open("json/user-data.json") 
         return UserInfo(
             conditions=data.get("conditions", []),
             preferences={preference: prefs.get(preference) for preference in preferences},
@@ -171,7 +171,7 @@ class jsonUtils:
         def look_for_id():
             ID = 9
             disease_name = jsonUtils.search(
-                file = "json_files/symptoms.json",
+                file = "json/symptoms.json",
                 sentinal = ID
                 )
             return disease_name
@@ -179,7 +179,7 @@ class jsonUtils:
         def look_for_name():
             name="Bad Breath"
             disease_id = jsonUtils.search(
-                file = "json_files/symptoms.json",
+                file = "json/symptoms.json",
                 sentinal = name,
                 search_for = "Name",
                 _return = "ID"
@@ -189,7 +189,7 @@ class jsonUtils:
         def get_id_symptom():
             ID = 9
             symptom = jsonUtils.search(
-                file = "json_files/symptoms.json",
+                file = "json/symptoms.json",
                 sentinal = ID
                 )
             return symptom
@@ -288,17 +288,22 @@ class open_json:
         self.return_file = (self.action != "r")
     
     def __enter__(self):
-        self.file = open(self.path, self.action)
-        return (json.load(self.file), self.file) if self.return_file else json.load(self.file)
+        if self.return_file:
+            self.file = open(self.path, self.action)
+            return (json.load(self.file), self.file)
+        
+        with open(self.path, self.action) as f:
+            return json.load(f)
+        
     
     def __exit__(self):
-        self.file.close()
+        if self.return_file:
+            self.file.close()
 
 def main() -> None:
     j = jsonUtils
     j.clearfiles()
-    print(j.search("json_files/symptoms.json", 17))
-            
+    print(j.search("json/symptoms.json", 17))
 
 if __name__ == "__main__":         
     main()
