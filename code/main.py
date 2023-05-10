@@ -13,9 +13,9 @@ from utils.data_classes import Question, CustomQuestion, UserInfo
 from api.diagnosis import Diagnosis
 
 
-preferences = "json_files/preferences.json"
-user_data = "json_files/user-data.json"
-conditions_list = "json_files/symptoms.json"
+preferences = "json/preferences.json"
+user_data = "json/user-data.json"
+conditions_list = "json/symptoms.json"
 
 class Program:
     '''Class encompassing all the functions used to run the program'''
@@ -208,7 +208,7 @@ class Program:
             
         return conditions
     
-    def get_previous_medical_conditions(self, font="Default", file="json_files/conditions.json") -> None: # CustomQuestion
+    def get_previous_medical_conditions(self, font="Default", file="json/conditions.json") -> None: # CustomQuestion
         """Create checkboxes of previous medical conditions
 
         Parameters:
@@ -320,7 +320,7 @@ class Program:
             results = Diagnosis(user=user).make_call()
             
             self.logger.info("User made daily diagnosis call.")
-            file = f"json_files/logs/{date.today().strftime('%d_%m_%y')}.json"
+            file = f"json/logs/{date.today().strftime('%d_%m_%y')}.json"
             jsonUtils.overwrite(
                 data = results,
                 file = file
@@ -328,10 +328,10 @@ class Program:
             self.logger.info(f"Writing to log file '{file}' completed successfully")
             
             # writes it to list of logs
-            logs = set(jsonUtils.open("json_files/logs.json")["logs_list"]).union((file,))
+            logs = set(jsonUtils.open("json/logs.json")["logs_list"]).union((file,))
             jsonUtils.add(
                 data={"logs_list": list(logs)},
-                file="json_files/logs.json"
+                file="json/logs.json"
             )
             
             self.logger.info("Added log file name to logs.json")
@@ -342,7 +342,7 @@ class Program:
             self.__root,
             "Daily Checkup",
             self.logger,
-            CustomQuestion(self.get_previous_medical_conditions, kwargs={"file": "json_files/conditions.json"})
+            CustomQuestion(self.get_previous_medical_conditions, kwargs={"file": "json/conditions.json"})
         ).begin()
         
         self.clean()
@@ -354,7 +354,7 @@ class Program:
         )
         loading.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
         
-        test_results = jsonUtils.read("json_files/conditions.json")
+        test_results = jsonUtils.read("json/conditions.json")
         user = jsonUtils.get_values()
         
         for condition in test_results["conditions"]:
@@ -368,7 +368,33 @@ class Program:
         
         loading.destroy()
         
-        self.home()     
+        self._show_diagnosis_results()     
+    
+    def _show_diagnosis_results(self):
+        tabview = ctk.CTkTabview(
+            self.__root
+        )
+        tabview.pack(padx=20, pady=20)
+        
+        
+        diseases = jsonUtils.read("json/possible_diseases.json")
+        
+        if isinstance(diseases, str):
+            self.logger.error(f"Unable to get diagnosis results: {diseases}")
+            return
+        
+        for disease in diseases:
+            self.logger.debug(disease)
+            issue, specialization = disease["Issue"], disease["Specialisation"]
+            name, accuracy = issue["Name"], issue["Accuracy"]
+            
+            tab = tabview.add(name)
+            label = ctk.CTkLabel(
+                tab,
+                text=f"Accuracy rating: {round(accuracy, 2)}%\nSee doctors specialized in {', '.join(x['Name'] for x in specialization)}"
+            )
+            label.pack()
+        self.__root.mainloop()
     
     def home(self) -> None:
         '''Main function that executes the program'''
@@ -417,8 +443,6 @@ class Program:
         else:
             self._appearance_is_set()
         
-        logs = jsonUtils.open("json_files/logs.json")["logs_list"]
-        
         self.logger.info("Attempting to save memory by deleting last months checkup results")
         
         current_date = date.today()
@@ -426,7 +450,7 @@ class Program:
         last_month = current_month - 1 if current_month != 1 else 12  
         today_a_month_ago = date(current_date.year, last_month, current_date.day).strftime("%d_%m_%y")
         
-        last_months_checkup = f"json_files/logs/{today_a_month_ago}.json"
+        last_months_checkup = f"json/logs/{today_a_month_ago}.json"
         try:
             jsonUtils.delete_file(last_months_checkup)
         except FileNotFoundError:

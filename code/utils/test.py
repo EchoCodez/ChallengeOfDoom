@@ -1,27 +1,25 @@
 import customtkinter as ctk
-import tkinter as tk
-from CTkMessagebox import CTkMessagebox
+
+class MyTabView(ctk.CTkTabview):
+    def __init__(self, master, **kwargs):
+        super().__init__(master, **kwargs)
+
+        # create tabs
+        self.add("tab 1")
+        self.add("tab 2")
+
+        # add widgets on tabs
+        self.label = ctk.CTkLabel(master=self.tab("tab 1"))
+        self.label.grid(row=0, column=0, padx=20, pady=10)
 
 
-ctk.set_appearance_mode("dark")
-root = ctk.CTk()
-root.geometry("700x350")
+class App(ctk.CTk):
+    def __init__(self):
+        super().__init__()
 
-def configure_label():
-    if text.get(1.0, tk.END).strip().isnumeric():
-        b.configure(text=text.get(1.0, tk.END))
-    else:
-        print(text.get(1.0, tk.END))
-        CTkMessagebox(root, message="Must be a number", icon="cancel")
+        self.tab_view = MyTabView(master=self)
+        self.tab_view.grid(row=0, column=0, padx=20, pady=20)
 
-text = ctk.CTkTextbox(root, width=240, height=45)
-text.insert(tk.END, "Type Here")
-text.pack()
 
-b = ctk.CTkLabel(root, text="Sample")
-b.pack()
-
-l = ctk.CTkButton(root, text="Update", command=configure_label)
-l.pack()
-
-root.mainloop()
+app = App()
+app.mainloop()
