@@ -443,8 +443,6 @@ class Program:
         else:
             self._appearance_is_set()
         
-        logs = jsonUtils.open("json/logs.json")["logs_list"]
-        
         self.logger.info("Attempting to save memory by deleting last months checkup results")
         
         current_date = date.today()
