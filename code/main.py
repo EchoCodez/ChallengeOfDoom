@@ -385,7 +385,6 @@ class Program:
             return
         
         for disease in diseases:
-            self.logger.debug(disease)
             issue, specialization = disease["Issue"], disease["Specialisation"]
             name, accuracy = issue["Name"], issue["Accuracy"]
             
@@ -395,10 +394,17 @@ class Program:
                 text=f"Accuracy rating: {round(accuracy, 2)}%\nSee doctors specialized in {', '.join(x['Name'] for x in specialization)}"
             )
             label.pack()
+        ctk.CTkButton(
+            self.__root,
+            text="Back to homepage",
+            command=self.clean
+        ).pack()
         self.__root.mainloop()
     
     def home(self) -> None:
         '''Main function that executes the program'''
+        
+        self.clean(quit_root=False)
         
         # Frames
         ctk.CTkFrame( # top left
