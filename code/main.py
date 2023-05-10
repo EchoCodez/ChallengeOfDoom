@@ -319,7 +319,7 @@ class Program:
         def call_api(user):
             results = Diagnosis(user=user).make_call()
             
-            self.logger.info("User made daily diagnosis call.")
+            self.logger.debug("User made daily diagnosis call.")
             file = f"json/logs/{date.today().strftime('%d_%m_%y')}.json"
             jsonUtils.overwrite(
                 data = results,
@@ -368,7 +368,8 @@ class Program:
         
         loading.destroy()
         
-        self._show_diagnosis_results()     
+        self._show_diagnosis_results()
+        self.home()
     
     def _show_diagnosis_results(self):
         tabview = ctk.CTkTabview(

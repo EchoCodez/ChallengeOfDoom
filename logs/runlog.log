@@ -1,5 +1,13 @@
-2023-05-10 07:54:37 (main.py) INFO: Attempting to save memory by deleting last months checkup results
-2023-05-10 07:54:37 (main.py) INFO: Last months checkup was not found. AKA file path json/logs/10_04_23.json was not found.
-2023-05-10 08:00:44 (mcq.py) DEBUG: Started Quiz
-2023-05-10 08:00:46 (main.py) INFO: User clicked X button
-2023-05-10 08:00:46 (main.py) DEBUG: Exited program
+2023-05-10 08:16:59 (main.py) INFO: Attempting to save memory by deleting last months checkup results
+2023-05-10 08:16:59 (main.py) INFO: Last months checkup was not found. AKA file path json/logs/10_04_23.json was not found.
+2023-05-10 08:17:01 (mcq.py) DEBUG: Started Quiz
+2023-05-10 08:17:07 (mcq.py) DEBUG: Next Question
+2023-05-10 08:17:07 (mcq.py) DEBUG: Cleaned
+2023-05-10 08:17:07 (mcq.py) DEBUG: ended
+2023-05-10 08:17:07 (mcq.py) DEBUG: Ended Quiz
+2023-05-10 08:17:08 (main.py) DEBUG: User made daily diagnosis call.
+2023-05-10 08:17:08 (main.py) INFO: Writing to log file 'json/logs/10_05_23.json' completed successfully
+2023-05-10 08:17:08 (main.py) INFO: Added log file name to logs.json
+2023-05-10 08:17:08 (main.py) DEBUG: {'Issue': {'ID': 431, 'Name': 'Drug side effect', 'Accuracy': 90, 'Icd': 'T88.7', 'IcdName': 'Unspecified adverse effect of drug or medicament', 'ProfName': 'Adverse drug reaction', 'Ranking': 1}, 'Specialisation': [{'ID': 15, 'Name': 'General practice', 'SpecialistID': 0}, {'ID': 19, 'Name': 'Internal medicine', 'SpecialistID': 0}]}
+2023-05-10 08:17:16 (main.py) INFO: User clicked X button
+2023-05-10 08:17:17 (main.py) DEBUG: Exited program
