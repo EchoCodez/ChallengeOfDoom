@@ -368,7 +368,28 @@ class Program:
         
         loading.destroy()
         
-        self.home()     
+        self._show_diagnosis_results()     
+    
+    def _show_diagnosis_results(self):
+        tabview = ctk.CTkTabview(
+            self.__root
+        )
+        tabview.pack(padx=20, pady=20)
+        
+        
+        diseases = jsonUtils.read("json_files/possible_diseases.json")
+        for disease in diseases:
+            self.logger.debug(disease)
+            issue, specialization = disease["Issue"], disease["Specialisation"]
+            name, accuracy = issue["Name"], issue["Accuracy"]
+            
+            tab = tabview.add(name)
+            label = ctk.CTkLabel(
+                tab,
+                text=f"Accuracy rating: {round(accuracy, 2)}%\nSee doctors specialized in {', '.join(x['Name'] for x in specialization)}"
+            )
+            label.pack()
+        self.__root.mainloop()
     
     def home(self) -> None:
         '''Main function that executes the program'''

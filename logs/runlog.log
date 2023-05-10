@@ -1,12 +1,2 @@
-2023-05-09 17:26:23 (main.py) INFO: Attempting to save memory by deleting last months checkup results
-2023-05-09 17:26:23 (main.py) INFO: Last months checkup was not found. AKA file path json_files/logs/09_04_23.json was not found.
-2023-05-09 17:26:25 (mcq.py) DEBUG: Started Quiz
-2023-05-09 17:26:35 (mcq.py) DEBUG: Next Question
-2023-05-09 17:26:35 (mcq.py) DEBUG: Cleaned
-2023-05-09 17:26:35 (mcq.py) DEBUG: ended
-2023-05-09 17:26:37 (mcq.py) DEBUG: Ended Quiz
-2023-05-09 17:26:38 (main.py) INFO: User made daily diagnosis call.
-2023-05-09 17:26:38 (main.py) INFO: Writing to log file 'json_files/logs/09_05_23.json' completed successfully
-2023-05-09 17:26:38 (main.py) INFO: Added log file name to logs.json
-2023-05-09 17:26:48 (main.py) INFO: User clicked X button
-2023-05-09 17:26:49 (main.py) INFO: Exited program
+2023-05-09 22:35:31 (main.py) INFO: Attempting to save memory by deleting last months checkup results
+2023-05-09 22:35:31 (main.py) INFO: Last months checkup was not found. AKA file path json_files/logs/09_04_23.json was not found.

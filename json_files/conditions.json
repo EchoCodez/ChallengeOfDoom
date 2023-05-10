@@ -1,7 +1,6 @@
 {
     "conditions": [
-        "Tiredness",
-        "Chest pain",
-        "Back pain"
+        "Abdominal pain",
+        "Fever"
     ]
 }

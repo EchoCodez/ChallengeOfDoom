@@ -1,13 +1,64 @@
 [
     {
         "Issue": {
-            "ID": 11,
-            "Name": "Flu",
+            "ID": 281,
+            "Name": "Food poisoning",
             "Accuracy": 90,
-            "Icd": "J10;J11",
-            "IcdName": "Influenza due to other identified influenza virus;Influenza, virus not identified",
-            "ProfName": "Influenza",
+            "Icd": "A05;A02;A03;A04",
+            "IcdName": "Other bacterial foodborne intoxications, not elsewhere classified;Other salmonella infections;Shigellosis;Other bacterial intestinal infections",
+            "ProfName": "Foodborne illness",
             "Ranking": 1
+        },
+        "Specialisation": [
+            {
+                "ID": 15,
+                "Name": "General practice",
+                "SpecialistID": 0
+            },
+            {
+                "ID": 19,
+                "Name": "Internal medicine",
+                "SpecialistID": 0
+            }
+        ]
+    },
+    {
+        "Issue": {
+            "ID": 59,
+            "Name": "Urinary tract infection",
+            "Accuracy": 21.8571434,
+            "Icd": "N39.0",
+            "IcdName": "Urinary tract infection, site not specified",
+            "ProfName": "Cystitis",
+            "Ranking": 2
+        },
+        "Specialisation": [
+            {
+                "ID": 15,
+                "Name": "General practice",
+                "SpecialistID": 0
+            },
+            {
+                "ID": 18,
+                "Name": "Gynecology",
+                "SpecialistID": 0
+            },
+            {
+                "ID": 19,
+                "Name": "Internal medicine",
+                "SpecialistID": 0
+            }
+        ]
+    },
+    {
+        "Issue": {
+            "ID": 166,
+            "Name": "Listeria infection",
+            "Accuracy": 14.9142847,
+            "Icd": "A32",
+            "IcdName": "Listeriosis",
+            "ProfName": "Listeriosis",
+            "Ranking": 3
         },
         "Specialisation": [
             {
