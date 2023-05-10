@@ -1,19 +1,20 @@
 import json
+import os
 from typing import Callable
 from io import StringIO
-from data_classes import UserInfo
+from utils.data_classes import UserInfo
 
 
 
 preferences = ("appearance_theme", "save_data")
-files = ("json_files/preferences.json", "json_files/user-data.json")
+files = ("json/preferences.json", "json/user-data.json")
 
 
 class jsonUtils:
     '''Class containing custom made json file methods'''
     
     @staticmethod
-    def add(data: dict, file: str = "json_files/user-data.json", indent=4) -> None:
+    def add(data: dict, file: str = "json/user-data.json", indent=4) -> None:
         '''
         Adds data to a file
         
@@ -34,7 +35,7 @@ class jsonUtils:
             f.write(json.dumps(modified_data, indent=indent))
             
     @staticmethod
-    def clearfile(file: str = "json_files/user-data.json") -> None:
+    def clearfile(file: str = "json/user-data.json") -> None:
         """Resets json files
 
         Paramters:
@@ -116,7 +117,7 @@ class jsonUtils:
         ```
         """
         
-        prefs, data = jsonUtils.open("json_files/preferences.json"), jsonUtils.open("json_files/user-data.json") 
+        prefs, data = jsonUtils.open("json/preferences.json"), jsonUtils.open("json/user-data.json") 
         return UserInfo(
             conditions=data.get("conditions", []),
             preferences={preference: prefs.get(preference) for preference in preferences},
@@ -170,7 +171,7 @@ class jsonUtils:
         def look_for_id():
             ID = 9
             disease_name = jsonUtils.search(
-                file = "json_files/symptoms.json",
+                file = "json/symptoms.json",
                 sentinal = ID
                 )
             return disease_name
@@ -178,7 +179,7 @@ class jsonUtils:
         def look_for_name():
             name="Bad Breath"
             disease_id = jsonUtils.search(
-                file = "json_files/symptoms.json",
+                file = "json/symptoms.json",
                 sentinal = name,
                 search_for = "Name",
                 _return = "ID"
@@ -188,7 +189,7 @@ class jsonUtils:
         def get_id_symptom():
             ID = 9
             symptom = jsonUtils.search(
-                file = "json_files/symptoms.json",
+                file = "json/symptoms.json",
                 sentinal = ID
                 )
             return symptom
@@ -222,14 +223,87 @@ class jsonUtils:
         for symptom in data:
             if symptom.get(search_for) == sentinal:
                 return symptom if return_dict else symptom[kwargs.get("_return", "Name")]
-        
+    
+    @staticmethod
+    def overwrite(data, file: str, *, dumps = True):
+        """Overwrite data in a file
 
+        Parameters:
+        ----------
+            data (dict | dumps): the data to overwrite the file with
+            
+            file (str): the file path
+            
+            dumps (bool, optional): whether to write `json.dumps(data)`. Defaults to True.
+        """
+            
+        with open(file, "w") as f:
+            if dumps:
+                f.write(json.dumps(data, indent=4))
+            else:
+                f.write(data)
+
+    @staticmethod
+    def read(file: str):
+        """Wrapper for jsonUtils.open
+
+        Args:
+            file (str): file path to json file
+
+        Returns:
+            dict | list[dict]: The json file
+        """
+        
+        return jsonUtils.open(file)
+
+    @staticmethod
+    def open_json(path: str, action: str = "r"):
+        """Context manager for opening json files. 
+        Instead of returning a file object, the object returned is a json.load(file) object. 
+        This should mainly be used for readability
+
+        Parameters:
+        -----------
+            path (`str`): Path to the file
+            
+            action (`str`, optional): What action to take with the file. Options include any of the parameters from open.
+            
+            Defaults to "r". If anything other than "r" is used, it returns the file object as well.
+
+        Returns:
+        --------
+            `Any | tuple[Any, fp]`: json loaded version of file, or tuple of json loaded version of file and file object (only if `action != r`)
+        """        
+        return open_json(path, action)
+
+    @staticmethod
+    def delete_file(path: str):
+        os.remove(path)
+
+
+class open_json:
+    def __init__(self, path: str, action: str = "r") -> None:
+        self.path = path
+        self.action = action
+        self.return_file = (self.action != "r")
+    
+    def __enter__(self):
+        if self.return_file:
+            self.file = open(self.path, self.action)
+            return (json.load(self.file), self.file)
+        
+        with open(self.path, self.action) as f:
+            return json.load(f)
+        
+    
+    def __exit__(self):
+        if self.return_file:
+            self.file.close()
 
 def main() -> None:
     j = jsonUtils
     j.clearfiles()
-    print(j.search("json_files/symptoms.json", 17))
-            
+    print(j.search("json/symptoms.json", 17))
 
 if __name__ == "__main__":         
     main()

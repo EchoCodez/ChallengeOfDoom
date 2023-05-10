@@ -22,7 +22,8 @@ class Question:
     
 @dataclasses.dataclass
 class CustomQuestion:
-    '''A Custom question
+    '''A Custom question. Results from the custom requestion must be stored from within the callable.
+    It is not returned in the final score/survey answers
     
     Parameters:
     -----------

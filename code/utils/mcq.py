@@ -1,16 +1,17 @@
 import tkinter as tk
 import customtkinter as ctk
-from data_classes import Question, CustomQuestion
+from logging import Logger
+from utils.data_classes import Question, CustomQuestion
 
 class MCQbuiler:
-    def __init__(self, root: ctk.CTk, name, logger, *questions: Question) -> None:
+    def __init__(self, root: ctk.CTk, name: str, logger: Logger, *questions: Question) -> None:
         """Initialize Multiple Choice Quiz
 
         Parameters:
         -----------
             root (ctk.CTk): customtkinter root
             
-            name (_type_): Name of test
+            name (str): Name of test
         """
         
         self.questions = questions
