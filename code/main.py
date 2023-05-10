@@ -378,6 +378,11 @@ class Program:
         
         
         diseases = jsonUtils.read("json_files/possible_diseases.json")
+        
+        if isinstance(diseases, str):
+            self.logger.error(f"Unable to get diagnosis results: {diseases}")
+            return
+        
         for disease in diseases:
             self.logger.debug(disease)
             issue, specialization = disease["Issue"], disease["Specialisation"]
