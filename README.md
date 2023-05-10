@@ -1,15 +1,72 @@
 # Challenge Of Doom: App Challenge 2023
 
-# Taking a look at the code
+# Downloading the program
+<ol>
+    <li>TODO: Use PyInstaller and InstallForge to create the builder</li>
+    x, y, z
+    <li>Cloning the github repository</li>
+    Alternatively, you could go to our github repository (linked <a href=https://github.com/EchoCodez/ChallengeOfDoom>here</a>) and clone it from here.<br>
+    On windows:<br>
+    Go to the code button on the top right:<br><br>
+    <img src="readme_screenshots/code_button.png"><br><br>
+    Click on it and select download zip<br><br>
+    <img src="readme_screenshots/download_zip.png"><br><br>
+    Now navigate to the zipped file and click extract all. Remember your extracted location.<br><br>
+    <img src="readme_screenshots/extract_zip.png"><br><br>
+    Now open a new window in Visual Studio Code (download <a href="https://code.visualstudio.com/download">here</a>). Click open folder.
+    <img src="readme_screenshots/open_folder_vscode.png"><br><br>
+    Click on the folder you extracted the github repository too. You have officially cloned the repository!<br>
+    Note: To run the program, all you need to do now is open <code>code/main.py</code> and run it.
+</ol>
+
+# Directory Structure
+```bash
+.
+├── README.md
+├── code
+│   │
+│   ├── api
+│   │   ├── api.py
+│   │   └── diagnosis.py
+│   ├── log_processes
+│   │   ├── UI_health_log.py
+│   │   ├── get_logs.py
+│   │   └── health_log.py
+│   ├── machine_learning
+│   │   ├── meal.jpg
+│   │   └── test.py
+│   ├── main.py
+│   └── utils
+│       ├── config.py
+│       ├── data_classes.py
+│       ├── mcq.py
+│       ├── parse_json.py
+│       ├── setup.py
+│       └── test.py
+├── json
+│   ├── conditions.json
+│   ├── logs
+│   │   ├── 09_05_23.json # Files storing results of that day's diagnosis
+│   │   └── 10_05_23.json # Stored in day_month_year format
+│   ├── logs.json
+│   ├── possible_diseases.json
+│   ├── preferences.json
+│   ├── symptoms.json
+│   └── user-data.json
+└── logs
+    └── runlog.log
+```
+
+# Parts and Pieces
 <ul>
-    <li><h3>main.py</h3>
+    <li><h3><code>main.py</code></h3>
     The main file in the program. Contains all the programs to be run in a singular class called `Program`.</li>
-    <li><h3>preferences.json</h3>
-    .json file containing all the user's aesthetic choices</l1>
-    <li><h3>parse_json.py</h3>
-    File containing class jsonUtil. Contains methods that add to a json file, clean a json file, or get a value from json file</li>
-    <li><h3>user-data.json</h3>
-    .json file containing user information on previous medical conditions</li>
+    <li><h3><code>utils/parse_json.py</code></h3>
+    File containing class jsonUtil. Mainly used for working with json files</li>
+    <li><h3><code>utils/mcq.py</code></h3>
+    Home to the Multiple Choice Quiz Builder</li>
+    <li><h3><code>api/api.py</code> and <code>api/diagnosis.py</code></h3>
+    The files used to make calls to the APImedic api</li>
 </ul>
 
 # Libraries and tools used
