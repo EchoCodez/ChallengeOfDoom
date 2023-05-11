@@ -34,6 +34,7 @@ class Program:
         self.__root.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.width, self.height = self.__root.winfo_screenwidth(), self.__root.winfo_screenheight()
         self.__root.geometry(f"{self.width}x{self.height}+0+0")
+        self.__root.focus_force()
         
         self.__setup_quiz = False
         self.__setup_finished = jsonUtils.open(preferences).get("setup_finished", False)
@@ -417,12 +418,35 @@ class Program:
         ).pack()
         self.__root.mainloop()
     
+    def health_log(self):
+        self.clean(quit_root=False)
+        tabview = ctk.CTkTabview(
+            self.__root
+        )
+        tabview.pack(padx=20, pady=20)
+        
+        for name in ("Diagnosis Log", "Diet Log"):
+            tab = tabview.add(name) # Create master for each tab
+            ctk.CTkLabel(
+                tab,
+                text="Stuff about tab here"
+            ).pack()
+            # Whatever you do here, to make it appear under the tab, make its master `tab`
+            
+        ctk.CTkButton(
+            self.__root,
+            text="Back to Homepage",
+            command=self.__root.quit
+        ).pack()
+        self.__root.mainloop()
+        self.clean(quit_root=False)
+        self.home()
+    
     def home(self) -> None:
         '''Main function that executes the program'''
         
         self.clean(quit_root=False)
         
-        # Buttons (Currently Frames)
         ctk.CTkButton( # top left
             self.__root,
             fg_color="#ADD8E6",
@@ -462,7 +486,7 @@ class Program:
             self.__root,
             text="Health Log",
             fg_color="#ADD8E6",
-            command=lambda: self.logger.debug("Button Clicked"),
+            command=self.health_log,
             corner_radius=40,
             height=self.height*0.25,
             width=self.width*0.2,

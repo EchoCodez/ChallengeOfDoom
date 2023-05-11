@@ -1,4 +1,4 @@
-2023-05-11 08:00:57 (main.py) INFO: Attempting to save memory by deleting last months checkup results
-2023-05-11 08:00:57 (main.py) INFO: Last months checkup was not found. AKA file path json/logs/11_04_23.json was not found.
-2023-05-11 08:01:02 (main.py) INFO: User clicked X button
-2023-05-11 08:01:03 (main.py) DEBUG: Exited program
+2023-05-11 08:10:24 (main.py) INFO: Attempting to save memory by deleting last months checkup results
+2023-05-11 08:10:24 (main.py) INFO: Last months checkup was not found. AKA file path json/logs/11_04_23.json was not found.
+2023-05-11 08:10:27 (main.py) INFO: User clicked X button
+2023-05-11 08:10:28 (main.py) DEBUG: Exited program
