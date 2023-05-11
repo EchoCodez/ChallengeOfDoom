@@ -422,42 +422,54 @@ class Program:
         
         self.clean(quit_root=False)
         
-        # Frames
-        ctk.CTkFrame( # top left
+        # Buttons (Currently Frames)
+        ctk.CTkButton( # top left
             self.__root,
             fg_color="#ADD8E6",
+            text="TBD",
+            command=lambda: self.logger.debug("Button Clicked"),
             corner_radius=40,
             height=self.height*0.55,
-            width=self.width*0.2
+            width=self.width*0.2,
+            font=("Times New Roman", 30),
+            text_color="#000000",
             ).place(relx=0.15, rely=0.3, anchor=tk.CENTER)
-        ctk.CTkFrame( # bottom right
-            self.__root,
-            fg_color="#ADD8E6",
-            corner_radius=40,
-            height=self.height*0.55,
-            width=self.width*0.2
-            ).place(relx=0.85, rely=0.6, anchor=tk.CENTER)
-        ctk.CTkFrame( # bottom left
-            self.__root,
-            fg_color="#ADD8E6",
-            corner_radius=40,
-            height=self.height*0.25,
-            width=self.width*0.2
-            ).place(relx=0.15, rely=0.75, anchor=tk.CENTER)
-        ctk.CTkFrame( # top right
-            self.__root,
-            fg_color="#ADD8E6",
-            corner_radius=40,
-            height=self.height*0.25,
-            width=self.width*0.2
-            ).place(relx=0.85, rely=0.15, anchor=tk.CENTER)
         
-        # Buttons
-        ctk.CTkButton(
+        ctk.CTkButton( # bottom right
             self.__root,
             text="Daily Diagnosis",
-            command=self._diagnose
+            command=self._diagnose,
+            fg_color="#ADD8E6",
+            height=self.height*0.55,
+            width=self.width*0.2,
+            text_color="#000000",
+            font=("Times New Roman", 30),
+            corner_radius=40
             ).place(relx=0.85, rely=0.6, anchor=tk.CENTER)
+        
+        ctk.CTkButton( # bottom left
+            self.__root,
+            fg_color="#ADD8E6",
+            text="TBD",
+            command=lambda: self.logger.debug("Button Clicked"),
+            corner_radius=40,
+            height=self.height*0.25,
+            width=self.width*0.2,
+            font=("Times New Roman", 30),
+            text_color="#000000",
+            ).place(relx=0.15, rely=0.75, anchor=tk.CENTER)
+        ctk.CTkButton( # top right
+            self.__root,
+            text="Health Log",
+            fg_color="#ADD8E6",
+            command=lambda: self.logger.debug("Button Clicked"),
+            corner_radius=40,
+            height=self.height*0.25,
+            width=self.width*0.2,
+            font=("Times New Roman", 30),
+            text_color="#000000",
+            ).place(relx=0.85, rely=0.15, anchor=tk.CENTER)
+        
         self.__root.mainloop()
     
     def execute(self):
