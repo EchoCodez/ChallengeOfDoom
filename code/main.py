@@ -10,8 +10,9 @@ from utils.parse_json import jsonUtils
 from CTkMessagebox import CTkMessagebox
 from utils.setup import setup_logging
 from utils.mcq import MCQbuiler
-from utils.data_classes import Question, CustomQuestion, UserInfo
+from utils.data_classes import Question, CustomQuestion
 from api.diagnosis import Diagnosis
+from log_processes.health_log import GetLogs, SearchForLog, get_previous_month
 
 
 preferences = "json/preferences.json"
@@ -388,7 +389,10 @@ class Program:
         
         
         diseases = jsonUtils.read("json/possible_diseases.json")
+        self.get_diagnosis_info(diseases, tabview, font)
+        self.__root.mainloop()
         
+    def get_diagnosis_info(self, diseases: str|list[dict], tabview: ctk.CTkTabview, font = ("Times New Roman", 35)):
         if isinstance(diseases, str):
             self.logger.error(f"Unable to get diagnosis results: {diseases}")
             return
@@ -416,22 +420,32 @@ class Program:
             text="Back to homepage",
             command=self.clean
         ).pack()
-        self.__root.mainloop()
     
-    def health_log(self):
+    def health_log(self, font=("Times New Roman", 15)):
         self.clean(quit_root=False)
         tabview = ctk.CTkTabview(
-            self.__root
+            self.__root,
+            width=900,
+            height=750,
         )
         tabview.pack(padx=20, pady=20)
         
-        for name in ("Diagnosis Log", "Diet Log"):
-            tab = tabview.add(name) # Create master for each tab
-            ctk.CTkLabel(
-                tab,
-                text="Stuff about tab here"
-            ).pack()
-            # Whatever you do here, to make it appear under the tab, make its master `tab`
+        tab1 = tabview.add("Diagnosis Log") # Create master for each tab
+        
+        frame = ctk.CTkScrollableFrame(
+            tab1,
+            width=900,
+            height=750
+        )
+        frame.pack()
+        for button, _date in get_previous_month(frame):
+            _date = _date.strftime("%d/%m/%y")
+            button.configure(
+                font=font,
+                command=lambda _date=_date: self.logger.info(SearchForLog(self.logger, date=_date).search())
+                )
+            button.pack(pady=5)
+        # Whatever you do here, to make it appear under the tab, make its master `frame`
             
         ctk.CTkButton(
             self.__root,
@@ -534,7 +548,9 @@ def main(*, erase_data = False) -> None:
 
     program = Program()
     
-    program.execute()
+    program._appearance_is_set()
+    program.health_log()
+    # program.execute()
     
 
 
