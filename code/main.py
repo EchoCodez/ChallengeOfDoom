@@ -23,8 +23,9 @@ conditions_list = "json/symptoms.json"
 class Program(ctk.CTk):
     """_summary_
 
-    Args:
-        ctk (_type_): _description_
+    Parameters:
+    -----------
+        ctk (str): window background color, tuple: (light_color, dark_color) or single color
     """    
     
     def __init__(self, ctk = None) -> None:
