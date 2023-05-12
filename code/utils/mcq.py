@@ -106,7 +106,7 @@ class MCQbuiler:
             text=question.question,
             font=kwargs.get("question_font", ("DEFAULT", 50))
         )
-        q.pack()
+        q.pack(pady=20)
         
         option = tk.StringVar() # what option they chose
         
@@ -118,7 +118,7 @@ class MCQbuiler:
                 value=answer
                 )
 
-            button.pack(pady=10)
+            button.pack(pady=20)
         
         def leave():
             self.logger.debug(option.get())

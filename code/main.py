@@ -3,6 +3,7 @@ import tkinter as tk
 import customtkinter as ctk
 import sys
 import webbrowser
+import re
 from datetime import datetime, date
 
 # file imports
@@ -19,57 +20,40 @@ preferences = "json/preferences.json"
 user_data = "json/user-data.json"
 conditions_list = "json/symptoms.json"
 
-class Program:
+class Program(ctk.CTk):
     '''Class encompassing all the functions used to run the program'''
     
     def __init__(self) -> None:
         '''
-        Initilize self.__root and store file names for ease of access
+        Initilize self and store file names for ease of access
         
         Name mangling is used to ensure root cannot be used outside of class
         '''
         
-        self.logger = setup_logging()
-        self.__root = ctk.CTk()
-        self.__root.title("Congressional App Challenge 2023")
-        self.__root.protocol("WM_DELETE_WINDOW", self.on_closing)
-        self.width, self.height = self.__root.winfo_screenwidth(), self.__root.winfo_screenheight()
-        self.__root.geometry(f"{self.width}x{self.height}+0+0")
-        self.__root.focus_force()
+        super().__init__()
         
-        self.__setup_quiz = False
+        self.logger = setup_logging()
+        self.title("Congressional App Challenge 2023")
+        self.protocol("WM_DELETE_WINDOW", self.on_closing)
+        self.width, self.height = self.winfo_screenwidth(), self.winfo_screenheight()
+        self.geometry(f"{self.width}x{self.height}+0+0")
+        self.focus_force()
+        
         self.__setup_finished = jsonUtils.open(preferences).get("setup_finished", False)
         self.__appearance = tk.StringVar(value="light")
-        self.__remember = tk.BooleanVar(value=True)
     
     def on_closing(self) -> None:
         '''Confirm if user wanted to end application'''
         
         self.logger.info("User clicked X button")
         
-        if self.__setup_quiz:
-            force_quit = CTkMessagebox(
-                title="Unsuccessful Quit",
-                icon="cancel",
-                message=
-                "Sorry, you cannot exit the application until you finish the setup quiz.\
-                    \nForcing a shutdown may result in the application no longer working the next time you open it.",
-                option_1="Force Quit",
-                option_2="Understood"
-            )
-            if force_quit.get() == "Force Quit":
-                self.logger.warning("User chose to force application to shut down")
-                sys.exit(0)
-            self.logger.debug("User choose to continue with the setup quiz")
-            return
-        else:
-            answer = CTkMessagebox(
-                title="Quit?",
-                icon="question",
-                message="Do you want to close the program?",
-                option_1="Cancel",
-                option_2="Yes"
-            )
+        answer = CTkMessagebox(
+            title="Quit?",
+            icon="question",
+            message="Do you want to close the program?",
+            option_1="Cancel",
+            option_2="Yes"
+        )
         if answer.get() == "Yes":
             self.logger.debug("Exited program")
             sys.exit(0)
@@ -79,22 +63,21 @@ class Program:
     def clean(self, quit_root=True, destroy=False) -> None:
         '''
         Clean the tkinter window\n
-        If quit_root is true, it will also run self.__root.quit()
+        If quit_root is true, it will also run self.quit()
         '''
         
-        for widget in self.__root.winfo_children():
+        for widget in self.winfo_children():
             widget.destroy()
         
         if quit_root:
-            self.__root.quit()
+            self.quit()
         if destroy:
-            self.__root.destroy()
+            self.destroy()
     
     def _appearance_is_set(self) -> bool:
         '''check if theme preference in file already. If it is, update current'''
         with open(preferences) as f:
             if jsonUtils.get(f, "appearance_theme", func = ctk.set_appearance_mode):
-                self.__remember.set(False)
                 return True
         return False
         
@@ -117,18 +100,18 @@ class Program:
         # get user input for choice of theme
         
         question = ctk.CTkLabel(
-            self.__root,
+            self,
             text="Which appearance theme would you like to use?",
             font=("Default", 50)
             )
         label = ctk.CTkLabel(
-            self.__root,
+            self,
             text="You have selected light mode",
             font=("Default", 35),
             )
         
         dark_button = ctk.CTkRadioButton(
-            self.__root,
+            self,
             text="Dark",
             variable=self.__appearance,
             value="dark",
@@ -136,7 +119,7 @@ class Program:
             font=("Default", 25),
             ) 
         light_button = ctk.CTkRadioButton(
-            self.__root, 
+            self, 
             text="Light", 
             variable=self.__appearance, 
             value="light", 
@@ -144,7 +127,7 @@ class Program:
             font=("Default", 25),
             )
         next_button = ctk.CTkButton(
-            self.__root, 
+            self, 
             text="Next", 
             command=cont,
             font=("Default", 25),
@@ -157,7 +140,7 @@ class Program:
         label.pack(pady=20)
         next_button.pack(pady=20)
         
-        self.__root.mainloop()
+        self.mainloop()
     
     def __checkboxes(self, fontsize: int = 25, font="Arial") -> dict:
         '''Creates the checkboxes
@@ -168,7 +151,7 @@ class Program:
         '''
         
         
-        width, height = self.__root.winfo_screenwidth(), self.__root.winfo_screenheight()
+        width, height = self.winfo_screenwidth(), self.winfo_screenheight()
         
         conditions = {}
         width_counter = 0
@@ -183,7 +166,7 @@ class Program:
                 
                 conditions[name]=tk.BooleanVar(value=False)
                 checkbox = ctk.CTkCheckBox(
-                    self.__root, 
+                    self, 
                     text=name,
                     variable=conditions[name],
                     onvalue=True,
@@ -194,7 +177,7 @@ class Program:
                     row=i, 
                     column=j, 
                     pady=5, 
-                    padx=20,
+                    padx=40,
                     sticky=tk.W
                     )
                 
@@ -229,12 +212,12 @@ class Program:
 
              
         title = ctk.CTkLabel(
-            self.__root,
+            self,
             text="Are you experiencing any of the above from this list?",
             font=(font, 50)
             )
         next_button = ctk.CTkButton(
-            self.__root,
+            self,
             text="Continue",
             command=continue_button,
             width=280,
@@ -246,15 +229,15 @@ class Program:
             column=0, 
             columnspan=10, 
             padx=5, 
-            pady=5,
+            pady=20,
             sticky=tk.N
             )
         
         self.__conditions = self.__checkboxes(fontsize=30, font=font)
         
-        next_button.grid(pady=10)
+        next_button.place(relx=0.82, rely=0.8, anchor=tk.CENTER)
             
-        self.__root.mainloop()       
+        self.mainloop()       
 
     def get_year_of_birth(self, font = ("None", 50)): # CustomQuestion
         def verify_and_continue():
@@ -262,51 +245,56 @@ class Program:
             year = datetime.now().year
             self.logger.info(f"User typed {typed} as input for date of birth")
             
-            if not typed.isnumeric():
-                self.logger.info("User entered a non numeric string")
-                CTkMessagebox(self.__root, title="Date of Birth Submission Error",message="Must be a number", icon="cancel")
-            elif int(typed) not in range(1930, year+1):
+            birth_year = int(re.sub("\D", "", typed))
+            self.logger.debug(f"Transformed {typed} to {birth_year}")
+            
+            if int(birth_year) not in range(1930, year+1):
                 self.logger.info(f"User entered date of birth outside 1930 and {year}")
-                CTkMessagebox(self.__root, title="Date of Birth Submission Error",message=f"Must be a year between 1930 and {year}", icon="cancel")
+                CTkMessagebox(self, title="Date of Birth Submission Error",message=f"Must be a year between 1930 and {year}", icon="cancel")
             else:
                 self.logger.info("User entered valid date of birth")
                 jsonUtils.add(
                     data={"birth_year": typed}
                 )
                 self.logger.info(f"Birth year ::{typed}:: succesfully written to file")
-                self.__root.quit()
+                self.quit()
         
-        typer = ctk.CTkTextbox(self.__root, width=400, font=("Times New Roman", 25))
+        typer = ctk.CTkTextbox(self, width=400, font=("Times New Roman", 25))
         typer.insert(tk.END, "Type Here")
         
         title = ctk.CTkLabel(
-            self.__root,
+            self,
             text="What year were you born?",
             font=font
             )
+        subtitle = ctk.CTkLabel(
+            self,
+            text="All non-numbers will be ignored",
+            font=("", 20)
+        )
         next_button = ctk.CTkButton(
-            self.__root,
+            self,
             text="Next",
             command=verify_and_continue
         )
-        title.pack(pady=10)
-        typer.pack(pady=10)
-        next_button.pack(pady=10)
-        self.__root.mainloop()
+        title.pack(pady=20)
+        subtitle.pack(pady=20)
+        typer.pack(pady=20)
+        next_button.pack(pady=20)
+        self.mainloop()
 
     def setup(self) -> None:
         """Sets up the multiple choice quiz and appearance theme
         """        
         
         prequiz = MCQbuiler(
-            self.__root,
+            self,
             "Let's set up the program!", # title
             self.logger,
             CustomQuestion(self.set_appearance if not self._appearance_is_set() else lambda: None),
             Question("What is your gender?", ["Male", "Female"]),
             CustomQuestion(self.get_year_of_birth)
         )
-        self.__setup_quiz = True
         answers = prequiz.begin()
         
         jsonUtils.add({
@@ -314,7 +302,6 @@ class Program:
             })
         
         self.clean(quit_root=False)
-        self.__setup_quiz = False
         jsonUtils.add({"setup_finished": True}, file=preferences)
         self.logger.debug(jsonUtils.get_values())
     
@@ -342,7 +329,7 @@ class Program:
         self.clean(quit_root=False)
         
         MCQbuiler(
-            self.__root,
+            self,
             "Daily Checkup",
             self.logger,
             CustomQuestion(self.get_previous_medical_conditions, kwargs={"file": "json/conditions.json"})
@@ -351,7 +338,7 @@ class Program:
         self.clean()
         
         loading = ctk.CTkLabel(
-            self.__root,
+            self,
             text="Saving results to health log", # TODO
             font=("Times New Roman", 50)
         )
@@ -376,12 +363,12 @@ class Program:
     
     def _show_diagnosis_results(self, font: str | tuple[str, int] = ("Times New Roman", 35)):
         ctk.CTkLabel(
-            self.__root,
+            self,
             text="Diagnosis results",
             font=(font[0], font[1]+5) if isinstance(font, (tuple, list)) else (font, 40)
         ).pack(pady=20)
         tabview = ctk.CTkTabview(
-            self.__root,
+            self,
             width=600,
             height=500
         )
@@ -390,7 +377,7 @@ class Program:
         
         diseases = jsonUtils.read("json/possible_diseases.json")
         self.get_diagnosis_info(diseases, tabview, font)
-        self.__root.mainloop()
+        self.mainloop()
         
     def get_diagnosis_info(self, diseases: str|list[dict], tabview: ctk.CTkTabview, font = ("Times New Roman", 35)):
         if isinstance(diseases, str):
@@ -416,7 +403,7 @@ class Program:
             ).pack(pady=50)
         
         ctk.CTkButton(
-            self.__root,
+            self,
             text="Back to homepage",
             command=self.clean
         ).pack()
@@ -424,7 +411,7 @@ class Program:
     def health_log(self, font=("Times New Roman", 15)):
         self.clean(quit_root=False)
         tabview = ctk.CTkTabview(
-            self.__root,
+            self,
             width=900,
             height=750,
         )
@@ -448,11 +435,11 @@ class Program:
         # Whatever you do here, to make it appear under the tab, make its master `frame`
             
         ctk.CTkButton(
-            self.__root,
+            self,
             text="Back to Homepage",
-            command=self.__root.quit
+            command=self.quit
         ).pack()
-        self.__root.mainloop()
+        self.mainloop()
         self.clean(quit_root=False)
         self.home()
     
@@ -462,7 +449,7 @@ class Program:
         self.clean(quit_root=False)
         
         ctk.CTkButton( # top left
-            self.__root,
+            self,
             fg_color="#ADD8E6",
             text="TBD",
             command=lambda: self.logger.debug("Button Clicked"),
@@ -474,7 +461,7 @@ class Program:
             ).place(relx=0.15, rely=0.3, anchor=tk.CENTER)
         
         ctk.CTkButton( # bottom right
-            self.__root,
+            self,
             text="Daily Diagnosis",
             command=self._diagnose,
             fg_color="#ADD8E6",
@@ -486,7 +473,7 @@ class Program:
             ).place(relx=0.85, rely=0.6, anchor=tk.CENTER)
         
         ctk.CTkButton( # bottom left
-            self.__root,
+            self,
             fg_color="#ADD8E6",
             text="TBD",
             command=lambda: self.logger.debug("Button Clicked"),
@@ -497,7 +484,7 @@ class Program:
             text_color="#000000",
             ).place(relx=0.15, rely=0.75, anchor=tk.CENTER)
         ctk.CTkButton( # top right
-            self.__root,
+            self,
             text="Health Log",
             fg_color="#ADD8E6",
             command=self.health_log,
@@ -508,7 +495,7 @@ class Program:
             text_color="#000000",
             ).place(relx=0.85, rely=0.15, anchor=tk.CENTER)
         
-        self.__root.mainloop()
+        self.mainloop()
     
     def execute(self):
         if not self.__setup_finished:
@@ -548,9 +535,7 @@ def main(*, erase_data = False) -> None:
 
     program = Program()
     
-    program._appearance_is_set()
-    program.health_log()
-    # program.execute()
+    program.execute()
     
 
 
