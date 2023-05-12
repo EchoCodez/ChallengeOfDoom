@@ -14,6 +14,7 @@ from utils.mcq import MCQbuiler
 from utils.data_classes import Question, CustomQuestion
 from api.diagnosis import Diagnosis
 from log_processes.health_log import GetLogs, SearchForLog, get_previous_month
+from utils.config import set_theme
 
 
 preferences = "json/preferences.json"
@@ -21,7 +22,7 @@ user_data = "json/user-data.json"
 conditions_list = "json/symptoms.json"
 
 class Program(ctk.CTk):
-    """_summary_
+    """The main program that runs the application
 
     Parameters:
     -----------
@@ -70,13 +71,9 @@ class Program(ctk.CTk):
         Clean the tkinter window of widgets\n
         If quit_root is true, it will also run self.quit()
         '''
-    
-    def _appearance_is_set(self) -> bool:
-        '''check if theme preference in file already. If it is, update current'''
-        with open(preferences) as f:
-            if jsonUtils.get(f, "appearance_theme", func = ctk.set_appearance_mode):
-                return True
-        return False
+        
+        for widget in self.winfo_children():
+            widget.destroy()
         
     def set_appearance(self) -> None:
         '''Choose dark or light theme for custom tkinter'''
@@ -288,7 +285,7 @@ class Program(ctk.CTk):
             self,
             "Let's set up the program!", # title
             self.logger,
-            CustomQuestion(self.set_appearance if not self._appearance_is_set() else lambda: None),
+            CustomQuestion(self.set_appearance if not set_theme() else lambda: None),
             Question("What is your gender?", ["Male", "Female"]),
             CustomQuestion(self.get_year_of_birth)
         )
@@ -412,6 +409,7 @@ class Program(ctk.CTk):
     
     def health_log(self, font=("Times New Roman", 15)):
         self.clean()
+        self.logger.debug("Health log accessed")
         tabview = ctk.CTkTabview(
             self,
             width=900,
@@ -434,6 +432,8 @@ class Program(ctk.CTk):
                 command=lambda _date=_date: self.logger.info(SearchForLog(self.logger, date=_date).search())
                 )
             button.pack(pady=5)
+        
+        tab2 = tabview.add("Diet log")
         # Whatever you do here, to make it appear under the tab, make its master `frame`
             
         ctk.CTkButton(
@@ -447,7 +447,7 @@ class Program(ctk.CTk):
     
     def home(self) -> None:
         '''Main function that executes the program'''
-        
+        self.logger.debug("Reached Home Screen")
         self.clean()
         
         ctk.CTkButton( # top left
@@ -503,7 +503,7 @@ class Program(ctk.CTk):
         if not self.__setup_finished:
             self.setup()
         else:
-            self._appearance_is_set()
+            set_theme()
         
         self.logger.info("Attempting to save memory by deleting last months checkup results")
         

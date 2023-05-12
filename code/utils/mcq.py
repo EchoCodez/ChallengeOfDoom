@@ -78,7 +78,9 @@ class MCQbuiler:
             if isinstance(question, Question):
                 self.__create_question(question)
             elif isinstance(question, CustomQuestion):
-                question.question(*question.args, **question.kwargs)
+                result = question.question(*question.args, **question.kwargs)
+                if result is not None:
+                    self.correct = result
             elif question() is not None:
                 raise TypeError("Invalid Question {0}".format(question))
             

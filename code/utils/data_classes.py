@@ -1,7 +1,7 @@
 import dataclasses
 import typing
 
-@dataclasses.dataclass
+@dataclasses.dataclass(frozen=True)
 class Question:
     """A Question for the Multiple Choice Quiz Builder
     
@@ -11,7 +11,12 @@ class Question:
         
         answers (Iterable[str]): A list of the multiple choice question answers
         
-        correct_answer (int, None, optional): The index correct answer (starting index is 1). Defaults to None, meaning it is a survey question
+        correct_answer (int, None, optional): The index correct answer (starting index is 1). 
+        Defaults to None, meaning it is a survey question
+            
+    Raises:
+    -------
+        `FrozenInstanceError`: parameters are modified after creation
     """    
     question: str
     answers: typing.Iterable[str]
@@ -20,18 +25,23 @@ class Question:
     def __str__(self):
         return f"Question {self.question}"
     
-@dataclasses.dataclass
+@dataclasses.dataclass(frozen=True)
 class CustomQuestion:
     '''A Custom question. Results from the custom requestion must be stored from within the callable.
-    It is not returned in the final score/survey answers
+    If possible, writing to file should be done inside function. Otherwise if return value is not None,
+    it will add the return value to the list of answers return at the end of `MCQbuilder.begin()`
     
     Parameters:
     -----------
         question (`Callable`): A method or function that can be called to create the question
         
-        args (`Iterable`): Iterable of question arguments. Defaults to `tuple()`
+        args (`Iterable`): Iterable of question arguments. Defaults to `()`
         
         kwargs (`dict`): kwargs for question. Defaults to `dict()`
+        
+    Raises:
+    -------
+        `FrozenInstanceError`: parameters are modified after creation
     '''
     
     question: typing.Callable
