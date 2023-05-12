@@ -21,26 +21,30 @@ user_data = "json/user-data.json"
 conditions_list = "json/symptoms.json"
 
 class Program(ctk.CTk):
-    '''Class encompassing all the functions used to run the program'''
+    """_summary_
+
+    Args:
+        ctk (_type_): _description_
+    """    
     
-    def __init__(self) -> None:
+    def __init__(self, ctk = None) -> None:
         '''
         Initilize self and store file names for ease of access
         
         Name mangling is used to ensure root cannot be used outside of class
         '''
         
-        super().__init__()
+        super().__init__(fg_color=ctk)
         
         self.logger = setup_logging()
         self.title("Congressional App Challenge 2023")
         self.protocol("WM_DELETE_WINDOW", self.on_closing)
-        self.width, self.height = self.winfo_screenwidth(), self.winfo_screenheight()
-        self.geometry(f"{self.width}x{self.height}+0+0")
+        self.geometry(f"{self.winfo_screenwidth()}x{self.winfo_screenheight()}+0+0")
         self.focus_force()
         
         self.__setup_finished = jsonUtils.open(preferences).get("setup_finished", False)
         self.__appearance = tk.StringVar(value="light")
+        self.resizable(width=True, height=True)
     
     def on_closing(self) -> None:
         '''Confirm if user wanted to end application'''
@@ -60,19 +64,11 @@ class Program(ctk.CTk):
         else:
             self.logger.info("Canceled exiting program")
     
-    def clean(self, quit_root=True, destroy=False) -> None:
+    def clean(self) -> None:
         '''
-        Clean the tkinter window\n
+        Clean the tkinter window of widgets\n
         If quit_root is true, it will also run self.quit()
         '''
-        
-        for widget in self.winfo_children():
-            widget.destroy()
-        
-        if quit_root:
-            self.quit()
-        if destroy:
-            self.destroy()
     
     def _appearance_is_set(self) -> bool:
         '''check if theme preference in file already. If it is, update current'''
@@ -95,7 +91,7 @@ class Program(ctk.CTk):
         
         def cont():
             jsonUtils.add({"appearance_theme":self.__appearance.get()}, file=preferences)
-            self.clean(quit_root=True)
+            self.quit()
         
         # get user input for choice of theme
         
@@ -208,7 +204,7 @@ class Program(ctk.CTk):
                 {"conditions": list(self.__conditions.keys())},
                 file=file
                 )
-            self.clean(quit_root=True)
+            self.quit()
 
              
         title = ctk.CTkLabel(
@@ -301,7 +297,7 @@ class Program(ctk.CTk):
                 "gender": answers[1],
             })
         
-        self.clean(quit_root=False)
+        self.clean()
         jsonUtils.add({"setup_finished": True}, file=preferences)
         self.logger.debug(jsonUtils.get_values())
     
@@ -326,7 +322,7 @@ class Program(ctk.CTk):
             
             self.logger.info("Added log file name to logs.json")
         
-        self.clean(quit_root=False)
+        self.clean()
         
         MCQbuiler(
             self,
@@ -335,7 +331,7 @@ class Program(ctk.CTk):
             CustomQuestion(self.get_previous_medical_conditions, kwargs={"file": "json/conditions.json"})
         ).begin()
         
-        self.clean()
+        self.quit()
         
         loading = ctk.CTkLabel(
             self,
@@ -382,6 +378,11 @@ class Program(ctk.CTk):
     def get_diagnosis_info(self, diseases: str|list[dict], tabview: ctk.CTkTabview, font = ("Times New Roman", 35)):
         if isinstance(diseases, str):
             self.logger.error(f"Unable to get diagnosis results: {diseases}")
+            ctk.CTkButton(
+                self,
+                text="Back to Homepage",
+                command=self.quit
+            )
             return
         
         for disease in diseases:
@@ -405,11 +406,11 @@ class Program(ctk.CTk):
         ctk.CTkButton(
             self,
             text="Back to homepage",
-            command=self.clean
+            command=self.quit
         ).pack()
     
     def health_log(self, font=("Times New Roman", 15)):
-        self.clean(quit_root=False)
+        self.clean()
         tabview = ctk.CTkTabview(
             self,
             width=900,
@@ -440,13 +441,13 @@ class Program(ctk.CTk):
             command=self.quit
         ).pack()
         self.mainloop()
-        self.clean(quit_root=False)
+        self.clean()
         self.home()
     
     def home(self) -> None:
         '''Main function that executes the program'''
         
-        self.clean(quit_root=False)
+        self.clean()
         
         ctk.CTkButton( # top left
             self,
@@ -454,8 +455,8 @@ class Program(ctk.CTk):
             text="TBD",
             command=lambda: self.logger.debug("Button Clicked"),
             corner_radius=40,
-            height=self.height*0.55,
-            width=self.width*0.2,
+            height=self.winfo_screenheight()*0.55,
+            width=self.winfo_screenwidth()*0.2,
             font=("Times New Roman", 30),
             text_color="#000000",
             ).place(relx=0.15, rely=0.3, anchor=tk.CENTER)
@@ -465,8 +466,8 @@ class Program(ctk.CTk):
             text="Daily Diagnosis",
             command=self._diagnose,
             fg_color="#ADD8E6",
-            height=self.height*0.55,
-            width=self.width*0.2,
+            height=self.winfo_screenheight()*0.55,
+            width=self.winfo_screenwidth()*0.2,
             text_color="#000000",
             font=("Times New Roman", 30),
             corner_radius=40
@@ -478,8 +479,8 @@ class Program(ctk.CTk):
             text="TBD",
             command=lambda: self.logger.debug("Button Clicked"),
             corner_radius=40,
-            height=self.height*0.25,
-            width=self.width*0.2,
+            height=self.winfo_screenheight()*0.25,
+            width=self.winfo_screenwidth()*0.2,
             font=("Times New Roman", 30),
             text_color="#000000",
             ).place(relx=0.15, rely=0.75, anchor=tk.CENTER)
@@ -489,8 +490,8 @@ class Program(ctk.CTk):
             fg_color="#ADD8E6",
             command=self.health_log,
             corner_radius=40,
-            height=self.height*0.25,
-            width=self.width*0.2,
+            height=self.winfo_screenheight()*0.25,
+            width=self.winfo_screenwidth()*0.2,
             font=("Times New Roman", 30),
             text_color="#000000",
             ).place(relx=0.85, rely=0.15, anchor=tk.CENTER)
