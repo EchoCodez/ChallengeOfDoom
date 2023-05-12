@@ -296,9 +296,10 @@ class open_json:
             return json.load(f)
         
     
-    def __exit__(self):
+    def __exit__(self, exception_type, exception_value, traceback):
         if self.return_file:
             self.file.close()
+        exit(0)
 
 def main() -> None:
     j = jsonUtils
