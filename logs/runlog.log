@@ -1,2 +1,11 @@
 2023-05-12 17:12:55 (main.py) INFO: Attempting to save memory by deleting last months checkup results
 2023-05-12 17:12:55 (main.py) INFO: Last months checkup was not found. AKA file path json/logs/12_04_23.json was not found.
+2023-05-12 17:13:05 (mcq.py) DEBUG: Started Quiz
+2023-05-12 17:13:15 (mcq.py) DEBUG: Next Question
+2023-05-12 17:13:15 (mcq.py) DEBUG: Cleaned
+2023-05-12 17:13:15 (mcq.py) DEBUG: ended
+2023-05-12 17:13:16 (mcq.py) DEBUG: Ended Quiz
+2023-05-12 17:13:17 (main.py) DEBUG: User made daily diagnosis call.
+2023-05-12 17:13:17 (main.py) INFO: Writing to log file 'json/logs/12_05_23.json' completed successfully
+2023-05-12 17:13:17 (main.py) INFO: Added log file name to logs.json
+2023-05-12 17:13:17 (main.py) ERROR: Unable to get diagnosis results: Invalid token
