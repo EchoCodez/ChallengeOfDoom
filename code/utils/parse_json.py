@@ -168,7 +168,7 @@ class jsonUtils:
         Example Use:
         ------------
         ```
-        def look_for_id():
+        def look_for_id() -> str:
             ID = 9
             disease_name = jsonUtils.search(
                 file = "json/symptoms.json",
@@ -176,7 +176,7 @@ class jsonUtils:
                 )
             return disease_name
 
-        def look_for_name():
+        def look_for_name() -> int:
             name="Bad Breath"
             disease_id = jsonUtils.search(
                 file = "json/symptoms.json",
@@ -190,7 +190,8 @@ class jsonUtils:
             ID = 9
             symptom = jsonUtils.search(
                 file = "json/symptoms.json",
-                sentinal = ID
+                sentinal = ID,
+                _return = "Name"
                 )
             return symptom
         ```
