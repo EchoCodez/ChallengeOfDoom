@@ -180,11 +180,17 @@ class Program(ctk.CTk, Questions):
     def get_diagnosis_info(self, diseases: str|list[dict], tabview: ctk.CTkTabview, font = ("Times New Roman", 35), loop=False):
         if isinstance(diseases, str):
             self.logger.error(f"Unable to get diagnosis results: {diseases}")
+            
+            ctk.CTkLabel(
+                self,
+                text=f"Unable to get diagnosis results: {diseases}"
+            ).pack(pady=20)
             ctk.CTkButton(
                 self,
                 text="Back to Homepage",
                 command=self.quit
-            )
+            ).pack(pady=20)
+            self.mainloop()
             return
         
         for disease in diseases:
@@ -280,7 +286,7 @@ class Program(ctk.CTk, Questions):
             self,
             fg_color="#ADD8E6",
             text="TBD",
-            command=lambda: self.logger.debug("Button Clicked"),
+            command=lambda: self.logger.debug("Top Left clicked"),
             corner_radius=40,
             height=self.winfo_screenheight()*0.55,
             width=self.winfo_screenwidth()*0.2,
@@ -303,8 +309,8 @@ class Program(ctk.CTk, Questions):
         ctk.CTkButton( # bottom left
             self,
             fg_color="#ADD8E6",
-            text="TBD",
-            command=lambda: self.logger.debug("Button Clicked"),
+            text="Settings",
+            command=lambda: self.logger.debug("Settings clicked"),
             corner_radius=40,
             height=self.winfo_screenheight()*0.25,
             width=self.winfo_screenwidth()*0.2,

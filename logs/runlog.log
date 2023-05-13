@@ -1,7 +1,39 @@
-2023-05-13 14:55:54 (config.py) INFO: Attempting to save memory by deleting last months checkup results
-2023-05-13 14:55:54 (config.py) INFO: Deletion of last months diagnosis was successfull
-2023-05-13 14:55:54 (config.py) INFO: Attempting to remove it from json/logs.json
-2023-05-13 14:55:54 (config.py) INFO: Removed json/logs/13_04_23.json from json/logs.json
-2023-05-13 14:55:54 (main.py) DEBUG: Reached Home Screen
-2023-05-13 14:56:15 (main.py) INFO: User clicked X button
-2023-05-13 14:56:16 (main.py) DEBUG: Exited program
+2023-05-13 15:01:49 (config.py) INFO: Attempting to save memory by deleting last months checkup results
+2023-05-13 15:01:49 (config.py) INFO: Last months checkup was not found. AKA file path json/logs/13_04_23.json was not found.
+2023-05-13 15:01:49 (main.py) DEBUG: Reached Home Screen
+2023-05-13 15:01:50 (main.py) DEBUG: Health log accessed
+2023-05-13 15:01:50 (get_logs.py) DEBUG: Found file json/logs/12_05_23.json
+2023-05-13 15:01:50 (get_logs.py) DEBUG: Could not find file json/logs/11_05_23.json
+2023-05-13 15:01:50 (get_logs.py) DEBUG: Found file json/logs/10_05_23.json
+2023-05-13 15:01:50 (get_logs.py) DEBUG: Found file json/logs/09_05_23.json
+2023-05-13 15:01:50 (get_logs.py) DEBUG: Could not find file json/logs/08_05_23.json
+2023-05-13 15:01:50 (get_logs.py) DEBUG: Could not find file json/logs/07_05_23.json
+2023-05-13 15:01:50 (get_logs.py) DEBUG: Could not find file json/logs/06_05_23.json
+2023-05-13 15:01:50 (get_logs.py) DEBUG: Could not find file json/logs/05_05_23.json
+2023-05-13 15:01:50 (get_logs.py) DEBUG: Could not find file json/logs/04_05_23.json
+2023-05-13 15:01:50 (get_logs.py) DEBUG: Could not find file json/logs/03_05_23.json
+2023-05-13 15:01:50 (get_logs.py) DEBUG: Could not find file json/logs/02_05_23.json
+2023-05-13 15:01:50 (get_logs.py) DEBUG: Could not find file json/logs/01_05_23.json
+2023-05-13 15:01:50 (get_logs.py) DEBUG: Could not find file json/logs/30_04_23.json
+2023-05-13 15:01:50 (get_logs.py) DEBUG: Could not find file json/logs/29_04_23.json
+2023-05-13 15:01:50 (get_logs.py) DEBUG: Could not find file json/logs/28_04_23.json
+2023-05-13 15:01:50 (get_logs.py) DEBUG: Could not find file json/logs/27_04_23.json
+2023-05-13 15:01:50 (get_logs.py) DEBUG: Could not find file json/logs/26_04_23.json
+2023-05-13 15:01:50 (get_logs.py) DEBUG: Could not find file json/logs/25_04_23.json
+2023-05-13 15:01:50 (get_logs.py) DEBUG: Could not find file json/logs/24_04_23.json
+2023-05-13 15:01:50 (get_logs.py) DEBUG: Could not find file json/logs/23_04_23.json
+2023-05-13 15:01:50 (get_logs.py) DEBUG: Could not find file json/logs/22_04_23.json
+2023-05-13 15:01:50 (get_logs.py) DEBUG: Could not find file json/logs/21_04_23.json
+2023-05-13 15:01:50 (get_logs.py) DEBUG: Could not find file json/logs/20_04_23.json
+2023-05-13 15:01:50 (get_logs.py) DEBUG: Could not find file json/logs/19_04_23.json
+2023-05-13 15:01:50 (get_logs.py) DEBUG: Could not find file json/logs/18_04_23.json
+2023-05-13 15:01:50 (get_logs.py) DEBUG: Could not find file json/logs/17_04_23.json
+2023-05-13 15:01:50 (get_logs.py) DEBUG: Could not find file json/logs/16_04_23.json
+2023-05-13 15:01:50 (get_logs.py) DEBUG: Could not find file json/logs/15_04_23.json
+2023-05-13 15:01:50 (get_logs.py) DEBUG: Could not find file json/logs/14_04_23.json
+2023-05-13 15:01:50 (get_logs.py) DEBUG: Could not find file json/logs/13_04_23.json
+2023-05-13 15:01:51 (main.py) DEBUG: Searching for file for date 12/05/23
+2023-05-13 15:01:51 (get_logs.py) DEBUG: Found file json/logs/12_05_23.json
+2023-05-13 15:01:51 (main.py) ERROR: Unable to get diagnosis results: Invalid token
+2023-05-13 15:01:57 (main.py) INFO: User clicked X button
+2023-05-13 15:01:58 (main.py) DEBUG: Exited program
