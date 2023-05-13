@@ -1,8 +1,7 @@
-2023-05-12 20:37:43 (config.py) INFO: Attempting to save memory by deleting last months checkup results
-2023-05-12 20:37:43 (config.py) INFO: Last months checkup was not found. AKA file path json/logs/12_04_23.json was not found.
-2023-05-12 20:37:43 (main.py) DEBUG: Reached Home Screen
-2023-05-12 20:37:44 (main.py) DEBUG: Health log accessed
-2023-05-12 20:37:49 (main.py) DEBUG: Health log accessed
-2023-05-12 20:37:52 (main.py) DEBUG: Health log accessed
-2023-05-12 20:37:54 (main.py) INFO: User clicked X button
-2023-05-12 20:37:56 (main.py) DEBUG: Exited program
+2023-05-13 14:55:54 (config.py) INFO: Attempting to save memory by deleting last months checkup results
+2023-05-13 14:55:54 (config.py) INFO: Deletion of last months diagnosis was successfull
+2023-05-13 14:55:54 (config.py) INFO: Attempting to remove it from json/logs.json
+2023-05-13 14:55:54 (config.py) INFO: Removed json/logs/13_04_23.json from json/logs.json
+2023-05-13 14:55:54 (main.py) DEBUG: Reached Home Screen
+2023-05-13 14:56:15 (main.py) INFO: User clicked X button
+2023-05-13 14:56:16 (main.py) DEBUG: Exited program

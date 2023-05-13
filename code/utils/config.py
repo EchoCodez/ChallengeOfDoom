@@ -30,5 +30,19 @@ def delete_old_diagnosis(logger):
         jsonUtils.delete_file(last_months_checkup)
     except FileNotFoundError:
         logger.info(f"Last months checkup was not found. AKA file path {last_months_checkup} was not found.")
+        return
     else:
         logger.info("Deletion of last months diagnosis was successfull")
+    
+    logger.info("Attempting to remove it from json/logs.json")
+    
+    try:
+        data = jsonUtils.open("json/logs.json")["logs_list"]
+        jsonUtils.overwrite(
+            data = {"logs_list": [x for x in data if x != last_months_checkup]},
+            file="json/logs.json"
+            )
+    except Exception as e:
+        logger.warning(e)
+    else:
+        logger.info(f"Removed {last_months_checkup} from json/logs.json")
