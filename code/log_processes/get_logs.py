@@ -19,5 +19,6 @@ class SearchForLog:
             with open(self.name) as f:
                 return json.load(f)
         except FileNotFoundError as e:
-            self.logger.info(e)
+            return
+            self.logger.debug(e)
         

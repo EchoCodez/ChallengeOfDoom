@@ -177,7 +177,7 @@ class Program(ctk.CTk, Questions):
         self.get_diagnosis_info(diseases, tabview, font)
         self.mainloop()
         
-    def get_diagnosis_info(self, diseases: str|list[dict], tabview: ctk.CTkTabview, font = ("Times New Roman", 35)):
+    def get_diagnosis_info(self, diseases: str|list[dict], tabview: ctk.CTkTabview, font = ("Times New Roman", 35), loop=False):
         if isinstance(diseases, str):
             self.logger.error(f"Unable to get diagnosis results: {diseases}")
             ctk.CTkButton(
@@ -210,8 +210,11 @@ class Program(ctk.CTk, Questions):
             text="Back to homepage",
             command=self.quit
         ).pack()
+        
+        if loop:
+            self.mainloop()
     
-    def health_log(self, font=("Times New Roman", 15)):
+    def health_log(self, font=("Times New Roman", 15)):    
         self.clean()
         self.logger.debug("Health log accessed")
         tabview = ctk.CTkTabview(
@@ -231,9 +234,26 @@ class Program(ctk.CTk, Questions):
         frame.pack()
         for button, _date in get_previous_month(frame):
             _date = _date.strftime("%d/%m/%y")
+            
+            def show_old_diagnosis(d = _date):
+                self.clean()
+                temp_tabs = ctk.CTkTabview(self)
+                temp_tabs.pack()
+                self.get_diagnosis_info(
+                    SearchForLog(self.logger, date=d).search(),
+                    temp_tabs,
+                    loop=True
+                    )
+                self.health_log(font=font)
+            
+            result = SearchForLog(self.logger, date=_date).search()
+            
+            if result is None:
+                continue
+            
             button.configure(
                 font=font,
-                command=lambda _date=_date: self.logger.info(SearchForLog(self.logger, date=_date).search())
+                command=show_old_diagnosis
                 )
             button.pack(pady=5)
         
@@ -333,5 +353,5 @@ def main(*, erase_data = False) -> None:
 
 
 if __name__ == "__main__":
-    main(erase_data=True)
+    main(erase_data=False)
     
