@@ -78,7 +78,9 @@ class MCQbuiler:
             if isinstance(question, Question):
                 self.__create_question(question)
             elif isinstance(question, CustomQuestion):
-                question.question(*question.args, **question.kwargs)
+                result = question.question(*question.args, **question.kwargs)
+                if result is not None:
+                    self.correct = result
             elif question() is not None:
                 raise TypeError("Invalid Question {0}".format(question))
             
@@ -106,7 +108,7 @@ class MCQbuiler:
             text=question.question,
             font=kwargs.get("question_font", ("DEFAULT", 50))
         )
-        q.pack()
+        q.pack(pady=20)
         
         option = tk.StringVar() # what option they chose
         
@@ -118,7 +120,7 @@ class MCQbuiler:
                 value=answer
                 )
 
-            button.pack(pady=10)
+            button.pack(pady=20)
         
         def leave():
             self.logger.debug(option.get())

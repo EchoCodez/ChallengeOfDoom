@@ -3,316 +3,103 @@ import tkinter as tk
 import customtkinter as ctk
 import sys
 import webbrowser
-from datetime import datetime, date
+from datetime import date
 
 # file imports
 from utils.parse_json import jsonUtils
 from CTkMessagebox import CTkMessagebox
 from utils.setup import setup_logging
 from utils.mcq import MCQbuiler
-from utils.data_classes import Question, CustomQuestion, UserInfo
+from utils.data_classes import Question, CustomQuestion
 from api.diagnosis import Diagnosis
+from log_processes.health_log import SearchForLog, get_previous_month
+from utils.config import set_theme, delete_old_diagnosis
+from utils.setup_questions import Questions
 
 
 preferences = "json/preferences.json"
 user_data = "json/user-data.json"
 conditions_list = "json/symptoms.json"
 
-class Program:
-    '''Class encompassing all the functions used to run the program'''
+class Program(ctk.CTk, Questions):
+    """The main program that runs the application
+
+    Parameters:
+    -----------
+        ctk (str): window background color, tuple: (light_color, dark_color) or single color
+    """    
     
-    def __init__(self) -> None:
+    def __init__(self, fg = None) -> None:
         '''
-        Initilize self.__root and store file names for ease of access
+        Initilize self and store file names for ease of access
         
         Name mangling is used to ensure root cannot be used outside of class
         '''
         
-        self.logger = setup_logging()
-        self.__root = ctk.CTk()
-        self.__root.title("Congressional App Challenge 2023")
-        self.__root.protocol("WM_DELETE_WINDOW", self.on_closing)
-        self.width, self.height = self.__root.winfo_screenwidth(), self.__root.winfo_screenheight()
-        self.__root.geometry(f"{self.width}x{self.height}+0+0")
+        ctk.CTk.__init__(
+            self=self,
+            fg_color=fg
+            )
+        Questions.__init__(
+            self=self,
+            true_self=self
+        )
         
-        self.__setup_quiz = False
+        self.logger = setup_logging()
+        self.title("Congressional App Challenge 2023")
+        self.protocol("WM_DELETE_WINDOW", self.on_closing)
+        self.geometry(f"{self.winfo_screenwidth()}x{self.winfo_screenheight()}+0+0")
+        self.focus_force()
+        
         self.__setup_finished = jsonUtils.open(preferences).get("setup_finished", False)
-        self.__appearance = tk.StringVar(value="light")
-        self.__remember = tk.BooleanVar(value=True)
+        self.resizable(width=True, height=True)
     
     def on_closing(self) -> None:
         '''Confirm if user wanted to end application'''
         
         self.logger.info("User clicked X button")
         
-        if self.__setup_quiz:
-            force_quit = CTkMessagebox(
-                title="Unsuccessful Quit",
-                icon="cancel",
-                message=
-                "Sorry, you cannot exit the application until you finish the setup quiz.\
-                    \nForcing a shutdown may result in the application no longer working the next time you open it.",
-                option_1="Force Quit",
-                option_2="Understood"
-            )
-            if force_quit.get() == "Force Quit":
-                self.logger.warning("User chose to force application to shut down")
-                sys.exit(0)
-            self.logger.debug("User choose to continue with the setup quiz")
-            return
-        else:
-            answer = CTkMessagebox(
-                title="Quit?",
-                icon="question",
-                message="Do you want to close the program?",
-                option_1="Cancel",
-                option_2="Yes"
-            )
+        answer = CTkMessagebox(
+            title="Quit?",
+            icon="question",
+            message="Do you want to close the program?",
+            option_1="Cancel",
+            option_2="Yes"
+        )
         if answer.get() == "Yes":
             self.logger.debug("Exited program")
             sys.exit(0)
         else:
             self.logger.info("Canceled exiting program")
     
-    def clean(self, quit_root=True, destroy=False) -> None:
+    def clean(self) -> None:
         '''
-        Clean the tkinter window\n
-        If quit_root is true, it will also run self.__root.quit()
+        Clean the tkinter window of widgets\n
+        If quit_root is true, it will also run self.quit()
         '''
         
-        for widget in self.__root.winfo_children():
+        for widget in self.winfo_children():
             widget.destroy()
         
-        if quit_root:
-            self.__root.quit()
-        if destroy:
-            self.__root.destroy()
-    
-    def _appearance_is_set(self) -> bool:
-        '''check if theme preference in file already. If it is, update current'''
-        with open(preferences) as f:
-            if jsonUtils.get(f, "appearance_theme", func = ctk.set_appearance_mode):
-                self.__remember.set(False)
-                return True
-        return False
-        
-    def set_appearance(self) -> None:
-        '''Choose dark or light theme for custom tkinter'''
-        
-        def change() -> None:
-            '''Toggle light and dark theme'''
-            
-            label.configure(text=f"You have selected {self.__appearance.get()} mode")
-            if self.__appearance.get() == 'dark':
-                ctk.set_appearance_mode("dark")
-            else:
-                ctk.set_appearance_mode("light")
-        
-        def cont():
-            jsonUtils.add({"appearance_theme":self.__appearance.get()}, file=preferences)
-            self.clean(quit_root=True)
-        
-        # get user input for choice of theme
-        
-        question = ctk.CTkLabel(
-            self.__root,
-            text="Which appearance theme would you like to use?",
-            font=("Default", 50)
-            )
-        label = ctk.CTkLabel(
-            self.__root,
-            text="You have selected light mode",
-            font=("Default", 35),
-            )
-        
-        dark_button = ctk.CTkRadioButton(
-            self.__root,
-            text="Dark",
-            variable=self.__appearance,
-            value="dark",
-            command=change,
-            font=("Default", 25),
-            ) 
-        light_button = ctk.CTkRadioButton(
-            self.__root, 
-            text="Light", 
-            variable=self.__appearance, 
-            value="light", 
-            command=change,
-            font=("Default", 25),
-            )
-        next_button = ctk.CTkButton(
-            self.__root, 
-            text="Next", 
-            command=cont,
-            font=("Default", 25),
-            )
-    
-    
-        question.pack(pady=20)
-        dark_button.pack(pady=20)
-        light_button.pack(pady=20)
-        label.pack(pady=20)
-        next_button.pack(pady=20)
-        
-        self.__root.mainloop()
-    
-    def __checkboxes(self, fontsize: int = 25, font="Arial") -> dict:
-        '''Creates the checkboxes
-        
-        Returns:
-        --------
-            dict: which conditions were checkmarked
-        '''
-        
-        
-        width, height = self.__root.winfo_screenwidth(), self.__root.winfo_screenheight()
-        
-        conditions = {}
-        width_counter = 0
-        condition_names = (d["Name"] for d in jsonUtils.open(conditions_list))
-        for j in range(100): # choose arbitrarily large value for columns
-            checkboxes = []
-            widths = 0
-            for i in range(2, (height-300)//37): # calculate amount of rows based off of window height
-                name = next(condition_names, None)
-                if name is None:
-                    return conditions
-                
-                conditions[name]=tk.BooleanVar(value=False)
-                checkbox = ctk.CTkCheckBox(
-                    self.__root, 
-                    text=name,
-                    variable=conditions[name],
-                    onvalue=True,
-                    offvalue=False,
-                    font=(font, fontsize)
-                    )
-                checkbox.grid(
-                    row=i, 
-                    column=j, 
-                    pady=5, 
-                    padx=20,
-                    sticky=tk.W
-                    )
-                
-                checkbox.update_idletasks() # update the widget size
-                widths = max(widths, checkbox.winfo_width()) # height is always 24
-                checkboxes.append(checkbox)
-                
-            width_counter+=widths
-            if width_counter>width:
-                self.logger.debug(*(box.cget("text") for box in checkboxes))
-                for box in checkboxes:
-                    box.destroy()
-                return conditions
-            
-        return conditions
-    
-    def get_previous_medical_conditions(self, font="Default", file="json/conditions.json") -> None: # CustomQuestion
-        """Create checkboxes of previous medical conditions
-
-        Parameters:
-        -----------
-            font (str, optional): font options for title and next button. Font size is immutable. Defaults to "Default".
-        """
-        
-        def continue_button():
-            self.__conditions = {key: value.get() for key, value in self.__conditions.items() if value.get()}
-            jsonUtils.overwrite(
-                {"conditions": list(self.__conditions.keys())},
-                file=file
-                )
-            self.clean(quit_root=True)
-
-             
-        title = ctk.CTkLabel(
-            self.__root,
-            text="Are you experiencing any of the above from this list?",
-            font=(font, 50)
-            )
-        next_button = ctk.CTkButton(
-            self.__root,
-            text="Continue",
-            command=continue_button,
-            width=280,
-            height=56,
-            font=(font, 40)
-            )
-        
-        title.grid(
-            column=0, 
-            columnspan=10, 
-            padx=5, 
-            pady=5,
-            sticky=tk.N
-            )
-        
-        self.__conditions = self.__checkboxes(fontsize=30, font=font)
-        
-        next_button.grid(pady=10)
-            
-        self.__root.mainloop()       
-
-    def get_year_of_birth(self, font = ("None", 50)): # CustomQuestion
-        def verify_and_continue():
-            typed = typer.get(1.0, tk.END).strip()
-            year = datetime.now().year
-            self.logger.info(f"User typed {typed} as input for date of birth")
-            
-            if not typed.isnumeric():
-                self.logger.info("User entered a non numeric string")
-                CTkMessagebox(self.__root, title="Date of Birth Submission Error",message="Must be a number", icon="cancel")
-            elif int(typed) not in range(1930, year+1):
-                self.logger.info(f"User entered date of birth outside 1930 and {year}")
-                CTkMessagebox(self.__root, title="Date of Birth Submission Error",message=f"Must be a year between 1930 and {year}", icon="cancel")
-            else:
-                self.logger.info("User entered valid date of birth")
-                jsonUtils.add(
-                    data={"birth_year": typed}
-                )
-                self.logger.info(f"Birth year ::{typed}:: succesfully written to file")
-                self.__root.quit()
-        
-        typer = ctk.CTkTextbox(self.__root, width=400, font=("Times New Roman", 25))
-        typer.insert(tk.END, "Type Here")
-        
-        title = ctk.CTkLabel(
-            self.__root,
-            text="What year were you born?",
-            font=font
-            )
-        next_button = ctk.CTkButton(
-            self.__root,
-            text="Next",
-            command=verify_and_continue
-        )
-        title.pack(pady=10)
-        typer.pack(pady=10)
-        next_button.pack(pady=10)
-        self.__root.mainloop()
-
     def setup(self) -> None:
         """Sets up the multiple choice quiz and appearance theme
         """        
         
         prequiz = MCQbuiler(
-            self.__root,
+            self,
             "Let's set up the program!", # title
             self.logger,
-            CustomQuestion(self.set_appearance if not self._appearance_is_set() else lambda: None),
+            CustomQuestion(self.set_appearance if not set_theme() else lambda: None),
             Question("What is your gender?", ["Male", "Female"]),
             CustomQuestion(self.get_year_of_birth)
         )
-        self.__setup_quiz = True
         answers = prequiz.begin()
         
         jsonUtils.add({
                 "gender": answers[1],
             })
         
-        self.clean(quit_root=False)
-        self.__setup_quiz = False
+        self.clean()
         jsonUtils.add({"setup_finished": True}, file=preferences)
         self.logger.debug(jsonUtils.get_values())
     
@@ -337,19 +124,19 @@ class Program:
             
             self.logger.info("Added log file name to logs.json")
         
-        self.clean(quit_root=False)
+        self.clean()
         
         MCQbuiler(
-            self.__root,
+            self,
             "Daily Checkup",
             self.logger,
             CustomQuestion(self.get_previous_medical_conditions, kwargs={"file": "json/conditions.json"})
         ).begin()
         
-        self.clean()
+        self.quit()
         
         loading = ctk.CTkLabel(
-            self.__root,
+            self,
             text="Saving results to health log", # TODO
             font=("Times New Roman", 50)
         )
@@ -374,12 +161,12 @@ class Program:
     
     def _show_diagnosis_results(self, font: str | tuple[str, int] = ("Times New Roman", 35)):
         ctk.CTkLabel(
-            self.__root,
+            self,
             text="Diagnosis results",
             font=(font[0], font[1]+5) if isinstance(font, (tuple, list)) else (font, 40)
         ).pack(pady=20)
         tabview = ctk.CTkTabview(
-            self.__root,
+            self,
             width=600,
             height=500
         )
@@ -387,9 +174,17 @@ class Program:
         
         
         diseases = jsonUtils.read("json/possible_diseases.json")
+        self.get_diagnosis_info(diseases, tabview, font)
+        self.mainloop()
         
+    def get_diagnosis_info(self, diseases: str|list[dict], tabview: ctk.CTkTabview, font = ("Times New Roman", 35), loop=False):
         if isinstance(diseases, str):
             self.logger.error(f"Unable to get diagnosis results: {diseases}")
+            ctk.CTkButton(
+                self,
+                text="Back to Homepage",
+                command=self.quit
+            )
             return
         
         for disease in diseases:
@@ -411,76 +206,133 @@ class Program:
             ).pack(pady=50)
         
         ctk.CTkButton(
-            self.__root,
+            self,
             text="Back to homepage",
-            command=self.clean
+            command=self.quit
         ).pack()
-        self.__root.mainloop()
+        
+        if loop:
+            self.mainloop()
+    
+    def health_log(self, font=("Times New Roman", 15)):    
+        self.clean()
+        self.logger.debug("Health log accessed")
+        tabview = ctk.CTkTabview(
+            self,
+            width=900,
+            height=750,
+        )
+        tabview.pack(padx=20, pady=20)
+        
+        tab1 = tabview.add("Diagnosis Log") # Create master for each tab
+        
+        frame = ctk.CTkScrollableFrame(
+            tab1,
+            width=900,
+            height=750
+        )
+        frame.pack()
+        
+        for button, _date in get_previous_month(frame):
+            _date = _date.strftime("%d/%m/%y")
+            
+            def show_old_diagnosis(d = _date):
+                self.logger.debug(f"Searching for file for date {d}")
+                self.clean()
+                temp_tabs = ctk.CTkTabview(self)
+                temp_tabs.pack()
+                self.get_diagnosis_info(
+                    SearchForLog(self.logger, date=d).search(),
+                    temp_tabs,
+                    loop=True
+                    )
+                self.health_log(font=font)
+            
+            result = SearchForLog(self.logger, date=_date).search()
+            
+            if result is None:
+                continue
+            
+            button.configure(
+                font=font,
+                command=show_old_diagnosis
+                )
+            button.pack(pady=5)
+        
+        tab2 = tabview.add("Diet log")
+        # Whatever you do here, to make it appear under the tab, make its master `frame`
+            
+        ctk.CTkButton(
+            self,
+            text="Back to Homepage",
+            command=self.quit
+        ).pack()
+        self.mainloop()
+        self.clean()
+        self.home()
     
     def home(self) -> None:
         '''Main function that executes the program'''
+        self.logger.debug("Reached Home Screen")
+        self.clean()
         
-        self.clean(quit_root=False)
-        
-        # Frames
-        ctk.CTkFrame( # top left
-            self.__root,
+        ctk.CTkButton( # top left
+            self,
             fg_color="#ADD8E6",
+            text="TBD",
+            command=lambda: self.logger.debug("Button Clicked"),
             corner_radius=40,
-            height=self.height*0.55,
-            width=self.width*0.2
+            height=self.winfo_screenheight()*0.55,
+            width=self.winfo_screenwidth()*0.2,
+            font=("Times New Roman", 30),
+            text_color="#000000",
             ).place(relx=0.15, rely=0.3, anchor=tk.CENTER)
-        ctk.CTkFrame( # bottom right
-            self.__root,
+        
+        ctk.CTkButton( # bottom right
+            self,
+            text="Daily Diagnosis",
+            command=self._diagnose,
             fg_color="#ADD8E6",
-            corner_radius=40,
-            height=self.height*0.55,
-            width=self.width*0.2
+            height=self.winfo_screenheight()*0.55,
+            width=self.winfo_screenwidth()*0.2,
+            text_color="#000000",
+            font=("Times New Roman", 30),
+            corner_radius=40
             ).place(relx=0.85, rely=0.6, anchor=tk.CENTER)
-        ctk.CTkFrame( # bottom left
-            self.__root,
+        
+        ctk.CTkButton( # bottom left
+            self,
             fg_color="#ADD8E6",
+            text="TBD",
+            command=lambda: self.logger.debug("Button Clicked"),
             corner_radius=40,
-            height=self.height*0.25,
-            width=self.width*0.2
+            height=self.winfo_screenheight()*0.25,
+            width=self.winfo_screenwidth()*0.2,
+            font=("Times New Roman", 30),
+            text_color="#000000",
             ).place(relx=0.15, rely=0.75, anchor=tk.CENTER)
-        ctk.CTkFrame( # top right
-            self.__root,
+        ctk.CTkButton( # top right
+            self,
+            text="Health Log",
             fg_color="#ADD8E6",
+            command=self.health_log,
             corner_radius=40,
-            height=self.height*0.25,
-            width=self.width*0.2
+            height=self.winfo_screenheight()*0.25,
+            width=self.winfo_screenwidth()*0.2,
+            font=("Times New Roman", 30),
+            text_color="#000000",
             ).place(relx=0.85, rely=0.15, anchor=tk.CENTER)
         
-        # Buttons
-        ctk.CTkButton(
-            self.__root,
-            text="Daily Diagnosis",
-            command=self._diagnose
-            ).place(relx=0.85, rely=0.6, anchor=tk.CENTER)
-        self.__root.mainloop()
+        self.mainloop()
     
     def execute(self):
         if not self.__setup_finished:
             self.setup()
         else:
-            self._appearance_is_set()
+            set_theme()
         
-        self.logger.info("Attempting to save memory by deleting last months checkup results")
+        delete_old_diagnosis(self.logger)
         
-        current_date = date.today()
-        current_month = current_date.month
-        last_month = current_month - 1 if current_month != 1 else 12  
-        today_a_month_ago = date(current_date.year, last_month, current_date.day).strftime("%d_%m_%y")
-        
-        last_months_checkup = f"json/logs/{today_a_month_ago}.json"
-        try:
-            jsonUtils.delete_file(last_months_checkup)
-        except FileNotFoundError:
-            self.logger.info(f"Last months checkup was not found. AKA file path {last_months_checkup} was not found.")
-        else:
-            self.logger.info("Deletion of last months diagnosis was successfull")
-            
         self.home()
 
 

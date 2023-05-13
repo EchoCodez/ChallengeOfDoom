@@ -1,6 +1,3 @@
-'''Parse logs and put into readable format'''
+'''importable __init__.py for searching for, and rendering, log files'''
 from log_processes.get_logs import SearchForLog
-
-class GetLogs:
-    def __init__(self, *logs) -> None:
-        self.logs = logs
+from log_processes.UI_health_log import get_previous_month
