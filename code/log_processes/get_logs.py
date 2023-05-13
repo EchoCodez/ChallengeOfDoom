@@ -17,8 +17,11 @@ class SearchForLog:
         import json
         try:
             with open(self.name) as f:
-                return json.load(f)
-        except FileNotFoundError as e:
-            return
-            self.logger.debug(e)
+                r = json.load(f)
+        except FileNotFoundError as _:
+            self.logger.debug(f"Could not find file {self.name}")
+            return None
+        else:
+            self.logger.debug(f"Found file {self.name}")
+            return r
         

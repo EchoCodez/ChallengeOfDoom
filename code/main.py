@@ -232,10 +232,12 @@ class Program(ctk.CTk, Questions):
             height=750
         )
         frame.pack()
+        
         for button, _date in get_previous_month(frame):
             _date = _date.strftime("%d/%m/%y")
             
             def show_old_diagnosis(d = _date):
+                self.logger.debug(f"Searching for file for date {d}")
                 self.clean()
                 temp_tabs = ctk.CTkTabview(self)
                 temp_tabs.pack()
