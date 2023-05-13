@@ -13,13 +13,14 @@ class SearchForLog:
         
         self.logger = logger
     
-    def search(self) -> list[dict] | dict:
+    def search(self, debug=False) -> list[dict] | dict:
         import json
         try:
             with open(self.name) as f:
                 r = json.load(f)
-        except FileNotFoundError as _:
-            self.logger.debug(f"Could not find file {self.name}")
+        except FileNotFoundError:
+            if debug:
+                self.logger.debug(f"Could not find file {self.name}")
             return None
         else:
             self.logger.debug(f"Found file {self.name}")
