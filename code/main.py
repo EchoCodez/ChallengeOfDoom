@@ -51,22 +51,39 @@ class Program(ctk.CTk, Questions):
         self.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.geometry(f"{self.winfo_screenwidth()}x{self.winfo_screenheight()}+0+0")
         self.focus_force()
+        if (self.winfo_screenwidth(), self.winfo_screenheight()) != (1920, 1080):
+            self.logger.debug(f"Screen dimensions {self.winfo_screenwidth()}x{self.winfo_screenheight()} are not recommended")
+            answer = self.raise_exception(
+                title="Screen Dimensions",
+                message=f"Your screen dimensions are not of the recommended 1980x1080 pixels. This may cause some errors.\
+                    \nCurrent dimensions: {self.winfo_screenwidth()}x{self.winfo_screenheight()}",
+                icon="warning",
+                option_1="Quit",
+                option_2="Understood",
+            )
+            if answer.get() == "Quit":
+                self.on_closing()
+        else:
+            self.logger.debug("User has good screen dimensions")
         
         self.__setup_finished = jsonUtils.open(preferences).get("setup_finished", False)
         self.resizable(width=True, height=True)
+    
+    def raise_exception(self, **kwargs):
+        return CTkMessagebox(self, **kwargs)
     
     def on_closing(self) -> None:
         '''Confirm if user wanted to end application'''
         
         self.logger.info("User clicked X button")
         
-        answer = CTkMessagebox(
+        answer = self.raise_exception(
             title="Quit?",
             icon="question",
-            message="Do you want to close the program?",
-            option_1="Cancel",
+            message="Do you want to close the application?",
+            option_1 = "Cancel",
             option_2="Yes"
-        )
+            )
         if answer.get() == "Yes":
             self.logger.debug("Exited program")
             sys.exit(0)
@@ -167,8 +184,7 @@ class Program(ctk.CTk, Questions):
             self.logger,
             CustomQuestion(self.get_previous_medical_conditions, kwargs={"file": "json/conditions.json"})
         ).begin()
-    
-    
+     
     def _show_diagnosis_results(self, font: str | tuple[str, int] = ("Times New Roman", 35)):
         ctk.CTkLabel(
             self,
