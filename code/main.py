@@ -15,6 +15,7 @@ from api.diagnosis import Diagnosis
 from log_processes.health_log import SearchForLog, get_previous_month
 from utils.config import set_theme, delete_old_diagnosis
 from utils.setup_questions import Questions
+from log.health_log import Log
 
 
 preferences = "json/preferences.json"
@@ -159,6 +160,15 @@ class Program(ctk.CTk, Questions):
         self._show_diagnosis_results()
         self.home()
     
+    def open_health_log(self):
+        MCQbuiler(
+            self,
+            "Daily Checkup",
+            self.logger,
+            CustomQuestion(self.get_previous_medical_conditions, kwargs={"file": "json/conditions.json"})
+        ).begin()
+    
+    
     def _show_diagnosis_results(self, font: str | tuple[str, int] = ("Times New Roman", 35)):
         ctk.CTkLabel(
             self,
@@ -223,7 +233,7 @@ class Program(ctk.CTk, Questions):
     def health_log(self, font=("Times New Roman", 15)):    
         self.clean()
         self.logger.debug("Health log accessed")
-        tabview = ctk.CTkTabview(
+        """tabview = ctk.CTkTabview(
             self,
             width=900,
             height=750,
@@ -265,7 +275,7 @@ class Program(ctk.CTk, Questions):
                 )
             button.pack(pady=5)
         
-        tab2 = tabview.add("Diet log")
+        tab2 = tabview.add("Diet log")"""
         # Whatever you do here, to make it appear under the tab, make its master `frame`
             
         ctk.CTkButton(
