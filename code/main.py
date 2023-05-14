@@ -233,7 +233,7 @@ class Program(ctk.CTk, Questions):
     def health_log(self, font=("Times New Roman", 15)):    
         self.clean()
         self.logger.debug("Health log accessed")
-        """tabview = ctk.CTkTabview(
+        tabview = ctk.CTkTabview(
             self,
             width=900,
             height=750,
@@ -275,7 +275,7 @@ class Program(ctk.CTk, Questions):
                 )
             button.pack(pady=5)
         
-        tab2 = tabview.add("Diet log")"""
+        tab2 = tabview.add("Diet log")
         # Whatever you do here, to make it appear under the tab, make its master `frame`
             
         ctk.CTkButton(
