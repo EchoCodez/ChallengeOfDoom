@@ -26,7 +26,7 @@ class Program(ctk.CTk, Questions):
             )
         Questions.__init__(
             self=self
-        )
+            )
         
         self.logger = setup_logging()
         self.title("Congressional App Challenge 2023")
