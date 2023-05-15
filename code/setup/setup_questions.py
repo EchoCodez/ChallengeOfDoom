@@ -13,6 +13,7 @@ conditions_list = "json/symptoms.json"
 
 
 class Questions:
+    '''Setup questions for application'''
     def __init__(self, true_self) -> None:
         self = true_self
         self.__appearance = tk.StringVar(value="light")
