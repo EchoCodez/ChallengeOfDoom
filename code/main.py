@@ -25,8 +25,7 @@ class Program(ctk.CTk, Questions):
             fg_color=fg
             )
         Questions.__init__(
-            self=self,
-            true_self=self
+            self=self
         )
         
         self.logger = setup_logging()
