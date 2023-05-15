@@ -231,50 +231,8 @@ class Program(ctk.CTk, Questions):
     def health_log(self, font=("Times New Roman", 15)):    
         self.clean()
         self.logger.debug("Health log accessed")
-        tabview = ctk.CTkTabview(
-            self,
-            width=900,
-            height=750,
-        )
-        tabview.pack(padx=20, pady=20)
-        
-        tab1 = tabview.add("Diagnosis Log") # Create master for each tab
-        
-        frame = ctk.CTkScrollableFrame(
-            tab1,
-            width=900,
-            height=750
-        )
-        frame.pack()
-        
-        for button, _date in get_previous_month(frame):
-            _date = _date.strftime("%d/%m/%y")
-            
-            def show_old_diagnosis(d = _date):
-                self.logger.debug(f"Searching for file for date {d}")
-                self.clean()
-                temp_tabs = ctk.CTkTabview(self)
-                temp_tabs.pack()
-                self.get_diagnosis_info(
-                    SearchForLog(self.logger, date=d).search(),
-                    temp_tabs,
-                    loop=True
-                    )
-                self.health_log(font=font)
-            
-            result = SearchForLog(self.logger, date=_date).search()
-            
-            if result is None:
-                continue
-            
-            button.configure(
-                font=font,
-                command=show_old_diagnosis
-                )
-            button.pack(pady=5)
-        
-        tab2 = tabview.add("Diet log")
-        CTkCalender(tab2)
+        calendar = Calendar(self)
+        calendar.run()
         # Whatever you do here, to make it appear under the tab, make its master `frame`
             
         ctk.CTkButton(
