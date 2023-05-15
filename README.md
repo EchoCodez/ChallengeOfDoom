@@ -24,37 +24,51 @@
 .
 ├── README.md
 ├── code
-│   │
 │   ├── api
 │   │   ├── api.py
 │   │   └── diagnosis.py
+│   ├── log
+│   │   ├── health_log.py
+│   │   ├── meal.jpg
+│   │   └── test.py
 │   ├── log_processes
 │   │   ├── UI_health_log.py
 │   │   ├── get_logs.py
 │   │   └── health_log.py
-│   ├── machine_learning
-│   │   ├── meal.jpg
-│   │   └── test.py
 │   ├── main.py
+│   ├── setup
+│   │   ├── __init__.py
+│   │   ├── ctkcalender.py
+│   │   ├── imports.py
+│   │   ├── setup.py
+│   │   └── setup_questions.py
 │   └── utils
+│       ├── __init__.py
 │       ├── config.py
 │       ├── data_classes.py
 │       ├── mcq.py
 │       ├── parse_json.py
-│       ├── setup.py
 │       └── test.py
 ├── json
 │   ├── conditions.json
 │   ├── logs
-│   │   ├── 09_05_23.json # Files storing results of that day's diagnosis
-│   │   └── 10_05_23.json # Stored in day_month_year format
+│   │   ├── 09_05_23.json # store user diagnosis results
+│   │   ├── 10_05_23.json
+│   │   └── 12_05_23.json
 │   ├── logs.json
 │   ├── possible_diseases.json
 │   ├── preferences.json
 │   ├── symptoms.json
 │   └── user-data.json
-└── logs
-    └── runlog.log
+├── logs
+│   └── runlog.log
+├── main.spec
+├── readme
+└── readme_screenshots
+    ├── code_button.png
+    ├── download_zip.png
+    ├── extract_zip.png
+    └── open_folder_vscode.png
 ```
 
 # Parts and Pieces
