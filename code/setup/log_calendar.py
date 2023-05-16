@@ -25,7 +25,7 @@ class Calendar:
     def run(self) -> None | list[ctk.CTkButton]:
         today = datetime.today()
         offset, month = monthrange(today.year, today.month)
-        # TODO: Make it match up with days of the week using `offset`
+        # TODO: Make empty boxes show
         for i in range(7):
             ctk.CTkLabel(
                 self.master,
