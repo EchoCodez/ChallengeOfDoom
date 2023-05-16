@@ -1,6 +1,6 @@
-2023-05-16 16:57:57 (main.py) DEBUG: User has good screen dimensions
-2023-05-16 16:57:57 (config.py) INFO: Attempting to save memory by deleting last months checkup results
-2023-05-16 16:57:57 (config.py) INFO: Last months checkup was not found. AKA file path json/logs/16_04_23.json was not found.
-2023-05-16 16:57:57 (main.py) DEBUG: Reached Home Screen
-2023-05-16 16:57:58 (main.py) INFO: User clicked X button
-2023-05-16 16:57:59 (main.py) DEBUG: Exited program
+2023-05-16 16:59:04 (main.py) DEBUG: User has good screen dimensions
+2023-05-16 16:59:04 (config.py) INFO: Attempting to save memory by deleting last months checkup results
+2023-05-16 16:59:04 (config.py) INFO: Last months checkup was not found. AKA file path json/logs/16_04_23.json was not found.
+2023-05-16 16:59:04 (main.py) DEBUG: Reached Home Screen
+2023-05-16 16:59:06 (main.py) INFO: User clicked X button
+2023-05-16 16:59:07 (main.py) DEBUG: Exited program

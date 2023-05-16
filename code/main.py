@@ -1,4 +1,4 @@
-from setup.imports import *
+from setup import *
 
 
 preferences = "json/preferences.json"
