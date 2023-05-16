@@ -24,9 +24,6 @@ class Program(ctk.CTk, Questions):
             self=self,
             fg_color=fg
             )
-        Questions.__init__(
-            self=self
-            )
         
         self.logger = setup_logging()
         self.title("Congressional App Challenge 2023")
@@ -49,6 +46,10 @@ class Program(ctk.CTk, Questions):
             self.logger.debug("User has good screen dimensions")
         
         self.__setup_finished = jsonUtils.open(preferences).get("setup_finished", False)
+        if not self.__setup_finished:
+            Questions.__init__(
+            self=self
+            )
         self.resizable(width=True, height=True)
     
     def raise_exception(self, **kwargs):
