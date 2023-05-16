@@ -2,15 +2,35 @@ import customtkinter as ctk
 from datetime import datetime
 from calendar import monthrange
 
-class Calendar():
+class Calendar:
     def __init__(self, master):
         self.master = master
+    
+    @staticmethod
+    def num_to_day(__n: int, /):
+        key = {
+            0: "Sunday",
+            1:"Monday",
+            2:"Tuesday",
+            3:"Wednesday",
+            4: "Thursday",
+            5: "Friday",
+            6: "Saturday"
+        }
+        return key[__n]
     
     def run(self) -> None | list[ctk.CTkButton]:
         today = datetime.today()
         offset, month = monthrange(today.year, today.month)
-        # TODO: Make it match up with days of the week using `offset`
-        week = 0
+        
+        for i in range(7):
+            ctk.CTkLabel(
+                self.master,
+                text=self.num_to_day(i)
+            ).grid(row=0, column=i, padx=20, pady=20)
+            
+        # Add empty boxes before start of month and at end of month
+        week = 1
         days = []
         for num in range(1, month+1):
             num += offset
