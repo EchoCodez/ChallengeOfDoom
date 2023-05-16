@@ -1,5 +1,6 @@
-from utils.parse_json import jsonUtils
+from utils import jsonUtils
 import customtkinter as ctk
+import tkinter as tk
 
 
 def set_theme() -> bool:
@@ -46,3 +47,37 @@ def delete_old_diagnosis(logger):
         logger.warning(e)
     else:
         logger.info(f"Removed {last_months_checkup} from json/logs.json")
+
+class Settings:
+    def __init__(self, master: ctk.CTk) -> None:
+        self.master = master
+        self.show_settings()
+    
+    def show_settings(self, mainloop=True):
+        self.master.quit()
+        self.setting_vars = []
+        
+        for setting in range(1):
+            var = tk.StringVar(value="on")
+            l = ctk.CTkLabel(
+                self.master,
+                text=f"{var.get()}"
+            )
+            ctk.CTkSwitch(
+                self.master,
+                onvalue="on",
+                offvalue="off",
+                variable=var,
+                command=lambda: l.configure(text=f"{var.get()}"),
+                text="dark mode",
+            ).pack()
+            l.pack()
+            self.setting_vars += var,
+        
+        if mainloop:
+            self.master.mainloop()
+
+if __name__ == "__main__":
+    r = ctk.CTk()
+    r.geometry("720x480")
+    Settings(r)

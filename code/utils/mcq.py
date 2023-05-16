@@ -1,7 +1,7 @@
 import tkinter as tk
 import customtkinter as ctk
 from logging import Logger
-from utils.data_classes import Question, CustomQuestion
+from utils import Question, CustomQuestion
 
 class MCQbuiler:
     def __init__(self, root: ctk.CTk, name: str, logger: Logger, *questions: Question) -> None:
