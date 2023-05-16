@@ -7,7 +7,7 @@ class Calendar:
         self.master = master
     
     @staticmethod
-    def num_to_day(__n: int, /):
+    def get_key(reverse=False):
         key = {
             0: "Sunday",
             1:"Monday",
@@ -17,7 +17,15 @@ class Calendar:
             5: "Friday",
             6: "Saturday"
         }
-        return key[__n]
+        return key if not reverse else dict((v, k) for k, v in key.items())
+    
+    @staticmethod
+    def num_to_day(__n: int, /):
+        return Calendar.get_key()[__n]
+    
+    @staticmethod
+    def day_to_num(__s: str, /):
+        return Calendar.get_key(reverse=False)[__s]
     
     def run(self) -> None | list[ctk.CTkButton]:
         today = datetime.today()
