@@ -35,7 +35,7 @@ class Calendar:
         week = 1
         days = []
         for num in range(1, month+1):
-            num += offset # doesn't work... try using
+            num += offset # doesn't work... try using last month as example
             day = ctk.CTkButton(
                 self.master,
                 text=f"{num-offset}",
