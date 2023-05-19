@@ -2,7 +2,6 @@ from utils import jsonUtils
 import customtkinter as ctk
 import tkinter as tk
 import logging
-from typing import Callable
 
 
 def set_theme() -> bool:
@@ -68,17 +67,37 @@ class Settings:
             
         
         
-        self.setting_vars += self.create_setting("Toggle Appearance Mode", command=swap_mode),
+        self.setting_vars += self.create_switch_setting("Toggle Appearance Mode", command=swap_mode),
         
         if mainloop:
             self.master.mainloop()
     
-    def create_setting(self, name: str, var: tk.Variable = tk.StringVar, command=lambda: None, **kwargs) -> tk.Variable:
+    def create_switch_setting(self, name: str, **kwargs) -> tk.Variable:
+        """Create a setting button controlled by a switch
+
+        Parameters:
+        -----------
+            name (str): Setting name
+            
+            ACCEPTABLE KWARGS: width, height, font, switch_font, var, switch_place_kwargs, label_place_kwargs, on_off, command
+
+        Raises:
+        -------
+            TypeError: Too many kwargs passed in as parameters
+
+        Returns:
+        --------
+            tk.Variable: The variable after being attached to the button
+        """
+        
         width, height = kwargs.pop("width", 300), kwargs.pop("height", 72)
         font, switch_font = kwargs.pop("font", ("", 50)), kwargs.pop("switch_font", None)
-        var = var() if isinstance(var, Callable) else var
-        switch_kwargs = kwargs.pop("switch_kwargs", {"relx":0.7, "rely":0.1, "anchor":tk.CENTER})
-        label_kwargs = kwargs.pop("label_kwargs", {"relx":0.2, "rely":0.1, "anchor":tk.CENTER})
+        var = kwargs.pop("var", tk.StringVar())
+        switch_kwargs = kwargs.pop("switch_place_kwargs", {"relx":0.7, "rely":0.1, "anchor":tk.CENTER})
+        label_kwargs = kwargs.pop("label_place_kwargs", {"relx":0.2, "rely":0.1, "anchor":tk.CENTER})
+        on, off = kwargs.pop("on_off", ("on", "off"))
+        command = kwargs.pop("command")
+        
         if kwargs:
             raise TypeError("Too many arguments passed in!")
         
@@ -89,8 +108,8 @@ class Settings:
         )
         ctk.CTkSwitch(
             self.master,
-            onvalue="on",
-            offvalue="off",
+            onvalue=on,
+            offvalue=off,
             variable=var,
             command=command,
             switch_width=width,
