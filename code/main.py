@@ -278,7 +278,7 @@ class Program(ctk.CTk, Questions):
             self,
             fg_color="#ADD8E6",
             text="Settings",
-            command=lambda: self.logger.debug("Settings clicked"),
+            command=lambda: Settings(self, self.logger),
             corner_radius=40,
             height=self.winfo_screenheight()*0.25,
             width=self.winfo_screenwidth()*0.2,
