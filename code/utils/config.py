@@ -79,7 +79,8 @@ class Settings:
         -----------
             name (str): Setting name
             
-            ACCEPTABLE KWARGS: width, height, font, switch_font, var, switch_place_kwargs, label_place_kwargs, on_off, command
+            ACCEPTABLE KWARGS: width, height, font, switch_font, var, switch_place_kwargs, label_place_kwargs, on_off,
+            command, switch_kwargs, label_kwargs
 
         Raises:
         -------
@@ -97,6 +98,7 @@ class Settings:
         label_kwargs = kwargs.pop("label_place_kwargs", {"relx":0.2, "rely":0.1, "anchor":tk.CENTER})
         on, off = kwargs.pop("on_off", ("on", "off"))
         command = kwargs.pop("command")
+        switch_creation_kwargs, label_creation_kwargs = kwargs.pop("switch_kwargs", {}), kwargs.pop("label_kwargs", {})
         
         if kwargs:
             raise TypeError("Invalid kwargs {0}".format(kwargs))
@@ -104,7 +106,8 @@ class Settings:
         l = ctk.CTkLabel(
             self.master,
             text=name,
-            font=font
+            font=font,
+            **label_creation_kwargs
         )
         ctk.CTkSwitch(
             self.master,
@@ -115,7 +118,8 @@ class Settings:
             switch_width=width,
             switch_height=height,
             font=switch_font,
-            text=""
+            text="",
+            **switch_creation_kwargs
         ).place(**switch_kwargs)
         l.place(**label_kwargs)
         return var
