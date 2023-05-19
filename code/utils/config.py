@@ -84,7 +84,7 @@ class Settings:
         
         l = ctk.CTkLabel(
             self.master,
-            text="Toggle Dark Mode",
+            text=name,
             font=font
         )
         ctk.CTkSwitch(
