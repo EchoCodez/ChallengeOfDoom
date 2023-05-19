@@ -83,7 +83,7 @@ class Settings:
 
         Raises:
         -------
-            TypeError: Too many kwargs passed in as parameters
+            TypeError: Unknown kwarg passed in
 
         Returns:
         --------
@@ -99,7 +99,7 @@ class Settings:
         command = kwargs.pop("command")
         
         if kwargs:
-            raise TypeError("Too many arguments passed in!")
+            raise TypeError("Invalid kwargs {0}".format(kwargs))
         
         l = ctk.CTkLabel(
             self.master,
