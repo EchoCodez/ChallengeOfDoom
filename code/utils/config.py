@@ -66,8 +66,11 @@ class Settings:
             # TODO: Write to file
             
         
-        
-        self.setting_vars += self.create_switch_setting("Toggle Appearance Mode", command=swap_mode),
+        switch_settings = (
+            ("Toggle Appearance Mode", swap_mode),
+        )
+        for name, command in switch_settings:
+            self.setting_vars += self.create_switch_setting(name, command=command),
         
         if mainloop:
             self.master.mainloop()
