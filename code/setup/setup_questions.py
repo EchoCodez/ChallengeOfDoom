@@ -23,11 +23,11 @@ class Questions:
         def change() -> None:
             '''Toggle light and dark theme'''
             
-            label.configure(text=f"You have selected {self.__appearance.get()} mode")
             if self.__appearance.get() == 'dark':
                 ctk.set_appearance_mode("dark")
             else:
                 ctk.set_appearance_mode("light")
+            label.configure(text=f"You have selected {ctk.get_appearance_mode()} mode")
         
         def cont():
             jsonUtils.add({"appearance_theme":self.__appearance.get()}, file=preferences)

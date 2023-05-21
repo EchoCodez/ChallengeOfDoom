@@ -63,7 +63,10 @@ class Settings:
         def swap_mode():
             ctk.set_appearance_mode("dark" if ctk.get_appearance_mode().lower()=="light" else "light")
             self.logger.debug(f"Swapped appearance mode to {ctk.get_appearance_mode()}")
-            # TODO: Write to file
+            jsonUtils.add(
+                {"appearance_theme": ctk.get_appearance_mode()},
+                file="json/preferences.json"
+                )
             
         
         switch_settings = (
