@@ -1,7 +1,7 @@
 from utils import jsonUtils
 import customtkinter as ctk
 import tkinter as tk
-import logging
+from logging import Logger
 
 
 def set_theme() -> bool:
@@ -50,30 +50,30 @@ def delete_old_diagnosis(logger):
         logger.info(f"Removed {last_months_checkup} from json/logs.json")
 
 class Settings:
-    def __init__(self, master: ctk.CTk, logger: logging.Logger) -> None:
+    def __init__(self, master: ctk.CTk, logger: Logger) -> None:
         self.master = master
         self.logger = logger
         self.logger.debug("Settings Clicked")
         self.show_settings()
     
-    def show_settings(self, mainloop=True, font=""):
+    def show_settings(self, mainloop=True, font=("", 50)):
         self.master.clean()
         self.setting_vars = []
         
         def swap_mode():
             ctk.set_appearance_mode("dark" if ctk.get_appearance_mode().lower()=="light" else "light")
-            self.logger.debug(f"Swapped appearance mode to {ctk.get_appearance_mode()}")
             jsonUtils.add(
-                {"appearance_theme": ctk.get_appearance_mode()},
+                {"appearance_theme": ctk.get_appearance_mode().lower()},
                 file="json/preferences.json"
                 )
+            self.logger.debug(f"Appearance Mode: \"{ctk.get_appearance_mode().lower()}\" written to file")
             
         
         switch_settings = (
             ("Toggle Appearance Mode", swap_mode),
         )
         for name, command in switch_settings:
-            self.setting_vars += self.create_switch_setting(name, command=command),
+            self.setting_vars += self.create_switch_setting(name, command=command, font=font),
         
         if mainloop:
             self.master.mainloop()
@@ -98,7 +98,7 @@ class Settings:
         """
         
         width, height = kwargs.pop("width", 300), kwargs.pop("height", 72)
-        font, switch_font = kwargs.pop("font", ("", 50)), kwargs.pop("switch_font", None)
+        font, switch_font = kwargs.pop("font"), kwargs.pop("switch_font", None)
         var = kwargs.pop("var", tk.StringVar())
         switch_kwargs = kwargs.pop("switch_place_kwargs", {"relx":0.7, "rely":0.1, "anchor":tk.CENTER})
         label_kwargs = kwargs.pop("label_place_kwargs", {"relx":0.2, "rely":0.1, "anchor":tk.CENTER})

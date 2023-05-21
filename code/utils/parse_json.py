@@ -161,6 +161,10 @@ class jsonUtils:
             They default to "ID", "Name" and False respectively.
             See implementation for details on their function
         
+        Raises:
+        -------
+        TypeError: Kwarg is not one of the listed kwargs
+        
         Returns:
         --------
         str | dict: string if `symptom[kwargs[_return]]` is string, and dict if `kwargs[return_dict]` is True
@@ -202,28 +206,36 @@ class jsonUtils:
         @staticmethod
         def search(file: str, sentinal: int, **kwargs) -> str | dict:
             data = jsonUtils.open(file)
-            search_for = kwargs.get("search_for", "ID")
-            return_dict = kwargs.get("return_dict", False)
+            search_for = kwargs.pop("search_for", "ID")
+            return_dict = kwargs.pop("return_dict", False)
+            _return = kwargs.pop("_return", "Name")
+            
+            if kwargs:
+                raise TypeError("Unknown kwargs {0}".format(kwargs))
             
             if isinstance(data, dict):
-                return data if return_dict else data[kwargs.get("_return", "Name")]
+                return data if return_dict else data[_return]
             
             for symptom in data:
                 if symptom.get(search_for) == sentinal:
-                    return symptom if return_dict else symptom[kwargs.get("_return", "Name")]
+                    return symptom if return_dict else symptom[_return]
         ```
         '''
         
         data = jsonUtils.open(file)
-        search_for = kwargs.get("search_for", "ID")
-        return_dict = kwargs.get("return_dict", False)
+        search_for = kwargs.pop("search_for", "ID")
+        return_dict = kwargs.pop("return_dict", False)
+        _return = kwargs.pop("_return", "Name")
+        
+        if kwargs:
+            raise TypeError("Unknown kwargs {0}".format(kwargs))
         
         if isinstance(data, dict):
-            return data if return_dict else data[kwargs.get("_return", "Name")]
+            return data if return_dict else data[_return]
         
         for symptom in data:
             if symptom.get(search_for) == sentinal:
-                return symptom if return_dict else symptom[kwargs.get("_return", "Name")]
+                return symptom if return_dict else symptom[_return]
     
     @staticmethod
     def overwrite(data, file: str, *, dumps = True):

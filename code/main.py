@@ -15,9 +15,7 @@ class Program(ctk.CTk, Questions):
     
     def __init__(self, fg = None) -> None:
         '''
-        Initilize self and store file names for ease of access
-        
-        Name mangling is used to ensure root cannot be used outside of class
+        Initilize self and set up program, if not already set up
         '''
         
         ctk.CTk.__init__(
