@@ -1,9 +1,0 @@
-2023-05-21 16:34:42 (main.py) DEBUG: User has good screen dimensions
-2023-05-21 16:34:42 (config.py) INFO: Attempting to save memory by deleting last months checkup results
-2023-05-21 16:34:42 (config.py) INFO: Last months checkup was not found. AKA file path json/logs/21_04_23.json was not found.
-2023-05-21 16:34:42 (main.py) DEBUG: Reached Home Screen
-2023-05-21 16:34:43 (config.py) DEBUG: Settings Clicked
-2023-05-21 16:35:44 (config.py) DEBUG: Appearance Mode: "light" written to file
-2023-05-21 16:35:45 (config.py) DEBUG: Appearance Mode: "dark" written to file
-2023-05-21 16:35:47 (main.py) INFO: User clicked X button
-2023-05-21 16:35:48 (main.py) DEBUG: Exited program
