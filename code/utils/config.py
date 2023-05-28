@@ -58,7 +58,7 @@ class Settings:
     
     def show_settings(self, mainloop=True, font=("", 50)):
         self.master.clean()
-        self.setting_vars = []
+        self.setting_vars = {}
         
         def swap_mode():
             ctk.set_appearance_mode("dark" if ctk.get_appearance_mode().lower()=="light" else "light")
@@ -67,13 +67,14 @@ class Settings:
                 file="json/preferences.json"
                 )
             self.logger.debug(f"Appearance Mode: \"{ctk.get_appearance_mode().lower()}\" written to file")
-            
         
         switch_settings = (
             ("Toggle Appearance Mode", swap_mode),
+            
         )
+        # TODO: create bar for button colors
         for name, command in switch_settings:
-            self.setting_vars += self.create_switch_setting(name, command=command, font=font),
+            self.setting_vars[name] = self.create_switch_setting(name, command=command, font=font),
         
         if mainloop:
             self.master.mainloop()
