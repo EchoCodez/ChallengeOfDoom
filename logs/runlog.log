@@ -1,3 +1,6 @@
-2023-05-28 16:49:18 (main.py) DEBUG: Screen dimensions 1536x864 are not recommended
-2023-05-28 16:49:32 (main.py) INFO: User clicked X button
-2023-05-28 16:49:33 (main.py) DEBUG: Exited program
+2023-05-28 16:51:46 (main.py) DEBUG: Screen dimensions 1536x864 are not recommended
+2023-05-28 16:51:48 (config.py) INFO: Attempting to save memory by deleting last months checkup results
+2023-05-28 16:51:48 (config.py) INFO: Last months checkup was not found. AKA file path json/logs/28_04_23.json was not found.
+2023-05-28 16:51:48 (main.py) DEBUG: Reached Home Screen
+2023-05-28 16:53:53 (main.py) INFO: User clicked X button
+2023-05-28 16:53:54 (main.py) DEBUG: Exited program
