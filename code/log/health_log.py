@@ -3,7 +3,7 @@ from datetime import datetime
 from calendar import monthrange
 
 class Calendar:
-    def __init__(self, master):
+    def __init__(self, master: ctk.CTk) -> None:
         self.master = master
         self.key = {
             0: "Sunday",
@@ -15,7 +15,7 @@ class Calendar:
             6: "Saturday"
         }
     
-    def run(self):
+    def run(self) -> None:
         today = datetime.today()
         offset, month = monthrange(today.year, today.month)
         
@@ -39,7 +39,7 @@ class Calendar:
         self.master.mainloop()
 
 class Day(ctk.CTkButton):
-    def __init__(self, num, offset, master):
+    def __init__(self, num: int, offset: int, master: ctk.CTk) -> None:
         super().__init__(
                 master, 
                 text=f"{num-offset}",
@@ -54,11 +54,11 @@ class Day(ctk.CTkButton):
         win = Log()
     
 class Log(ctk.CTkToplevel):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self) -> None:
+        super().__init__()
         self.geometry("400x300")
 
-        self.label = ctk.CTkLabel(self, text="ToplevelWindow")
+        self.label = ctk.CTkLabel(self, text=f"")
         self.label.pack(padx=20, pady=20)
 
 
