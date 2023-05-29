@@ -8,13 +8,13 @@
     Alternatively, you could go to our github repository (linked <a href=https://github.com/EchoCodez/ChallengeOfDoom>here</a>) and clone it from here.<br>
     On windows:<br>
     Go to the code button on the top right:<br><br>
-    <img src="readme_screenshots/code_button.png"><br><br>
+    <img src="random/code_button.png"><br><br>
     Click on it and select download zip<br><br>
-    <img src="readme_screenshots/download_zip.png"><br><br>
+    <img src="random/download_zip.png"><br><br>
     Now navigate to the zipped file and click extract all. Remember your extracted location.<br><br>
-    <img src="readme_screenshots/extract_zip.png"><br><br>
+    <img src="random/extract_zip.png"><br><br>
     Now open a new window in Visual Studio Code (download <a href="https://code.visualstudio.com/download">here</a>). Click open folder.
-    <img src="readme_screenshots/open_folder_vscode.png"><br><br>
+    <img src="random/open_folder_vscode.png"><br><br>
     Click on the folder you extracted the github repository too. You have officially cloned the repository!<br>
     Note: To run the program, all you need to do now is open <code>code/main.py</code> and run it.
 </ol>

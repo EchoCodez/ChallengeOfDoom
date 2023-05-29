@@ -48,7 +48,11 @@ class Medicine:
                     if elements[i].get()[5]+elements[i].get()[6] != "AM" and elements[i].get()[5]+elements[i].get()[6] != "PM":
                         raise SystemError'''
             self.logger.debug([element.get() for element in elements])
-            jsonUtils.add({}, "json/medicines.json")
+            data = {}
+            for i in range(8):
+                data[self.labels[i]] = elements[i].get() 
+            print(data)
+            jsonUtils.add(data, "json/medicines.json")
             self.master.home()
 
         except:
