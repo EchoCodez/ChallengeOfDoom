@@ -307,13 +307,11 @@ class Program(ctk.CTk, Questions):
         self.mainloop()
 
     def activate_notifs(self) -> None:
-        scheduler = BackgroundScheduler()
-        scheduler.start()
         notif = Notification("HALLO", "COOOOOOOL", "11:02 AM", 1)
         if notif.time == datetime.today().strftime("%I:%M %p"):
-            self.logger.debug("WHAT")
-            job = scheduler.add_job(notif.send, 'interval', minutes=notif.increment)
-    
+            self.logger.debug("Notification sent")
+            notif.send()
+
     def execute(self) -> None:
         if not self.__setup_finished:
             self.setup()

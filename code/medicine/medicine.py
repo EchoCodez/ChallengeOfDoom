@@ -1,7 +1,6 @@
 import customtkinter as ctk
 from logging import Logger
-import sys
-sys.path.append("../setup")
+import time
 
 class Medicine:
     def __init__(self, master: ctk.CTk, logger: Logger) -> None:
@@ -22,7 +21,7 @@ class Medicine:
         try:
             for i in range(1, 4):
                 int(elements[i].get())
-            if elements[0] != "":
+            if elements[0] == "":
                 raise SystemError
             for i in range(4, 7):
                 if int(elements[i].get()[0])*10+int(elements[i].get()[1]) > 12 or int(elements[i].get()[3])*10+int(elements[i].get()[4]) > 60:
@@ -32,10 +31,8 @@ class Medicine:
                 if elements[i].get()[6]+elements[i].get()[7] != "AM" and elements[i].get()[6]+elements[i].get()[7] != "PM":
                     raise SystemError
             self.logger.debug([element.get() for element in elements])
-            ctk.CTkLabel(
-                self.master,
-                text="Thanks! Your input has been recieved!"
-            ).grid(row=4, column=4, padx=20, pady=20)
+            self.master.home()
+
         except:
             self.logger.debug("User failed to input correctly")
             ctk.CTkLabel(
