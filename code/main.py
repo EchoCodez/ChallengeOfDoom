@@ -306,11 +306,17 @@ class Program(ctk.CTk, Questions):
         
         self.mainloop()
 
+    def update(self):
+        schedule.run_pending()
+        self.after(16, self.update)
+
     def activate_notifs(self) -> None:
-        notif = Notification("HALLO", "COOOOOOOL", "11:02 AM", 1)
-        if notif.time == datetime.today().strftime("%I:%M %p"):
-            self.logger.debug("Notification sent")
-            notif.send()
+        notifications = []
+        for notif in notifications:
+            schedule.every().day.at(notif.time).do(notif.send)
+            
+        notif = Notification("HALLO", "COOOOOOOL", "05:16 PM", 1)
+        
 
     def execute(self) -> None:
         if not self.__setup_finished:
@@ -324,8 +330,8 @@ class Program(ctk.CTk, Questions):
             os.system("taskkill /im thing.exe")
         except:
             pass
-
         self.activate_notifs()
+        self.after(0, self.update())
         self.home()
 
 

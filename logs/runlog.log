@@ -1,11 +1,1 @@
-2023-05-29 16:57:13 (main.py) DEBUG: Screen dimensions 1536x864 are not recommended
-2023-05-29 16:57:15 (config.py) DEBUG: Attempted to delete logs/isrunning.log, but it did not exist
-2023-05-29 16:57:15 (config.py) INFO: Attempting to save memory by deleting last months checkup results
-2023-05-29 16:57:15 (config.py) INFO: Last months checkup was not found. AKA file path json/logs/29_04_23.json was not found.
-2023-05-29 16:57:16 (main.py) DEBUG: Reached Home Screen
-2023-05-29 16:57:16 (main.py) DEBUG: Medicine Log Accessed
-2023-05-29 16:57:30 (medicine.py) DEBUG: ['Bob', '1', '0', '1', '10:00 AM', '01:00 PM', '08:00 PM', 'Before']
-2023-05-29 16:57:30 (main.py) DEBUG: Reached Home Screen
-2023-05-29 16:57:35 (main.py) INFO: User clicked X button
-2023-05-29 16:57:36 (main.py) DEBUG: Exited program
-2023-05-29 16:58:11 (medicine.py) DEBUG: User failed to input correctly
+2023-05-29 17:58:29 (main.py) DEBUG: Screen dimensions 1536x864 are not recommended

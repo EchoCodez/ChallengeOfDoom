@@ -1,5 +1,6 @@
 import customtkinter as ctk
 from logging import Logger
+from utils import parse_json
 import time
 
 class Medicine:
@@ -24,12 +25,28 @@ class Medicine:
             if elements[0] == "":
                 raise SystemError
             for i in range(4, 7):
-                if int(elements[i].get()[0])*10+int(elements[i].get()[1]) > 12 or int(elements[i].get()[3])*10+int(elements[i].get()[4]) > 60:
-                    raise SystemError
-                if elements[i].get()[2] != ":":
-                    raise SystemError
-                if elements[i].get()[6]+elements[i].get()[7] != "AM" and elements[i].get()[6]+elements[i].get()[7] != "PM":
-                    raise SystemError
+                hours = ""
+                for j in elements[i].get():
+                    if j == ":":
+                        break
+                    hours += j
+                int(hours)
+                if len(hours) != 1:
+                    if int(elements[i].get()[0])*10+int(elements[i].get()[1]) > 12:
+                        raise SystemError
+                    if int(elements[i].get()[3])*10+int(elements[i].get()[4]) > 60:
+                        raise SystemError
+                    if elements[i].get()[2] != ":":
+                        raise SystemError
+                    if elements[i].get()[6]+elements[i].get()[7] != "AM" and elements[i].get()[6]+elements[i].get()[7] != "PM":
+                        raise SystemError
+                else:
+                    if int(elements[i].get()[2])*10+int(elements[i].get()[3]) > 60:
+                        raise SystemError
+                    if elements[i].get()[1] != ":":
+                        raise SystemError
+                    if elements[i].get()[5]+elements[i].get()[6] != "AM" and elements[i].get()[5]+elements[i].get()[6] != "PM":
+                        raise SystemError
             self.logger.debug([element.get() for element in elements])
             self.master.home()
 
