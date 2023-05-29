@@ -298,11 +298,12 @@ class Program(ctk.CTk, Questions):
         
         self.mainloop()
 
-    def activate_notifs():
+    def activate_notifs(self):
         scheduler = BackgroundScheduler()
         scheduler.start()
-        notif = Notification("HALLO", "COOOOOOOL", "10:00", 1)
-        if notif.time == time.time:
+        notif = Notification("HALLO", "COOOOOOOL", "11:02 AM", 1)
+        if notif.time == datetime.today().strftime("%I:%M %p"):
+            self.logger.debug("WHAT")
             job = scheduler.add_job(notif.send, 'interval', minutes=notif.increment)
     
     def execute(self):
