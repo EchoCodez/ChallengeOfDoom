@@ -1,1 +1,7 @@
 2023-05-29 14:48:14 (main.py) DEBUG: Screen dimensions 1536x864 are not recommended
+2023-05-29 14:48:16 (config.py) DEBUG: Attempted to delete logs/isrunning.log, but it did not exist
+2023-05-29 14:48:16 (config.py) INFO: Attempting to save memory by deleting last months checkup results
+2023-05-29 14:48:16 (config.py) INFO: Last months checkup was not found. AKA file path json/logs/29_04_23.json was not found.
+2023-05-29 14:48:16 (main.py) DEBUG: Reached Home Screen
+2023-05-29 14:48:17 (main.py) DEBUG: Medicine Log Accessed
+2023-05-29 14:48:34 (medicine.py) DEBUG: User failed to input correctly
