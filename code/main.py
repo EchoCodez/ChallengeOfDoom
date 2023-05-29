@@ -260,7 +260,7 @@ class Program(ctk.CTk, Questions):
         ctk.CTkButton( # top left
             self,
             fg_color="#ADD8E6",
-            text="TBD",
+            text="Medicine Log",
             command=lambda: self.medicine,
             corner_radius=40,
             height=self.winfo_screenheight()*0.55,
