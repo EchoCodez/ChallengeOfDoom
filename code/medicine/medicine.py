@@ -14,43 +14,49 @@ class Medicine:
             7: "Before/After Meal",
         }
     
-    def submit(self) -> None:
-        pass
-        
+    def submit(self, elements) -> None:
+        print([element._text for element in elements])
+
     def run(self) -> None:
+        elements = []
         for i in range(8):
-            ctk.CTkLabel(
+            label = ctk.CTkLabel(
                 self.master,
                 text=self.labels[i]
             ).grid(row=0, column=i, padx=20, pady=20)
+            elements.append(label)
         
-        ctk.CTkEntry(
+        entry = ctk.CTkEntry(
             self.master,
             placeholder_text="Enter medicine name"
         ).grid(row=1, column=0, padx=20, pady=20)
+        elements.append(entry)
         
         for i in range(3):
-            ctk.CTkEntry(
+            entry = ctk.CTkEntry(
                 self.master,
                 placeholder_text="",
                 width=30
             ).grid(row=1, column=i+1, padx=20, pady=20)
+            elements.append(entry)
         
-        ctk.CTkOptionMenu(
+        menu = ctk.CTkOptionMenu(
             self.master,
             values=["Before", "After"]
         ).grid(row=1, column=7, padx=20, pady=20)
+        elements.append(menu)
 
         for i in range(3):
-            ctk.CTkEntry(
+            entry = ctk.CTkEntry(
                 self.master,
                 placeholder_text="hh:mm AM/PM",
             ).grid(row=1, column=i+4, padx=20, pady=20)
-        
+            elements.append(entry)
+        print(elements)
         ctk.CTkButton(
             self.master, 
-            text="Sumbit",
-            command=self.submit()
+            text="Submit",
+            command=lambda: self.submit(elements)
         ).grid(row=2, column=4, padx=20, pady=20)
 
         self.master.mainloop()

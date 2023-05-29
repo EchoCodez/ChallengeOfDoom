@@ -35,7 +35,7 @@ class Calendar:
             if (num+1)%7==0:
                 week+=1
         
-        print([thing._text for thing in days])
+        print([element._text for element in days])
         self.master.mainloop()
 
 class Day(ctk.CTkButton):
@@ -46,7 +46,7 @@ class Day(ctk.CTkButton):
                 height=140,
                 font=("Default", 30),
                 fg_color=None,
-                command=lambda: self.open_log()
+                command=self.open_log
                 )
         self.log = None
 
