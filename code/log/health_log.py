@@ -6,26 +6,17 @@ class Calendar:
     def __init__(self, master):
         self.master = master
     
-    @staticmethod
-    def get_key(reverse=False):
+    def get_key(self):
         key = {
             0: "Sunday",
-            1:"Monday",
-            2:"Tuesday",
-            3:"Wednesday",
+            1: "Monday",
+            2: "Tuesday",
+            3: "Wednesday",
             4: "Thursday",
             5: "Friday",
             6: "Saturday"
         }
-        return key if not reverse else dict((v, k) for k, v in key.items())
-    
-    @staticmethod
-    def num_to_day(num):
-        return Calendar.get_key()[num]
-    
-    @staticmethod
-    def day_to_num(str):
-        return Calendar.get_key(reverse=False)[str]
+        return key
     
     def run(self):
         today = datetime.today()
@@ -34,10 +25,9 @@ class Calendar:
         for i in range(7):
             ctk.CTkLabel(
                 self.master,
-                text=self.num_to_day(i)
+                text=self.get_key()[i]
             ).grid(row=0, column=i, padx=20, pady=20)
             
-        # Add empty boxes before start of month and at end of month
         week = 1
         days = []
         for num in range(1, month+1):
