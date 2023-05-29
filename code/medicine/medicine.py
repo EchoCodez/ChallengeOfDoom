@@ -13,6 +13,9 @@ class Medicine:
             6: "Dinner Time",
             7: "Before/After Meal",
         }
+    
+    def submit(self) -> None:
+        pass
         
     def run(self) -> None:
         for i in range(8):
@@ -43,6 +46,12 @@ class Medicine:
                 self.master,
                 placeholder_text="hh:mm AM/PM",
             ).grid(row=1, column=i+4, padx=20, pady=20)
+        
+        ctk.CTkButton(
+            self.master, 
+            text="Sumbit",
+            command=self.submit()
+        ).grid(row=2, column=4, padx=20, pady=20)
 
         self.master.mainloop()
 
