@@ -22,10 +22,16 @@ class Medicine:
         try:
             for i in range(1, 4):
                 int(elements[i].get())
-            int(elements[4].get()[0])
+            for i in range(4, 7):
+                if int(elements[i].get()[0])*10+int(elements[i].get()[1]) > 12 or int(elements[i].get()[3])*10+int(elements[i].get()[4]) > 60:
+                    raise SystemError
+                if elements[i].get()[2] != ":":
+                    raise SystemError
+                if elements[i].get()[6]+elements[i].get()[7] != "AM" and elements[i].get()[6]+elements[i].get()[7] != "PM":
+                    raise SystemError
             self.logger.debug([element.get() for element in elements])
         except:
-            print("failure")
+            self.logger.debug("User failed to input correctly")
             ctk.CTkLabel(
                 self.master,
                 text="Please enter everything in the correct format"
@@ -80,8 +86,3 @@ class Medicine:
 
         
         self.master.mainloop()
-
-
-if __name__ == "__main__":
-    medicine = Medicine(ctk.CTk(), setup_logging())
-    medicine.run()
