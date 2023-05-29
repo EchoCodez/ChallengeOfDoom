@@ -50,7 +50,7 @@ class Program(ctk.CTk, Questions):
             )
         self.resizable(width=True, height=True)
     
-    def raise_exception(self, **kwargs):
+    def raise_exception(self, **kwargs) -> Exception:
         return CTkMessagebox(self, **kwargs)
     
     def on_closing(self) -> None:
@@ -103,7 +103,7 @@ class Program(ctk.CTk, Questions):
         jsonUtils.add({"setup_finished": True}, file=preferences)
         self.logger.debug(jsonUtils.get_values())
     
-    def _diagnose(self):
+    def _diagnose(self) -> None:
         def call_api(user):
             results = Diagnosis(user=user).make_call()
             
@@ -159,7 +159,7 @@ class Program(ctk.CTk, Questions):
         self._show_diagnosis_results()
         self.home()
     
-    def open_health_log(self):
+    def open_health_log(self) -> None:
         MCQbuiler(
             self,
             "Daily Checkup",
@@ -167,7 +167,7 @@ class Program(ctk.CTk, Questions):
             CustomQuestion(self.get_previous_medical_conditions, kwargs={"file": "json/conditions.json"})
         ).begin()
      
-    def _show_diagnosis_results(self, font: str | tuple[str, int] = ("Times New Roman", 35)):
+    def _show_diagnosis_results(self, font: str | tuple[str, int] = ("Times New Roman", 35)) -> None:
         ctk.CTkLabel(
             self,
             text="Diagnosis results",
@@ -185,7 +185,7 @@ class Program(ctk.CTk, Questions):
         self.get_diagnosis_info(diseases, tabview, font)
         self.mainloop()
         
-    def get_diagnosis_info(self, diseases: str|list[dict], tabview: ctk.CTkTabview, font = ("Times New Roman", 35), loop=False):
+    def get_diagnosis_info(self, diseases: str|list[dict], tabview: ctk.CTkTabview, font = ("Times New Roman", 35), loop=False) -> None:
         if isinstance(diseases, str):
             self.logger.error(f"Unable to get diagnosis results: {diseases}")
             
@@ -228,7 +228,7 @@ class Program(ctk.CTk, Questions):
         if loop:
             self.mainloop()
     
-    def health_log(self, font=("Times New Roman", 15)):    
+    def health_log(self) -> None:    
         self.clean()
         self.logger.debug("Health Log Accessed")
         calendar = Calendar(self)
@@ -243,7 +243,7 @@ class Program(ctk.CTk, Questions):
         self.clean()
         self.home()
     
-    def medicine(self):
+    def medicine(self) -> FileNotFoundError:
         self.clean()
         self.logger.debug("Medicine Log Accessed")
         medicine = Medicine(self)
@@ -306,7 +306,7 @@ class Program(ctk.CTk, Questions):
         
         self.mainloop()
 
-    def activate_notifs(self):
+    def activate_notifs(self) -> None:
         scheduler = BackgroundScheduler()
         scheduler.start()
         notif = Notification("HALLO", "COOOOOOOL", "11:02 AM", 1)
@@ -314,7 +314,7 @@ class Program(ctk.CTk, Questions):
             self.logger.debug("WHAT")
             job = scheduler.add_job(notif.send, 'interval', minutes=notif.increment)
     
-    def execute(self):
+    def execute(self) -> None:
         if not self.__setup_finished:
             self.setup()
         else:
