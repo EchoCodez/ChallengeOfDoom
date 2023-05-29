@@ -233,7 +233,6 @@ class Program(ctk.CTk, Questions):
         self.logger.debug("Health Log Accessed")
         calendar = Calendar(self)
         calendar.run()
-        # Whatever you do here, to make it appear under the tab, make its master `frame`
             
         ctk.CTkButton(
             self,
@@ -247,6 +246,11 @@ class Program(ctk.CTk, Questions):
     def medicine(self):
         self.clean()
         self.logger.debug("Medicine Log Accessed")
+        medicine = Medicine(self)
+        medicine.run()
+        self.mainloop()
+        self.clean()
+        self.home()
     
     def home(self) -> None:
         '''Main function that executes the program'''
