@@ -261,7 +261,7 @@ class Program(ctk.CTk, Questions):
             self,
             fg_color="#ADD8E6",
             text="Medicine Log",
-            command=lambda: self.medicine,
+            command=self.medicine,
             corner_radius=40,
             height=self.winfo_screenheight()*0.55,
             width=self.winfo_screenwidth()*0.2,
