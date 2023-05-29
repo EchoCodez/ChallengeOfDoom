@@ -246,7 +246,7 @@ class Program(ctk.CTk, Questions):
     def medicine(self) -> None:
         self.clean()
         self.logger.debug("Medicine Log Accessed")
-        medicine = Medicine(self)
+        medicine = Medicine(self, self.logger)
         medicine.run()
         self.mainloop()
         self.clean()

@@ -1,8 +1,12 @@
 import customtkinter as ctk
+from logging import Logger
+import sys
+sys.path.append("../setup")
 
 class Medicine:
-    def __init__(self, master: ctk.CTk) -> None:
+    def __init__(self, master: ctk.CTk, logger: Logger) -> None:
         self.master = master
+        self.logger = logger
         self.labels = {
             0: "Medicine Name",
             1: "Morning", 
@@ -15,7 +19,18 @@ class Medicine:
         }
     
     def submit(self, elements) -> None:
-        print([element.get() for element in elements])
+        try:
+            for i in range(1, 4):
+                int(elements[i].get())
+            int(elements[4].get()[0])
+            self.logger.debug([element.get() for element in elements])
+        except:
+            print("failure")
+            ctk.CTkLabel(
+                self.master,
+                text="Please enter everything in the correct format"
+            ).grid(row=4, column=4, padx=20, pady=20)
+        
 
     def run(self) -> None:
         elements = []
@@ -68,5 +83,5 @@ class Medicine:
 
 
 if __name__ == "__main__":
-    medicine = Medicine(ctk.CTk())
+    medicine = Medicine(ctk.CTk(), setup_logging())
     medicine.run()
