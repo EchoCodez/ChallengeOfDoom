@@ -30,11 +30,15 @@ class Medicine:
                 if elements[i].get()[6]+elements[i].get()[7] != "AM" and elements[i].get()[6]+elements[i].get()[7] != "PM":
                     raise SystemError
             self.logger.debug([element.get() for element in elements])
+            ctk.CTkLabel(
+                self.master,
+                text="Thanks! Your input has been recieved!"
+            ).grid(row=4, column=4, padx=20, pady=20)
         except:
             self.logger.debug("User failed to input correctly")
             ctk.CTkLabel(
                 self.master,
-                text="Please enter everything in the correct format"
+                text="Please enter valid input"
             ).grid(row=4, column=4, padx=20, pady=20)
         
 
