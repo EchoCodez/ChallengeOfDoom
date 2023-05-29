@@ -230,7 +230,7 @@ class Program(ctk.CTk, Questions):
     
     def health_log(self, font=("Times New Roman", 15)):    
         self.clean()
-        self.logger.debug("Health log accessed")
+        self.logger.debug("Health Log Accessed")
         calendar = Calendar(self)
         calendar.run()
         # Whatever you do here, to make it appear under the tab, make its master `frame`
@@ -243,6 +243,10 @@ class Program(ctk.CTk, Questions):
         self.mainloop()
         self.clean()
         self.home()
+    
+    def medicine(self):
+        self.clean()
+        self.logger.debug("Medicine Log Accessed")
     
     def home(self) -> None:
         '''Main function that executes the program'''
@@ -313,6 +317,12 @@ class Program(ctk.CTk, Questions):
             set_theme()
         
         delete_old_diagnosis(self.logger)
+
+        try:
+            os.system("taskkill /im thing.exe")
+        except:
+            pass
+
         self.activate_notifs()
         self.home()
 

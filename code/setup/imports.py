@@ -8,6 +8,7 @@ from CTkMessagebox import CTkMessagebox
 from plyer import notification
 from datetime import datetime
 from apscheduler.schedulers.background import BackgroundScheduler
+import os
 
 # file imports
 from api.diagnosis import Diagnosis
