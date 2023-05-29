@@ -1,6 +1,6 @@
 import customtkinter as ctk
 from logging import Logger
-from utils import parse_json
+from utils.parse_json import jsonUtils
 import time
 
 class Medicine:
@@ -20,7 +20,7 @@ class Medicine:
     
     def submit(self, elements) -> None:
         try:
-            for i in range(1, 4):
+            '''for i in range(1, 4):
                 int(elements[i].get())
             if elements[0] == "":
                 raise SystemError
@@ -46,8 +46,9 @@ class Medicine:
                     if elements[i].get()[1] != ":":
                         raise SystemError
                     if elements[i].get()[5]+elements[i].get()[6] != "AM" and elements[i].get()[5]+elements[i].get()[6] != "PM":
-                        raise SystemError
+                        raise SystemError'''
             self.logger.debug([element.get() for element in elements])
+            jsonUtils.add({}, "json/medicines.json")
             self.master.home()
 
         except:
