@@ -1,5 +1,4 @@
 from plyer import notification
-from apscheduler.schedulers.background import BackgroundScheduler
 
 class Notification():
     def __init__(self, title, message, time, increment=1440):
@@ -13,11 +12,3 @@ class Notification():
             title = self.title,
             message = self.message,
         )
-
-scheduler = BackgroundScheduler()
-scheduler.start()
-notif = Notification("HALLO", "COOOOOOOL", "10:00", 1)
-job = scheduler.add_job(notif.send, 'interval', minutes=notif.increment)
-
-while True:
-    pass

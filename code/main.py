@@ -305,7 +305,10 @@ class Program(ctk.CTk, Questions):
             set_theme()
         
         delete_old_diagnosis(self.logger)
-        
+        scheduler = BackgroundScheduler()
+        scheduler.start()
+        notif = Notification("HALLO", "COOOOOOOL", "10:00", 1)
+        job = scheduler.add_job(notif.send, 'interval', minutes=notif.increment)
         self.home()
 
 
