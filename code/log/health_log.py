@@ -20,14 +20,14 @@ class Calendar:
         return key if not reverse else dict((v, k) for k, v in key.items())
     
     @staticmethod
-    def num_to_day(__n: int, /):
-        return Calendar.get_key()[__n]
+    def num_to_day(num):
+        return Calendar.get_key()[num]
     
     @staticmethod
-    def day_to_num(__s: str, /):
-        return Calendar.get_key(reverse=False)[__s]
+    def day_to_num(str):
+        return Calendar.get_key(reverse=False)[str]
     
-    def run(self) -> None | list[ctk.CTkButton]:
+    def run(self):
         today = datetime.today()
         offset, month = monthrange(today.year, today.month)
         
@@ -52,7 +52,7 @@ class Calendar:
         self.master.mainloop()
 
 class Day(ctk.CTkButton):
-    def __init__(self, num, offset, master) -> None:
+    def __init__(self, num, offset, master):
         super().__init__(
                 master, 
                 text=f"{num-offset}",
@@ -64,24 +64,15 @@ class Day(ctk.CTkButton):
         self.log = None
 
     def open_log(self):
-        win = ToplevelWindow()
+        win = Log()
     
-class ToplevelWindow(ctk.CTkToplevel):
+class Log(ctk.CTkToplevel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.geometry("400x300")
 
         self.label = ctk.CTkLabel(self, text="ToplevelWindow")
         self.label.pack(padx=20, pady=20)
-
-class Log(ctk.CTk):
-    def __init__(self) -> None:
-        super().__init__(None)
-        self.geometry(f"{self.winfo_screenwidth()}x{self.winfo_screenheight()}+0+0")
-        self.hi = "what"
-    
-    def run(self) -> None:
-        self.mainloop()
 
 
 if __name__ == "__main__":
