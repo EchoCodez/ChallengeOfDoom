@@ -13,7 +13,7 @@ class Medicine:
         
     def run(self):
         for i in range(5):
-            label = ctk.CTkLabel(
+            ctk.CTkLabel(
                 self.master,
                 text=self.labels[i]
             ).grid(row=0, column=i, padx=20, pady=20)
