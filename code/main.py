@@ -297,6 +297,12 @@ class Program(ctk.CTk, Questions):
             ).place(relx=0.85, rely=0.15, anchor=tk.CENTER)
         
         self.mainloop()
+
+    def activate_notifs():
+        scheduler = BackgroundScheduler()
+        scheduler.start()
+        notif = Notification("HALLO", "COOOOOOOL", "10:00", 1)
+        job = scheduler.add_job(notif.send, 'interval', minutes=notif.increment)
     
     def execute(self):
         if not self.__setup_finished:
@@ -305,10 +311,7 @@ class Program(ctk.CTk, Questions):
             set_theme()
         
         delete_old_diagnosis(self.logger)
-        scheduler = BackgroundScheduler()
-        scheduler.start()
-        notif = Notification("HALLO", "COOOOOOOL", "10:00", 1)
-        job = scheduler.add_job(notif.send, 'interval', minutes=notif.increment)
+        self.activate_notifs()
         self.home()
 
 
