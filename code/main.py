@@ -302,7 +302,8 @@ class Program(ctk.CTk, Questions):
         scheduler = BackgroundScheduler()
         scheduler.start()
         notif = Notification("HALLO", "COOOOOOOL", "10:00", 1)
-        job = scheduler.add_job(notif.send, 'interval', minutes=notif.increment)
+        if notif.time == time.time:
+            job = scheduler.add_job(notif.send, 'interval', minutes=notif.increment)
     
     def execute(self):
         if not self.__setup_finished:
