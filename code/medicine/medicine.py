@@ -5,18 +5,14 @@ class Medicine:
         self.master = master
         self.labels = {
             0: "Medicine Name",
-            1: "Timing",
-            2: "Route",
-            3: "Before/After Meal",
-        }
-        self.times = {
-            0: "Morning",
-            1: "Dose",
-            2: "Timing",
+            1: "Morning", 
+            2: "Afternoon", 
+            3: "Evening",
+            4: "Before/After Meal",
         }
         
     def run(self):
-        for i in range(4):
+        for i in range(5):
             ctk.CTkLabel(
                 self.master,
                 text=self.labels[i]
@@ -26,10 +22,16 @@ class Medicine:
             self.master,
             placeholder_text="Enter medicine name"
         ).grid(row=1, column=0, padx=20, pady=20)
-        ctk.CTkOptionMenu(
+        '''ctk.CTkOptionMenu(
             self.master,
             values=["1 tablet", "2 tablets"]
-        ).grid(row=1, column=1, padx=20, pady=20)
+        ).grid(row=1, column=1, padx=20, pady=20)'''
+        for i in range(3):
+            ctk.CTkEntry(
+                self.master,
+                placeholder_text="",
+                width=30
+            ).grid(row=1, column=i+1, padx=20, pady=20)
 
         self.master.mainloop()
 
