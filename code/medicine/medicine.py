@@ -41,7 +41,7 @@ class Medicine:
         for i in range(3):
             ctk.CTkEntry(
                 self.master,
-                placeholder_text="",
+                placeholder_text="hh:mm AM/PM",
             ).grid(row=1, column=i+4, padx=20, pady=20)
 
         self.master.mainloop()
