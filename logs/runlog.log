@@ -1,6 +1,8 @@
-2023-05-28 16:51:46 (main.py) DEBUG: Screen dimensions 1536x864 are not recommended
-2023-05-28 16:51:48 (config.py) INFO: Attempting to save memory by deleting last months checkup results
-2023-05-28 16:51:48 (config.py) INFO: Last months checkup was not found. AKA file path json/logs/28_04_23.json was not found.
-2023-05-28 16:51:48 (main.py) DEBUG: Reached Home Screen
-2023-05-28 16:53:53 (main.py) INFO: User clicked X button
-2023-05-28 16:53:54 (main.py) DEBUG: Exited program
+2023-05-29 09:24:08 (main.py) DEBUG: User has good screen dimensions
+2023-05-29 09:24:08 (config.py) DEBUG: Attempted to delete logs/isrunning.log, but it did not exist
+2023-05-29 09:24:08 (config.py) INFO: Attempting to save memory by deleting last months checkup results
+2023-05-29 09:24:08 (config.py) INFO: Last months checkup was not found. AKA file path json/logs/29_04_23.json was not found.
+2023-05-29 09:24:08 (main.py) DEBUG: Reached Home Screen
+2023-05-29 09:24:10 (main.py) INFO: User clicked X button
+2023-05-29 09:24:11 (main.py) DEBUG: Exited program
+2023-05-29 09:24:12 (config.py) DEBUG: Successfully created logs/isrunning.log

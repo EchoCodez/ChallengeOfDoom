@@ -67,7 +67,9 @@ class Program(ctk.CTk, Questions):
             )
         if answer.get() == "Yes":
             self.logger.debug("Exited program")
-            sys.exit(0)
+            self.destroy()
+            return
+            # sys.exit(0)
         else:
             self.logger.info("Canceled exiting program")
     
@@ -321,8 +323,13 @@ def main(*, erase_data = False) -> None:
         jsonUtils.clearfiles()
 
     program = Program()
+    files = FileHandler(program.logger)
+    
+    files.clear_old_application()
     
     program.execute()
+    
+    files.create_new_application()
     
 
 
