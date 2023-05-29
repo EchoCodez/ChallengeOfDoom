@@ -12,6 +12,7 @@ files = ("json/preferences.json", "json/user-data.json")
 
 class jsonUtils:
     '''Class containing custom made json file methods'''
+    __slots__ = ()
     
     @staticmethod
     def add(data: dict, file: str = "json/user-data.json", indent=4) -> None:
@@ -68,7 +69,6 @@ class jsonUtils:
         for file in files:
             jsonUtils.clearfile(file=file)
     
-    
     @staticmethod
     def get(file: StringIO, sentinal: str|int, *, func: Callable = lambda x: None) -> bool:
         """
@@ -98,7 +98,6 @@ class jsonUtils:
             return True
         return False
     
-
     @staticmethod
     def get_values() -> UserInfo:
         """Get all user preferences and user conditions as an instance of class UserInfo
@@ -238,7 +237,7 @@ class jsonUtils:
                 return symptom if return_dict else symptom[_return]
     
     @staticmethod
-    def overwrite(data, file: str, *, dumps = True):
+    def overwrite(data, file: str, *, dumps = True) -> None:
         """Overwrite data in a file
 
         Parameters:
@@ -257,7 +256,7 @@ class jsonUtils:
                 f.write(data)
 
     @staticmethod
-    def read(file: str):
+    def read(file: str) -> None:
         """Wrapper for jsonUtils.open
 
         Args:
@@ -270,7 +269,7 @@ class jsonUtils:
         return jsonUtils.open(file)
 
     @staticmethod
-    def open_json(path: str, action: str = "r"):
+    def open_json(path: str, action: str = "r") -> None:
         """Context manager for opening json files. 
         Instead of returning a file object, the object returned is a json.load(file) object. 
         This should mainly be used for readability
@@ -290,7 +289,7 @@ class jsonUtils:
         return open_json(path, action)
 
     @staticmethod
-    def delete_file(path: str):
+    def delete_file(path: str) -> None:
         os.remove(path)
 
 
