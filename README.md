@@ -31,7 +31,7 @@
 │   │   ├── health_log.py
 │   │   ├── meal.jpg
 │   │   └── test.py
-│   ├── log_processes
+│   ├── processes
 │   │   ├── UI_health_log.py
 │   │   ├── get_logs.py
 │   │   └── health_log.py
