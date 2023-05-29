@@ -1,7 +1,7 @@
 import customtkinter as ctk
 from logging import Logger
 from utils.parse_json import jsonUtils
-import time
+import json
 
 class Medicine:
     def __init__(self, master: ctk.CTk, logger: Logger) -> None:
@@ -19,6 +19,7 @@ class Medicine:
         }
     
     def submit(self, elements) -> None:
+        
         try:
             '''for i in range(1, 4):
                 int(elements[i].get())
@@ -52,7 +53,11 @@ class Medicine:
             for i in range(8):
                 data[self.labels[i]] = elements[i].get() 
             print(data)
-            jsonUtils.write(data, "json/medicines.json")
+            with open("json/medicines.json", 'r') as f:
+                feeds = json.load(f)
+            feeds.extend([data])
+            with open("json/medicines.json", 'w') as f:
+                json.dump(feeds, f, indent=4)
             self.master.home()
 
         except:

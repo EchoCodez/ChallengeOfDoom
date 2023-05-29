@@ -13,7 +13,24 @@ files = ("json/preferences.json", "json/user-data.json")
 class jsonUtils:
     '''Class containing custom made json file methods'''
     __slots__ = ()
-    
+
+    @staticmethod
+    def add(data: dict, file: str = "json/user-data.json", indent=4) -> None:
+        '''
+        Adds data to a file
+        
+        Parameters
+        ----------
+        data (dict): The data to be added
+        
+        file (str, optional): "user-data.json"
+            Which file to add data to.
+        '''
+
+        with open(file, "a") as f:
+            f.write(",\n")
+            f.write(json.dumps(data, indent=indent))
+
     @staticmethod
     def write(data: dict, file: str = "json/user-data.json", indent=4) -> None:
         '''
