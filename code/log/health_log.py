@@ -5,9 +5,7 @@ from calendar import monthrange
 class Calendar:
     def __init__(self, master):
         self.master = master
-    
-    def get_key(self):
-        key = {
+        self.key = {
             0: "Sunday",
             1: "Monday",
             2: "Tuesday",
@@ -16,7 +14,6 @@ class Calendar:
             5: "Friday",
             6: "Saturday"
         }
-        return key
     
     def run(self):
         today = datetime.today()
@@ -25,7 +22,7 @@ class Calendar:
         for i in range(7):
             ctk.CTkLabel(
                 self.master,
-                text=self.get_key()[i]
+                text=self.key[i]
             ).grid(row=0, column=i, padx=20, pady=20)
             
         week = 1
