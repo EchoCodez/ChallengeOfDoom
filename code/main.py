@@ -67,9 +67,8 @@ class Program(ctk.CTk, Questions):
             )
         if answer.get() == "Yes":
             self.logger.debug("Exited program")
-            self.destroy()
+            self.withdraw()
             return
-            # sys.exit(0)
         else:
             self.logger.info("Canceled exiting program")
     
