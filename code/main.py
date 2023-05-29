@@ -243,7 +243,7 @@ class Program(ctk.CTk, Questions):
         self.clean()
         self.home()
     
-    def medicine(self) -> FileNotFoundError:
+    def medicine(self) -> None:
         self.clean()
         self.logger.debug("Medicine Log Accessed")
         medicine = Medicine(self)
