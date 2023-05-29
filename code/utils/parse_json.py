@@ -15,7 +15,7 @@ class jsonUtils:
     __slots__ = ()
     
     @staticmethod
-    def add(data: dict, file: str = "json/user-data.json", indent=4) -> None:
+    def write(data: dict, file: str = "json/user-data.json", indent=4) -> None:
         '''
         Adds data to a file
         

@@ -52,7 +52,7 @@ class Medicine:
             for i in range(8):
                 data[self.labels[i]] = elements[i].get() 
             print(data)
-            jsonUtils.add(data, "json/medicines.json")
+            jsonUtils.write(data, "json/medicines.json")
             self.master.home()
 
         except:

@@ -95,12 +95,12 @@ class Program(ctk.CTk, Questions):
         )
         answers = prequiz.begin()
         
-        jsonUtils.add({
+        jsonUtils.write({
                 "gender": answers[1],
             })
         
         self.clean()
-        jsonUtils.add({"setup_finished": True}, file=preferences)
+        jsonUtils.write({"setup_finished": True}, file=preferences)
         self.logger.debug(jsonUtils.get_values())
     
     def _diagnose(self) -> None:
@@ -117,7 +117,7 @@ class Program(ctk.CTk, Questions):
             
             # writes it to list of logs
             logs = set(jsonUtils.open("json/logs.json")["logs_list"]).union((file,))
-            jsonUtils.add(
+            jsonUtils.write(
                 data={"logs_list": list(logs)},
                 file="json/logs.json"
             )

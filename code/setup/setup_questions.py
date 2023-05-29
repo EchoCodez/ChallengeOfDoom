@@ -30,7 +30,7 @@ class Questions:
             label.configure(text=f"You have selected {ctk.get_appearance_mode()} mode")
         
         def cont():
-            jsonUtils.add({"appearance_theme":self.__appearance.get()}, file=preferences)
+            jsonUtils.write({"appearance_theme":self.__appearance.get()}, file=preferences)
             self.quit()
         
         # get user input for choice of theme
@@ -189,7 +189,7 @@ class Questions:
                 CTkMessagebox(self, title="Date of Birth Submission Error",message=f"Must be a year between 1930 and {year}", icon="cancel")
             else:
                 self.logger.info("User entered valid date of birth")
-                jsonUtils.add(
+                jsonUtils.write(
                     data={"birth_year": typed}
                 )
                 self.logger.info(f"Birth year ::{typed}:: succesfully written to file")

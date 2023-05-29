@@ -79,7 +79,7 @@ class Settings:
         
         def swap_mode():
             ctk.set_appearance_mode("dark" if ctk.get_appearance_mode().lower()=="light" else "light")
-            jsonUtils.add(
+            jsonUtils.write(
                 {"appearance_theme": ctk.get_appearance_mode().lower()},
                 file="json/preferences.json"
                 )
