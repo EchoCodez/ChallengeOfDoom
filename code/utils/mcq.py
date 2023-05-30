@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import tkinter as tk
 import customtkinter as ctk
 from logging import Logger
@@ -15,6 +17,7 @@ class MCQbuiler:
         """
         
         self.questions = questions
+        self.iterator = (i for i in self.questions)
         self.root = root
         self.name = name
         self.logger = logger
@@ -76,7 +79,7 @@ class MCQbuiler:
         corrects: list[bool] = []
         for question in self.questions:
             if isinstance(question, Question):
-                self.__create_question(question)
+                self._create_question(question)
             elif isinstance(question, CustomQuestion):
                 result = question.question(*question.args, **question.kwargs)
                 if result is not None:
@@ -93,7 +96,7 @@ class MCQbuiler:
                 score.append(self.correct)
         return corrects if scored_quiz else score
     
-    def __create_question(self, question: Question, **kwargs):
+    def _create_question(self, question: Question, **kwargs):
         """Creates question if `isinstance(question, Question)`
 
         Parameters:
@@ -136,7 +139,6 @@ class MCQbuiler:
         next_button.pack(pady=10)
 
         self.root.mainloop()
-        
         
     def end(self, title_next="The End!", continue_text = "Finish", title_font= ("DEFAULT", 50), continue_font=("DEFAULT", 30), **kwargs):
         """Creates the end screen of quiz
@@ -187,6 +189,17 @@ class MCQbuiler:
         
         return answers
         
+    def __iter__(self) -> MCQbuiler:
+        return self
+    
+    def __next__(self) -> Question | CustomQuestion:
+        temp = next(self.iterator, None)
+        
+        if temp is not None:
+            return temp
+        
+        self.iterator = (i for i in self.questions)
+        raise StopIteration
         
         
 def main():
