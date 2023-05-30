@@ -1,13 +1,12 @@
-import schedule
-import time
+import customtkinter as ctk
+import tkinter as tk
 
-def my_function():
-    # Replace this with your desired function code
-    print("Executing my function at 5:30 PM!")
+root = ctk.CTk()
 
-# Schedule the function to run daily at 5:30 PM
-schedule.every().day.at("17:28").do(my_function)
-
-while True:
-    schedule.run_pending()
-    time.sleep(1)
+ctk.CTkButton(
+    root,
+    text="End",
+    command=exit
+).place(relx=.5, rely=.5, anchor=tk.CENTER)
+root.bind("<Button-3>", exit)
+root.mainloop()

@@ -22,10 +22,14 @@ class Program(ctk.CTk, Questions):
             self=self,
             fg_color=fg
             )
-        
+        def quit_app(event):
+            self.logger.info("QUITTING")
+            sys.exit(0)
+            
         self.logger = setup_logging()
         self.title("Congressional App Challenge 2023")
         self.protocol("WM_DELETE_WINDOW", self.on_closing)
+        self.bind("<Button-2>", quit_app) # for testing code faster
         self.geometry(f"{self.winfo_screenwidth()}x{self.winfo_screenheight()}+0+0")
         self.focus_force()
         if (self.winfo_screenwidth(), self.winfo_screenheight()) != (1920, 1080):

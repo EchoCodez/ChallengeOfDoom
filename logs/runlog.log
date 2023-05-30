@@ -1,15 +1,7 @@
-2023-05-29 19:02:41 (main.py) DEBUG: Screen dimensions 1536x864 are not recommended
-2023-05-29 19:02:43 (config.py) DEBUG: Attempted to delete logs/isrunning.log, but it did not exist
-2023-05-29 19:02:43 (config.py) INFO: Attempting to save memory by deleting last months checkup results
-2023-05-29 19:02:43 (config.py) INFO: Last months checkup was not found. AKA file path json/logs/29_04_23.json was not found.
-2023-05-29 19:02:43 (main.py) DEBUG: Reached Home Screen
-2023-05-29 19:02:44 (main.py) DEBUG: Medicine Log Accessed
-2023-05-29 19:02:45 (medicine.py) DEBUG: ['', '', '', '', '', '', '', 'Before']
-2023-05-29 19:02:45 (main.py) DEBUG: Reached Home Screen
-2023-05-29 19:02:48 (main.py) DEBUG: Medicine Log Accessed
-2023-05-29 19:02:50 (medicine.py) DEBUG: ['', '', '', '', '', '', '', 'Before']
-2023-05-29 19:02:50 (main.py) DEBUG: Reached Home Screen
-2023-05-29 19:02:51 (main.py) INFO: User clicked X button
-2023-05-29 19:02:52 (main.py) DEBUG: Exited program
-2023-05-29 19:02:56 (medicine.py) DEBUG: User failed to input correctly
-2023-05-29 19:02:56 (medicine.py) DEBUG: User failed to input correctly
+2023-05-30 18:13:43 (main.py) DEBUG: User has good screen dimensions
+2023-05-30 18:13:43 (config.py) DEBUG: Attempted to delete logs/isrunning.log, but it did not exist
+2023-05-30 18:13:43 (config.py) INFO: Attempting to save memory by deleting last months checkup results
+2023-05-30 18:13:43 (config.py) INFO: Last months checkup was not found. AKA file path json/logs/30_04_23.json was not found.
+2023-05-30 18:13:43 (main.py) DEBUG: Reached Home Screen
+2023-05-30 18:13:44 (main.py) INFO: QUITTING
+2023-05-30 18:13:44 (main.py) INFO: <ButtonPress event state=Mod1 num=2 x=909 y=156>
