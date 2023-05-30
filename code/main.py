@@ -22,6 +22,7 @@ class Program(ctk.CTk, Questions):
             self=self,
             fg_color=fg
             )
+        
         def quit_app(event):
             self.logger.info("QUITTING")
             sys.exit(0)
@@ -47,11 +48,11 @@ class Program(ctk.CTk, Questions):
         else:
             self.logger.debug("User has good screen dimensions")
         
-        self.__setup_finished = jsonUtils.open(preferences).get("setup_finished", False)
-        if not self.__setup_finished:
+        if not jsonUtils.open(preferences).get("setup_finished", False):
             Questions.__init__(
             self=self
             )
+        
         self.resizable(width=True, height=True)
     
     def raise_exception(self, **kwargs) -> Exception:
@@ -310,11 +311,12 @@ class Program(ctk.CTk, Questions):
         
         self.mainloop()
 
-    def update(self):
+    def update(self) -> None:
         schedule.run_pending()
         self.after(16, self.update)
 
-    def activate_notifs(self) -> None:
+    @staticmethod
+    def activate_notifs() -> None:
         notifications = []
         for notif in notifications:
             schedule.every().day.at(notif.time).do(notif.send)
@@ -323,17 +325,15 @@ class Program(ctk.CTk, Questions):
         
 
     def execute(self) -> None:
-        if not self.__setup_finished:
+        if not jsonUtils.open(preferences).get("setup_finished", False):
             self.setup()
         else:
             set_theme()
         
         delete_old_diagnosis(self.logger)
 
-        try:
-            os.system("taskkill /im thing.exe")
-        except:
-            pass
+        os.system("taskkill /im thing.exe")
+        
         self.activate_notifs()
         self.after(0, self.update())
         self.home()
