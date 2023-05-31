@@ -38,16 +38,30 @@ class jsonUtils:
         
         Parameters
         ----------
-        data (dict): The data to be added
+        data (dict | list): The data to be added
         
         file (str, optional): "user-data.json"
             Which file to add data to.
         '''
         
         with open(file) as f:
-            original_data: dict = json.load(f)
+            original_data: dict | list = json.load(f)
         
-        modified_data = original_data | data # add data to original_data. Information in data will override original
+        if isinstance(original_data, dict) and isinstance(data, dict):
+            modified_data = original_data | data # add data to original_data. Information in data will override original
+        elif isinstance(original_data, dict) and isinstance(data, dict):
+            raise TypeError("Cannot add dict to list inside json file")
+        elif isinstance(original_data, list) and isinstance(data, list):
+            original_data.append(data)
+            modified_data = original_data
+        elif isinstance(modified_data, list) and isinstance(data, dict):
+            modified_data = original_data+[data]
+        else:
+            raise TypeError(
+                "Invalid argument type of {0} for json file data, and {1} for data parameter".format(
+                    type(original_data), type(data)
+                    )
+                )
 
         with open(file, "w") as f:
             f.write(json.dumps(modified_data, indent=indent))
