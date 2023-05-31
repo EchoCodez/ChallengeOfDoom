@@ -22,6 +22,7 @@
 # Directory Structure
 ```bash
 .
+├── .gitignore
 ├── README.md
 ├── code
 │   ├── api
@@ -31,31 +32,32 @@
 │   │   ├── health_log.py
 │   │   ├── meal.jpg
 │   │   └── test.py
-│   ├── processes
-│   │   ├── UI_health_log.py
-│   │   ├── get_logs.py
-│   │   └── health_log.py
 │   ├── main.py
+│   ├── medicine
+│   │   ├── medicine.py
+│   │   └── notifications.py
+│   ├── processes
+│   │   ├── __init__.py
+│   │   └── health_log.py
 │   ├── setup
 │   │   ├── __init__.py
-│   │   ├── ctkcalender.py
-│   │   ├── imports.py
 │   │   ├── setup.py
 │   │   └── setup_questions.py
 │   └── utils
 │       ├── __init__.py
-│       ├── config.py
 │       ├── data_classes.py
+│       ├── generic.py
 │       ├── mcq.py
 │       ├── parse_json.py
-│       └── test.py
+│       └── special.py
 ├── json
 │   ├── conditions.json
-│   ├── logs
-│   │   ├── 09_05_23.json # store user diagnosis results
+│   ├── health
+│   │   ├── 09_05_23.json
 │   │   ├── 10_05_23.json
 │   │   └── 12_05_23.json
 │   ├── logs.json
+│   ├── medicines.json
 │   ├── possible_diseases.json
 │   ├── preferences.json
 │   ├── symptoms.json
@@ -63,8 +65,7 @@
 ├── logs
 │   └── runlog.log
 ├── main.spec
-├── readme
-└── readme_screenshots
+└── random
     ├── code_button.png
     ├── download_zip.png
     ├── extract_zip.png
@@ -72,16 +73,7 @@
 ```
 
 # Parts and Pieces
-<ul>
-    <li><h3><code>main.py</code></h3>
-    The main file in the program. Contains all the programs to be run in a singular class called `Program`.</li>
-    <li><h3><code>utils/parse_json.py</code></h3>
-    File containing class jsonUtil. Mainly used for working with json files</li>
-    <li><h3><code>utils/mcq.py</code></h3>
-    Home to the Multiple Choice Quiz Builder</li>
-    <li><h3><code>api/api.py</code> and <code>api/diagnosis.py</code></h3>
-    The files used to make calls to the APImedic api</li>
-</ul>
+To check out what each folder does, read its respective `FolderDescription.md`
 
 # Libraries and tools used
 <ul>
