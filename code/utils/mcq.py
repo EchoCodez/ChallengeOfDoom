@@ -4,8 +4,10 @@ import tkinter as tk
 import customtkinter as ctk
 from logging import Logger
 from utils.data_classes import Question, CustomQuestion
+from utils.generic import UseLogger
 
-class MCQbuiler:
+class MCQbuiler(UseLogger):
+    '''Builds a multiple choice quiz, with support for other types of questions. Container for questions.'''
     def __init__(self, root: ctk.CTk, name: str, logger: Logger, *questions: Question) -> None:
         """Initialize Multiple Choice Quiz
 
@@ -14,13 +16,20 @@ class MCQbuiler:
             root (ctk.CTk): customtkinter root
             
             name (str): Name of test
+            
+        Raises:
+        -------
+            TypeError: All questions must be instances of Question or CustomQuestion
         """
         
+        if not all(isinstance(q, (Question, CustomQuestion)) for q in questions):
+            raise TypeError("All questions must be instances of Question or CustomQuestion")
+        
+        super().__init__(logger)
         self.questions = questions
         self.iterator = (i for i in self.questions)
         self.root = root
         self.name = name
-        self.logger = logger
         self.correct = False
     
     def clean(self):
@@ -200,22 +209,4 @@ class MCQbuiler:
         
         self.iterator = (i for i in self.questions)
         raise StopIteration
-        
-        
-def main():
-    """Testing/Debugging function
-    """
-    
-    mcq = MCQbuiler(
-        ctk.CTk(),
-        "My MCQ Test",
-        (Question("Are you male or female?", ["Male", "Female", "Other"])),
-        Question("What is 2+2?", ["1", "3", "7", "4"])
-        )
-    mcq.begin()
-    
-
-if __name__ == "__main__":
-    ctk.set_appearance_mode("dark")
-    main()
         

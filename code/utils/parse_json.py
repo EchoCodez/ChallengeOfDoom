@@ -1,5 +1,5 @@
 import json
-import os
+import os, sys
 from typing import Callable
 from io import StringIO
 from utils.data_classes import UserInfo
@@ -325,16 +325,7 @@ class open_json:
             return json.load(f)
         
     
-    def __exit__(self, exception_type, exception_value, traceback):
+    def __exit__(self, exception_type, exception_value, traceback) -> None:
         if self.return_file:
             self.file.close()
-        exit(0)
-
-def main() -> None:
-    j = jsonUtils
-    j.clearfiles()
-    print(j.search("json/symptoms.json", 17))
-
-if __name__ == "__main__":         
-    main()
     
