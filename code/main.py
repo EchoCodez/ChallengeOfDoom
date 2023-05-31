@@ -113,7 +113,7 @@ class Program(ctk.CTk, Questions):
             results = Diagnosis(user=user).make_call()
             
             self.logger.debug("User made daily diagnosis call.")
-            file = f"json/logs/{date.today().strftime('%d_%m_%y')}.json"
+            file = f"json/health/{date.today().strftime('%d_%m_%y')}.json"
             jsonUtils.overwrite(
                 data = results,
                 file = file
@@ -330,7 +330,7 @@ class Program(ctk.CTk, Questions):
         else:
             set_theme()
         
-        delete_old_diagnosis(self.logger)
+        # delete_old_diagnosis(self.logger)
 
         os.system("taskkill /im thing.exe")
         

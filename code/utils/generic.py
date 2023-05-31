@@ -28,38 +28,6 @@ def set_theme() -> bool:
             return True
     return False
 
-def delete_old_diagnosis(logger: Logger):
-    from datetime import date
-    
-    logger.info("Attempting to save memory by deleting last months checkup results")
-        
-    current_date = date.today()
-    current_month = current_date.month
-    last_month = current_month - 1 if current_month != 1 else 12  
-    today_a_month_ago = date(current_date.year, last_month, current_date.day).strftime("%d_%m_%y")
-    
-    last_months_checkup = f"json/logs/{today_a_month_ago}.json"
-    try:
-        jsonUtils.delete_file(last_months_checkup)
-    except FileNotFoundError:
-        logger.info(f"Last months checkup was not found. AKA file path {last_months_checkup} was not found.")
-        return
-    else:
-        logger.info("Deletion of last months diagnosis was successfull")
-    
-    logger.info("Attempting to remove it from json/logs.json")
-    
-    try:
-        data = jsonUtils.open("json/logs.json")["logs_list"]
-        jsonUtils.overwrite(
-            data = {"logs_list": [x for x in data if x != last_months_checkup]},
-            file="json/logs.json"
-            )
-    except Exception as e:
-        logger.warning(e)
-    else:
-        logger.info(f"Removed {last_months_checkup} from json/logs.json")
-
 class FileHandler(UseLogger):
     def create_new_application(self):
         with open("logs/isrunning.log", "w"): # create the file
@@ -73,3 +41,21 @@ class FileHandler(UseLogger):
             self.logger.debug("Deleted logs/isrunning.log")
         except FileNotFoundError:
             self.logger.debug("Attempted to delete logs/isrunning.log, but it did not exist")
+            
+    def delete_logs(self, logs: list[str] = None):
+        '''Delete info
+        
+        Parameters:
+        -----------
+            logs (`list[str]`, optional): logs to delete. Defaults to those in `json/health/logs.json`
+        '''
+        import os
+        logs = jsonUtils.open("json/logs.json")["logs_list"] if logs is None else logs
+        self.logger.info("Deleting {0}".format(logs))
+        for log in logs:
+            try:
+                os.remove(path=log)
+            except FileNotFoundError:
+                continue
+        self.logger.debug("Finished")
+        

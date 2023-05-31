@@ -1,6 +1,6 @@
 import logging as lg
 from setup.setup_questions import Questions
-from log.health_log import Calendar
+from setup.health_log import Calendar, Log
 from medicine.medicine import Medicine
 
 def setup_logging(log_file: str = "logs/runlog.log", logger_name = __name__) -> lg.Logger:
