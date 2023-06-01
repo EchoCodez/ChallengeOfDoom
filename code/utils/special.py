@@ -31,8 +31,8 @@ class Settings:
         
         button_settings = (
             ("Delete Diagnosis Logs", FileHandler(self.logger).delete_logs, {}),
-            ("Delete Health Logs", None, {}),
-            ("Delete Medicine Logs", None, {})
+            ("Delete Health Logs", lambda: FileHandler(self.logger).delete_logs([]), {}),
+            ("Delete Medicine Logs", lambda: FileHandler(self.logger).delete_logs([]), {})
         )
         
         for name, command, kwargs in switch_settings:

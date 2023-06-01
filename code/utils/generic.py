@@ -47,7 +47,7 @@ class FileHandler(UseLogger):
         
         Parameters:
         -----------
-            logs (`list[str]`, optional): logs to delete. Defaults to those in `json/health/logs.json`
+            logs (`list[str]`, optional): logs to delete. Defaults to those in `json/logs.json`
         '''
         import os
         logs = jsonUtils.open("json/logs.json")["logs_list"] if logs is None else logs
