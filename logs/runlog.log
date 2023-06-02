@@ -1,6 +1,5 @@
-2023-05-30 22:27:19 (main.py) DEBUG: User has good screen dimensions
-2023-05-30 22:27:19 (generic.py) DEBUG: Attempted to delete logs/isrunning.log, but it did not exist
-2023-05-30 22:27:19 (generic.py) INFO: Attempting to save memory by deleting last months checkup results
-2023-05-30 22:27:19 (generic.py) INFO: Last months checkup was not found. AKA file path json/logs/30_04_23.json was not found.
-2023-05-30 22:27:20 (main.py) DEBUG: Reached Home Screen
-2023-05-30 22:27:23 (main.py) INFO: QUITTING
+2023-06-02 16:56:45 (main.py) DEBUG: User has good screen dimensions
+2023-06-02 16:56:45 (generic.py) DEBUG: Attempted to delete logs/isrunning.log, but it did not exist
+2023-06-02 16:56:45 (main.py) DEBUG: Reached Home Screen
+2023-06-02 16:56:46 (special.py) DEBUG: Settings Clicked
+2023-06-02 16:56:56 (main.py) INFO: QUITTING

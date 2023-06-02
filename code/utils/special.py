@@ -1,4 +1,4 @@
-from utils import jsonUtils, FileHandler
+from utils import jsonUtils
 import customtkinter as ctk
 import tkinter as tk
 from logging import Logger
@@ -12,6 +12,7 @@ class Settings:
         self.show_settings()
     
     def show_settings(self, mainloop=True, font=("", 50)) -> dict | None:
+        from utils import FileHandler
         self.master.clean()
         self.setting_vars = {}
         
@@ -24,7 +25,7 @@ class Settings:
             self.logger.debug(f"Appearance Mode: \"{ctk.get_appearance_mode().lower()}\" written to file")
         
         switch_settings = (
-            ("Toggle Appearance Mode", swap_mode, {}),
+            # ("Toggle Appearance Mode", swap_mode, {}),
         )
         
         # TODO: create bar for button colors
@@ -129,14 +130,20 @@ class Settings:
         font, button_font = kwargs.pop("font", None), kwargs.pop("button_font", None)
         
         button_kwargs = {
-            "column":self.master.grid_size()[1],
+            "column":4,
             "row":int(self.y_place*10),
-            "pady": 10,
-            "rowspan": 6,
+            "pady": 50,
             "sticky": tk.E
             } | kwargs.pop("button_place_kwargs", {})
         
-        label_kwargs = {"column":1, "row":int(self.y_place*10), "pady": 30, "padx": 50, "sticky": tk.W} | kwargs.pop("label_place_kwargs", {})
+        label_kwargs = {
+            "column":0,
+            "row":int(self.y_place*10),
+            "pady": 30,
+            "padx": 50,
+            "sticky": tk.W,
+            "columnspan": 2
+            } | kwargs.pop("label_place_kwargs", {})
         command = kwargs.pop("command", None)
         label_creation_kwargs = kwargs.pop("label_kwargs", {})
         button_creation_kwargs = kwargs.pop("button_kwargs", {})
@@ -146,12 +153,14 @@ class Settings:
         if kwargs:
             raise TypeError("Invalid kwargs {0}".format(kwargs))
         
+        
         ctk.CTkLabel(
             self.master,
             text=name,
             font=font,
             **label_creation_kwargs
         ).grid(**label_kwargs)
+        
         ctk.CTkButton(
             self.master,
             command=command,
@@ -160,4 +169,5 @@ class Settings:
             font=button_font,
             text="",
             **button_creation_kwargs
-        ).grid(**button_kwargs)
+        ).grid_configure(**button_kwargs)
+
