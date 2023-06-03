@@ -54,6 +54,12 @@ class Program(ctk.CTk, Questions):
             )
         
         self.resizable(width=True, height=True)
+        with open("json/medicines.json") as f:
+            medicines = json.load(f)
+        self.notifications = [medicines]
+        print(self.notifications)
+
+        
     
     def raise_exception(self, **kwargs) -> Exception:
         return CTkMessagebox(self, **kwargs)
@@ -314,14 +320,14 @@ class Program(ctk.CTk, Questions):
     def update(self) -> None:
         schedule.run_pending()
         self.after(16, self.update)
+        
 
     @staticmethod
-    def activate_notifs() -> None:
-        notifications = []
+    def activate_notifs(notifications) -> None:
         for notif in notifications:
-            schedule.every().day.at(notif.time).do(notif.send)
+            print(notif)
+            # schedule.every().day.at(notif.time).do(notif.send)
             
-        notif = Notification("HALLO", "COOOOOOOL", "05:16 PM", 1)
         
 
     def execute(self) -> None:
@@ -329,15 +335,13 @@ class Program(ctk.CTk, Questions):
             self.setup()
         else:
             set_theme()
-        
-        # delete_old_diagnosis(self.logger)
-
+    
         try:
             os.system("taskkill /im thing.exe")
         except:
             pass
         
-        self.activate_notifs()
+        self.activate_notifs(self.notifications)
         self.after(0, self.update())
         self.home()
 

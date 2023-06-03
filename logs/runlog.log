@@ -1,5 +1,6 @@
-2023-06-02 16:56:45 (main.py) DEBUG: User has good screen dimensions
-2023-06-02 16:56:45 (generic.py) DEBUG: Attempted to delete logs/isrunning.log, but it did not exist
-2023-06-02 16:56:45 (main.py) DEBUG: Reached Home Screen
-2023-06-02 16:56:46 (special.py) DEBUG: Settings Clicked
-2023-06-02 16:56:56 (main.py) INFO: QUITTING
+2023-06-03 17:33:55 (main.py) DEBUG: Screen dimensions 1536x864 are not recommended
+2023-06-03 17:33:56 (generic.py) DEBUG: Attempted to delete logs/isrunning.log, but it did not exist
+2023-06-03 17:33:56 (main.py) DEBUG: Reached Home Screen
+2023-06-03 17:33:57 (main.py) DEBUG: Medicine Log Accessed
+2023-06-03 17:34:02 (main.py) INFO: User clicked X button
+2023-06-03 17:34:03 (main.py) DEBUG: Exited program
