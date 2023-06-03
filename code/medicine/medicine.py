@@ -1,6 +1,5 @@
 import customtkinter as ctk
 from logging import Logger
-from utils.parse_json import jsonUtils
 import json
 
 class Medicine:
