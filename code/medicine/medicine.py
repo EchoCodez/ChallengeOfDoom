@@ -21,7 +21,7 @@ class Medicine:
     def submit(self, elements) -> None:
         
         try:
-            '''for i in range(1, 4):
+            for i in range(1, 4):
                 int(elements[i].get())
             if elements[0] == "":
                 raise SystemError
@@ -47,7 +47,7 @@ class Medicine:
                     if elements[i].get()[1] != ":":
                         raise SystemError
                     if elements[i].get()[5]+elements[i].get()[6] != "AM" and elements[i].get()[5]+elements[i].get()[6] != "PM":
-                        raise SystemError'''
+                        raise SystemError
             self.logger.debug([element.get() for element in elements])
             data = {}
             for i in range(8):
