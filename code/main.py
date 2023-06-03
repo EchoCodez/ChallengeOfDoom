@@ -332,7 +332,10 @@ class Program(ctk.CTk, Questions):
         
         # delete_old_diagnosis(self.logger)
 
-        os.system("taskkill /im thing.exe")
+        try:
+            os.system("taskkill /im thing.exe")
+        except:
+            pass
         
         self.activate_notifs()
         self.after(0, self.update())
