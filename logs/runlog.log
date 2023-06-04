@@ -1,0 +1,10 @@
+2023-06-04 11:20:16 (<string>) INFO: Attempted to access json/health/04_06_2023.json
+2023-06-04 11:20:16 (<string>) ERROR: [Errno 2] No such file or directory: '04_06_2023'
+Traceback (most recent call last):
+  File "c:\Users\adeshpande\Documents\Aarush\Personal\Coding\AppChallenge2023\ChallengeOfDoom\code\utils\generic.py", line 98, in get_log
+    return jsonUtils.open(path)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\adeshpande\Documents\Aarush\Personal\Coding\AppChallenge2023\ChallengeOfDoom\code\utils\parse_json.py", line 178, in open
+    with open(file) as f:
+         ^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '04_06_2023'

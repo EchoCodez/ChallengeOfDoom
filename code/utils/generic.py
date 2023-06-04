@@ -64,7 +64,7 @@ class FileHandler(UseLogger):
         self.logger.debug("Finished")
     
     @staticmethod
-    def get_log(_date: DATE, /) -> list[dict[str, dict[str, str|int]]]:
+    def get_log(_date: DATE, /, logger: Logger = None) -> list[dict[str, dict[str, str|int]]]:
         """Get the diagnosis results for a specific date
 
         Parameters:
@@ -77,9 +77,13 @@ class FileHandler(UseLogger):
 
         Returns:
         --------
-            `list[dict[str, dict[str, str|int]]]`: The diagnosis results for that day
-            str: Diagnosis Results for <day> not found
+            `list[dict[str, dict[str, str|int]]]`: The diagnosis results for that day\n
+            `str`: Diagnosis Results for <day> not found
         """        
+        
+        def print(txt: str, level="info"):
+            if logger is not None:
+                exec(f"logger.{level}(\"{txt}\")")
         
         if isinstance(_date, str):
             path = _date
@@ -88,7 +92,13 @@ class FileHandler(UseLogger):
         else:
             raise TypeError("Date for get_log must be a properly formatted string or datetime/date object")
         
+        print(f"Attempted to access json/health/{path}.json")
+        
         try:
             return jsonUtils.open(path)
         except FileNotFoundError as e:
+            print(
+                txt=e,
+                level="exception"
+            )
             return f"Diagnosis Results for {path} not found"
