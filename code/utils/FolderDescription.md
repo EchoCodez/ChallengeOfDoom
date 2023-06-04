@@ -5,7 +5,7 @@ Provide utility classes for main.py, setup/ and other folders
 <ul>
     <li><code>__init__.py</code></li>
     imports modules to run the program
-    <li><code>data_classes.py<code></li>
+    <li><code>data_classes.py</code></li>
     Provides the implementation of <code>Question</code>,<code>CustomQuestion</code>, and <code>UserInfo</code> classes which are used elsewhere in the code
     <li><code>generic.py</code></li>
     Home to the <code>UseLogger</code> class, which defines a <code>__init__</code> method that requires a logger, as well as the <code>FileHandler</code> class, which is used for QOL improvements when working with old diagnosis results. It also contains the <code>set_theme</code> function, which sets the appearance theme of the program at runtime.
