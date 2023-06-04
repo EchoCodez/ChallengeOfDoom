@@ -56,7 +56,14 @@ class Program(ctk.CTk, Questions):
         self.resizable(width=True, height=True)
         with open("json/medicines.json") as f:
             medicines = json.load(f)
-        self.notifications: list[dict[str, str]] = [medicines]
+        self.notifications: list[dict[str, str]] = medicines
+        for i in range(len(self.notifications)):
+            self.notifications[i] = Notification(
+                "Medication Reminder",
+                f"Take {self.notifications[i]['Morning']} dose of {self.notifications[i]['Medicine Name']}",
+                self.notifications[i]["Breakfast Time"]
+                )
+            print(self.notifications[i])
         self.logger.debug("self.notifications: {0}".format(self.notifications))
 
         
@@ -320,14 +327,24 @@ class Program(ctk.CTk, Questions):
         self.mainloop()
 
     def update(self) -> None:
+        try:
+            if self.notifications != tmp:
+                notif = self.notifications[-1]
+                schedule.every().day.at(notif.time).do(notif.send)
+        except:
+            pass
         schedule.run_pending()
         self.after(16, self.update)
+        tmp = self.notifications
         
 
     def activate_notifs(self, notifications: list) -> None:
+        print(notifications)
+        print("WHJKASN")
         for notif in notifications:
             self.logger.debug("notif: {0}".format(notif))
-            # schedule.every().day.at(notif.time).do(notif.send)
+            print(notif.time)
+            schedule.every().day.at(notif.time).do(notif.send)
             
         
 
