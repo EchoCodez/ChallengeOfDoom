@@ -179,6 +179,7 @@ class Program(ctk.CTk, Questions):
         ).begin()
      
     def _show_diagnosis_results(self, font: str | tuple[str, int] = ("Times New Roman", 35)) -> None:
+        self.clean()
         ctk.CTkLabel(
             self,
             text="Diagnosis results",
@@ -201,9 +202,9 @@ class Program(ctk.CTk, Questions):
             self.logger.error(f"Unable to get diagnosis results: {diseases}")
             
             ctk.CTkLabel(
-                self,
+                tabview,
                 text=f"Unable to get diagnosis results: {diseases}"
-            ).pack(pady=20)
+            ).grid(pady=20)
             ctk.CTkButton(
                 self,
                 text="Back to Homepage",

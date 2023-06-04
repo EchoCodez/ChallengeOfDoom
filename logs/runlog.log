@@ -1,10 +1,15 @@
-2023-06-04 11:20:16 (<string>) INFO: Attempted to access json/health/04_06_2023.json
-2023-06-04 11:20:16 (<string>) ERROR: [Errno 2] No such file or directory: '04_06_2023'
-Traceback (most recent call last):
-  File "c:\Users\adeshpande\Documents\Aarush\Personal\Coding\AppChallenge2023\ChallengeOfDoom\code\utils\generic.py", line 98, in get_log
-    return jsonUtils.open(path)
-           ^^^^^^^^^^^^^^^^^^^^
-  File "c:\Users\adeshpande\Documents\Aarush\Personal\Coding\AppChallenge2023\ChallengeOfDoom\code\utils\parse_json.py", line 178, in open
-    with open(file) as f:
-         ^^^^^^^^^^
-FileNotFoundError: [Errno 2] No such file or directory: '04_06_2023'
+2023-06-04 11:56:23 (main.py) DEBUG: User has good screen dimensions
+2023-06-04 11:56:23 (main.py) DEBUG: self.notifications: [[{'Medicine Name': 'Bobo', 'Morning': '1', 'Afternoon': '0', 'Evening': '1', 'Breakfast Time': '10:00 AM', 'Lunch Time': '1:00 PM', 'Dinner Time': '8:00 PM', 'Before/After Meal': 'Before'}, {'Medicine Name': 'Bobo', 'Morning': '1', 'Afternoon': '0', 'Evening': '1', 'Breakfast Time': '10:00 AM', 'Lunch Time': '1:00 PM', 'Dinner Time': '8:00 PM', 'Before/After Meal': 'Before'}]]
+2023-06-04 11:56:23 (generic.py) DEBUG: Attempted to delete logs/isrunning.log, but it did not exist
+2023-06-04 11:56:23 (main.py) DEBUG: notif: [{'Medicine Name': 'Bobo', 'Morning': '1', 'Afternoon': '0', 'Evening': '1', 'Breakfast Time': '10:00 AM', 'Lunch Time': '1:00 PM', 'Dinner Time': '8:00 PM', 'Before/After Meal': 'Before'}, {'Medicine Name': 'Bobo', 'Morning': '1', 'Afternoon': '0', 'Evening': '1', 'Breakfast Time': '10:00 AM', 'Lunch Time': '1:00 PM', 'Dinner Time': '8:00 PM', 'Before/After Meal': 'Before'}]
+2023-06-04 11:56:23 (main.py) DEBUG: Reached Home Screen
+2023-06-04 11:56:26 (mcq.py) DEBUG: Started Quiz
+2023-06-04 11:56:31 (mcq.py) DEBUG: Next Question
+2023-06-04 11:56:31 (mcq.py) DEBUG: Cleaned
+2023-06-04 11:56:31 (mcq.py) DEBUG: ended
+2023-06-04 11:56:31 (mcq.py) DEBUG: Ended Quiz
+2023-06-04 11:56:32 (main.py) DEBUG: User made daily diagnosis call.
+2023-06-04 11:56:32 (main.py) INFO: Writing to log file 'json/health/04_06_23.json' completed successfully
+2023-06-04 11:56:32 (main.py) INFO: Added log file name to logs.json
+2023-06-04 11:56:59 (main.py) DEBUG: Reached Home Screen
+2023-06-04 11:57:06 (main.py) INFO: QUITTING

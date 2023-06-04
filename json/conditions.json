@@ -1,3 +1,7 @@
 {
-    "conditions": []
+    "conditions": [
+        "Increased thirst",
+        "Nausea",
+        "Dizziness"
+    ]
 }
