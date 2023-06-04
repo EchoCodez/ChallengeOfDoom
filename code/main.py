@@ -370,6 +370,5 @@ def main(*, erase_data: bool = False) -> None:
 
 
 if __name__ == "__main__":
-    # main(erase_data=False)
-    print(FileHandler.get_log(datetime.today(), setup_logging()))
+    main(erase_data=False)
     
