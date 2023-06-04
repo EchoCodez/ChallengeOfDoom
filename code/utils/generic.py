@@ -64,7 +64,7 @@ class FileHandler(UseLogger):
         self.logger.debug("Finished")
     
     @staticmethod
-    def get_log(_date: DATE, /) -> list[dict[str, str|int]]:
+    def get_log(_date: DATE, /) -> list[dict[str, dict[str, str|int]]]:
         """Get the diagnosis results for a specific date
 
         Parameters:
@@ -77,7 +77,7 @@ class FileHandler(UseLogger):
 
         Returns:
         --------
-            `list[dict[str, str|int]]`: The diagnosis results for that day
+            `list[dict[str, dict[str, str|int]]]`: The diagnosis results for that day
             str: Diagnosis Results for <day> not found
         """        
         
