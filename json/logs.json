@@ -1,7 +1,8 @@
 {
     "logs_list": [
-        "json/logs/10_05_23.json",
-        "json/logs/12_05_23.json",
-        "json/logs/09_05_23.json"
+        "json/health/10_05_23.json",
+        "json/health/12_05_23.json",
+        "json/health/04_06_23.json",
+        "json/health/09_05_23.json"
     ]
 }

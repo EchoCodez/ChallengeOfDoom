@@ -1,9 +1,13 @@
+from __future__ import annotations
+
 import tkinter as tk
 import customtkinter as ctk
 from logging import Logger
 from utils.data_classes import Question, CustomQuestion
+from utils.generic import UseLogger
 
-class MCQbuiler:
+class MCQbuiler(UseLogger):
+    '''Builds a multiple choice quiz, with support for other types of questions. Container for questions.'''
     def __init__(self, root: ctk.CTk, name: str, logger: Logger, *questions: Question) -> None:
         """Initialize Multiple Choice Quiz
 
@@ -12,12 +16,20 @@ class MCQbuiler:
             root (ctk.CTk): customtkinter root
             
             name (str): Name of test
+            
+        Raises:
+        -------
+            TypeError: All questions must be instances of Question or CustomQuestion
         """
         
+        if not all(isinstance(q, (Question, CustomQuestion)) for q in questions):
+            raise TypeError("All questions must be instances of Question or CustomQuestion")
+        
+        super().__init__(logger)
         self.questions = questions
+        self.iterator = (i for i in self.questions)
         self.root = root
         self.name = name
-        self.logger = logger
         self.correct = False
     
     def clean(self):
@@ -76,7 +88,7 @@ class MCQbuiler:
         corrects: list[bool] = []
         for question in self.questions:
             if isinstance(question, Question):
-                self.__create_question(question)
+                self._create_question(question)
             elif isinstance(question, CustomQuestion):
                 result = question.question(*question.args, **question.kwargs)
                 if result is not None:
@@ -93,7 +105,7 @@ class MCQbuiler:
                 score.append(self.correct)
         return corrects if scored_quiz else score
     
-    def __create_question(self, question: Question, **kwargs):
+    def _create_question(self, question: Question, **kwargs):
         """Creates question if `isinstance(question, Question)`
 
         Parameters:
@@ -136,7 +148,6 @@ class MCQbuiler:
         next_button.pack(pady=10)
 
         self.root.mainloop()
-        
         
     def end(self, title_next="The End!", continue_text = "Finish", title_font= ("DEFAULT", 50), continue_font=("DEFAULT", 30), **kwargs):
         """Creates the end screen of quiz
@@ -187,22 +198,15 @@ class MCQbuiler:
         
         return answers
         
-        
-        
-def main():
-    """Testing/Debugging function
-    """
+    def __iter__(self) -> MCQbuiler:
+        return self
     
-    mcq = MCQbuiler(
-        ctk.CTk(),
-        "My MCQ Test",
-        (Question("Are you male or female?", ["Male", "Female", "Other"])),
-        Question("What is 2+2?", ["1", "3", "7", "4"])
-        )
-    mcq.begin()
-    
-
-if __name__ == "__main__":
-    ctk.set_appearance_mode("dark")
-    main()
+    def __next__(self) -> Question | CustomQuestion:
+        temp = next(self.iterator, None)
+        
+        if temp is not None:
+            return temp
+        
+        self.iterator = (i for i in self.questions)
+        raise StopIteration
         

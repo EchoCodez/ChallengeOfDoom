@@ -8,13 +8,13 @@
     Alternatively, you could go to our github repository (linked <a href=https://github.com/EchoCodez/ChallengeOfDoom>here</a>) and clone it from here.<br>
     On windows:<br>
     Go to the code button on the top right:<br><br>
-    <img src="readme_screenshots/code_button.png"><br><br>
+    <img src="random/code_button.png"><br><br>
     Click on it and select download zip<br><br>
-    <img src="readme_screenshots/download_zip.png"><br><br>
+    <img src="random/download_zip.png"><br><br>
     Now navigate to the zipped file and click extract all. Remember your extracted location.<br><br>
-    <img src="readme_screenshots/extract_zip.png"><br><br>
+    <img src="random/extract_zip.png"><br><br>
     Now open a new window in Visual Studio Code (download <a href="https://code.visualstudio.com/download">here</a>). Click open folder.
-    <img src="readme_screenshots/open_folder_vscode.png"><br><br>
+    <img src="random/open_folder_vscode.png"><br><br>
     Click on the folder you extracted the github repository too. You have officially cloned the repository!<br>
     Note: To run the program, all you need to do now is open <code>code/main.py</code> and run it.
 </ol>
@@ -22,52 +22,59 @@
 # Directory Structure
 ```bash
 .
+├── .gitignore
 ├── README.md
 ├── code
-│   │
+│   ├── main.py
 │   ├── api
-│   │   ├── api.py
 │   │   └── diagnosis.py
-│   ├── log_processes
-│   │   ├── UI_health_log.py
-│   │   ├── get_logs.py
-│   │   └── health_log.py
-│   ├── machine_learning
+│   ├── log
+│   │   ├── health_log.py
 │   │   ├── meal.jpg
 │   │   └── test.py
-│   ├── main.py
+│   ├── medicine
+│   │   ├── medicine.py
+│   │   └── notifications.py
+│   ├── processes
+│   │   ├── __init__.py
+│   │   └── health_log.py
+│   ├── setup
+│   │   ├── __init__.py
+│   │   ├── setup.py
+│   │   └── setup_questions.py
 │   └── utils
-│       ├── config.py
+│       ├── __init__.py
 │       ├── data_classes.py
+│       ├── generic.py
 │       ├── mcq.py
 │       ├── parse_json.py
-│       ├── setup.py
-│       └── test.py
+│       └── special.py
 ├── json
 │   ├── conditions.json
-│   ├── logs
-│   │   ├── 09_05_23.json # Files storing results of that day's diagnosis
-│   │   └── 10_05_23.json # Stored in day_month_year format
+│   ├── health
+│   │   ├── 09_05_23.json
+│   │   ├── 10_05_23.json
+│   │   └── 12_05_23.json
 │   ├── logs.json
+│   ├── medicines.json
 │   ├── possible_diseases.json
 │   ├── preferences.json
 │   ├── symptoms.json
 │   └── user-data.json
-└── logs
-    └── runlog.log
+├── logs
+│   └── runlog.log
+└── random
+    ├── code_button.png
+    ├── download_zip.png
+    ├── extract_zip.png
+    └── open_folder_vscode.png
 ```
 
 # Parts and Pieces
-<ul>
-    <li><h3><code>main.py</code></h3>
-    The main file in the program. Contains all the programs to be run in a singular class called `Program`.</li>
-    <li><h3><code>utils/parse_json.py</code></h3>
-    File containing class jsonUtil. Mainly used for working with json files</li>
-    <li><h3><code>utils/mcq.py</code></h3>
-    Home to the Multiple Choice Quiz Builder</li>
-    <li><h3><code>api/api.py</code> and <code>api/diagnosis.py</code></h3>
-    The files used to make calls to the APImedic api</li>
-</ul>
+To check out what each folder does, read its respective `FolderDescription.md`
+
+# Data gathered by us
+Rest assured that no data is gathered by our team! Every piece of info you put into this program is stored locally on your computer, so you don't have to worry about our policies regarding your personal info!
 
 # Libraries and tools used
 <ul>
@@ -77,5 +84,7 @@
     <li>customtkinter</li>
     <li>json</li>
     <li>os and sys</li>
-    <li>Other libraries like: typing, io, and dataclasses</li>
+    <li>datetime and calender</li>
+    <li>player and apscheduler</li>
+    <li>typing, io, dataclasses</li>
 </ul>

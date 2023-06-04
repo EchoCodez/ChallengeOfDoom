@@ -1,20 +1,4 @@
-# library imports
-import tkinter as tk
-import customtkinter as ctk
-import sys
-import webbrowser
-from datetime import date
-
-# file imports
-from utils.parse_json import jsonUtils
-from CTkMessagebox import CTkMessagebox
-from utils.setup import setup_logging
-from utils.mcq import MCQbuiler
-from utils.data_classes import Question, CustomQuestion
-from api.diagnosis import Diagnosis
-from log_processes.health_log import SearchForLog, get_previous_month
-from utils.config import set_theme, delete_old_diagnosis
-from utils.setup_questions import Questions
+from setup import *
 
 
 preferences = "json/preferences.json"
@@ -31,44 +15,71 @@ class Program(ctk.CTk, Questions):
     
     def __init__(self, fg = None) -> None:
         '''
-        Initilize self and store file names for ease of access
-        
-        Name mangling is used to ensure root cannot be used outside of class
+        Initilize self and set up program, if not already set up
         '''
         
         ctk.CTk.__init__(
             self=self,
             fg_color=fg
             )
-        Questions.__init__(
-            self=self,
-            true_self=self
-        )
         
+        def quit_app(event):
+            self.logger.info("QUITTING")
+            sys.exit(0)
+            
         self.logger = setup_logging()
         self.title("Congressional App Challenge 2023")
         self.protocol("WM_DELETE_WINDOW", self.on_closing)
+        self.bind("<Button-2>", quit_app) # for testing code faster
         self.geometry(f"{self.winfo_screenwidth()}x{self.winfo_screenheight()}+0+0")
         self.focus_force()
+        if (self.winfo_screenwidth(), self.winfo_screenheight()) != (1920, 1080):
+            self.logger.debug(f"Screen dimensions {self.winfo_screenwidth()}x{self.winfo_screenheight()} are not recommended")
+            answer = self.raise_exception(
+                title="Screen Dimensions",
+                message=f"Your screen dimensions are not of the recommended 1980x1080 pixels. This may cause some errors.\
+                    \nCurrent dimensions: {self.winfo_screenwidth()}x{self.winfo_screenheight()}",
+                icon="warning",
+                option_1="Quit",
+                option_2="Understood",
+            )
+            if answer.get() == "Quit":
+                self.on_closing()
+        else:
+            self.logger.debug("User has good screen dimensions")
         
-        self.__setup_finished = jsonUtils.open(preferences).get("setup_finished", False)
+        if not jsonUtils.open(preferences).get("setup_finished", False):
+            Questions.__init__(
+            self=self
+            )
+        
         self.resizable(width=True, height=True)
+        with open("json/medicines.json") as f:
+            medicines = json.load(f)
+        self.notifications: list[dict[str, str]] = [medicines]
+        self.logger.debug("self.notifications: {0}".format(self.notifications))
+
+        
+    
+    def raise_exception(self, **kwargs) -> Exception:
+        return CTkMessagebox(self, **kwargs)
     
     def on_closing(self) -> None:
         '''Confirm if user wanted to end application'''
         
         self.logger.info("User clicked X button")
         
-        answer = CTkMessagebox(
+        answer = self.raise_exception(
             title="Quit?",
             icon="question",
-            message="Do you want to close the program?",
-            option_1="Cancel",
+            message="Do you want to close the application?",
+            option_1 = "Cancel",
             option_2="Yes"
-        )
+            )
         if answer.get() == "Yes":
             self.logger.debug("Exited program")
-            sys.exit(0)
+            self.withdraw()
+            return
         else:
             self.logger.info("Canceled exiting program")
     
@@ -95,20 +106,20 @@ class Program(ctk.CTk, Questions):
         )
         answers = prequiz.begin()
         
-        jsonUtils.add({
+        jsonUtils.write({
                 "gender": answers[1],
             })
         
         self.clean()
-        jsonUtils.add({"setup_finished": True}, file=preferences)
+        jsonUtils.write({"setup_finished": True}, file=preferences)
         self.logger.debug(jsonUtils.get_values())
     
-    def _diagnose(self):
+    def _diagnose(self) -> None:
         def call_api(user):
             results = Diagnosis(user=user).make_call()
             
             self.logger.debug("User made daily diagnosis call.")
-            file = f"json/logs/{date.today().strftime('%d_%m_%y')}.json"
+            file = f"json/health/{date.today().strftime('%d_%m_%y')}.json"
             jsonUtils.overwrite(
                 data = results,
                 file = file
@@ -117,7 +128,7 @@ class Program(ctk.CTk, Questions):
             
             # writes it to list of logs
             logs = set(jsonUtils.open("json/logs.json")["logs_list"]).union((file,))
-            jsonUtils.add(
+            jsonUtils.write(
                 data={"logs_list": list(logs)},
                 file="json/logs.json"
             )
@@ -159,7 +170,16 @@ class Program(ctk.CTk, Questions):
         self._show_diagnosis_results()
         self.home()
     
-    def _show_diagnosis_results(self, font: str | tuple[str, int] = ("Times New Roman", 35)):
+    def open_health_log(self) -> None:
+        MCQbuiler(
+            self,
+            "Daily Checkup",
+            self.logger,
+            CustomQuestion(self.get_previous_medical_conditions, kwargs={"file": "json/conditions.json"})
+        ).begin()
+     
+    def _show_diagnosis_results(self, font: str | tuple[str, int] = ("Times New Roman", 35)) -> None:
+        self.clean()
         ctk.CTkLabel(
             self,
             text="Diagnosis results",
@@ -177,14 +197,20 @@ class Program(ctk.CTk, Questions):
         self.get_diagnosis_info(diseases, tabview, font)
         self.mainloop()
         
-    def get_diagnosis_info(self, diseases: str|list[dict], tabview: ctk.CTkTabview, font = ("Times New Roman", 35), loop=False):
+    def get_diagnosis_info(self, diseases: str|list[dict], tabview: ctk.CTkTabview, font = ("Times New Roman", 35), loop=False) -> None:
         if isinstance(diseases, str):
             self.logger.error(f"Unable to get diagnosis results: {diseases}")
+            
+            ctk.CTkLabel(
+                tabview,
+                text=f"Unable to get diagnosis results: {diseases}"
+            ).grid(pady=20)
             ctk.CTkButton(
                 self,
                 text="Back to Homepage",
                 command=self.quit
-            )
+            ).pack(pady=20)
+            self.mainloop()
             return
         
         for disease in diseases:
@@ -214,59 +240,27 @@ class Program(ctk.CTk, Questions):
         if loop:
             self.mainloop()
     
-    def health_log(self, font=("Times New Roman", 15)):    
+    def health_log(self) -> None:    
         self.clean()
-        self.logger.debug("Health log accessed")
-        tabview = ctk.CTkTabview(
-            self,
-            width=900,
-            height=750,
-        )
-        tabview.pack(padx=20, pady=20)
-        
-        tab1 = tabview.add("Diagnosis Log") # Create master for each tab
-        
-        frame = ctk.CTkScrollableFrame(
-            tab1,
-            width=900,
-            height=750
-        )
-        frame.pack()
-        
-        for button, _date in get_previous_month(frame):
-            _date = _date.strftime("%d/%m/%y")
-            
-            def show_old_diagnosis(d = _date):
-                self.logger.debug(f"Searching for file for date {d}")
-                self.clean()
-                temp_tabs = ctk.CTkTabview(self)
-                temp_tabs.pack()
-                self.get_diagnosis_info(
-                    SearchForLog(self.logger, date=d).search(),
-                    temp_tabs,
-                    loop=True
-                    )
-                self.health_log(font=font)
-            
-            result = SearchForLog(self.logger, date=_date).search()
-            
-            if result is None:
-                continue
-            
-            button.configure(
-                font=font,
-                command=show_old_diagnosis
-                )
-            button.pack(pady=5)
-        
-        tab2 = tabview.add("Diet log")
-        # Whatever you do here, to make it appear under the tab, make its master `frame`
+        self.logger.debug("Health Log Accessed")
+        calendar = Calendar(self)
+        calendar.run(mainloop=False)
             
         ctk.CTkButton(
             self,
             text="Back to Homepage",
             command=self.quit
-        ).pack()
+        ).grid()
+        
+        self.mainloop()
+        self.clean()
+        self.home()
+    
+    def medicine(self) -> None:
+        self.clean()
+        self.logger.debug("Medicine Log Accessed")
+        medicine = Medicine(self, self.logger)
+        medicine.run()
         self.mainloop()
         self.clean()
         self.home()
@@ -279,8 +273,8 @@ class Program(ctk.CTk, Questions):
         ctk.CTkButton( # top left
             self,
             fg_color="#ADD8E6",
-            text="TBD",
-            command=lambda: self.logger.debug("Button Clicked"),
+            text="Medicine Log",
+            command=self.medicine,
             corner_radius=40,
             height=self.winfo_screenheight()*0.55,
             width=self.winfo_screenwidth()*0.2,
@@ -303,8 +297,8 @@ class Program(ctk.CTk, Questions):
         ctk.CTkButton( # bottom left
             self,
             fg_color="#ADD8E6",
-            text="TBD",
-            command=lambda: self.logger.debug("Button Clicked"),
+            text="Settings",
+            command=lambda: Settings(self, self.logger),
             corner_radius=40,
             height=self.winfo_screenheight()*0.25,
             width=self.winfo_screenwidth()*0.2,
@@ -324,19 +318,36 @@ class Program(ctk.CTk, Questions):
             ).place(relx=0.85, rely=0.15, anchor=tk.CENTER)
         
         self.mainloop()
-    
-    def execute(self):
-        if not self.__setup_finished:
+
+    def update(self) -> None:
+        schedule.run_pending()
+        self.after(16, self.update)
+        
+
+    def activate_notifs(self, notifications: list) -> None:
+        for notif in notifications:
+            self.logger.debug("notif: {0}".format(notif))
+            # schedule.every().day.at(notif.time).do(notif.send)
+            
+        
+
+    def execute(self) -> None:
+        if not jsonUtils.open(preferences).get("setup_finished", False):
             self.setup()
         else:
             set_theme()
+    
+        try:
+            os.system("taskkill /im thing.exe")
+        except Exception: # ignore keyboard interrupt
+            pass
         
-        delete_old_diagnosis(self.logger)
-        
+        self.activate_notifs(self.notifications)
+        self.after(0, self.update())
         self.home()
 
 
-def main(*, erase_data = False) -> None:
+def main(*, erase_data: bool = False) -> None:
     '''Wrapper for running the program
     
     Parameters
@@ -349,8 +360,13 @@ def main(*, erase_data = False) -> None:
         jsonUtils.clearfiles()
 
     program = Program()
+    files = FileHandler(program.logger)
+    
+    files.clear_old_application()
     
     program.execute()
+    
+    files.create_new_application()
     
 
 

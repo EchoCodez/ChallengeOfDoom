@@ -12,7 +12,8 @@ files = ("json/preferences.json", "json/user-data.json")
 
 class jsonUtils:
     '''Class containing custom made json file methods'''
-    
+    __slots__ = ()
+
     @staticmethod
     def add(data: dict, file: str = "json/user-data.json", indent=4) -> None:
         '''
@@ -25,11 +26,42 @@ class jsonUtils:
         file (str, optional): "user-data.json"
             Which file to add data to.
         '''
+
+        with open(file, "a") as f:
+            f.write(",\n")
+            f.write(json.dumps(data, indent=indent))
+
+    @staticmethod
+    def write(data: dict, file: str = "json/user-data.json", indent=4) -> None:
+        '''
+        Adds data to a file
+        
+        Parameters
+        ----------
+        data (dict | list): The data to be added
+        
+        file (str, optional): "user-data.json"
+            Which file to add data to.
+        '''
         
         with open(file) as f:
-            original_data: dict = json.load(f)
+            original_data: dict | list = json.load(f)
         
-        modified_data = original_data | data # add data to original_data. Information in data will override original
+        if isinstance(original_data, dict) and isinstance(data, dict):
+            modified_data = original_data | data # add data to original_data. Information in data will override original
+        elif isinstance(original_data, dict) and isinstance(data, dict):
+            raise TypeError("Cannot add dict to list inside json file")
+        elif isinstance(original_data, list) and isinstance(data, list):
+            original_data.append(data)
+            modified_data = original_data
+        elif isinstance(modified_data, list) and isinstance(data, dict):
+            modified_data = original_data+[data]
+        else:
+            raise TypeError(
+                "Invalid argument type of {0} for json file data, and {1} for data parameter".format(
+                    type(original_data), type(data)
+                    )
+                )
 
         with open(file, "w") as f:
             f.write(json.dumps(modified_data, indent=indent))
@@ -68,7 +100,6 @@ class jsonUtils:
         for file in files:
             jsonUtils.clearfile(file=file)
     
-    
     @staticmethod
     def get(file: StringIO, sentinal: str|int, *, func: Callable = lambda x: None) -> bool:
         """
@@ -98,7 +129,6 @@ class jsonUtils:
             return True
         return False
     
-
     @staticmethod
     def get_values() -> UserInfo:
         """Get all user preferences and user conditions as an instance of class UserInfo
@@ -161,6 +191,10 @@ class jsonUtils:
             They default to "ID", "Name" and False respectively.
             See implementation for details on their function
         
+        Raises:
+        -------
+        TypeError: Kwarg is not one of the listed kwargs
+        
         Returns:
         --------
         str | dict: string if `symptom[kwargs[_return]]` is string, and dict if `kwargs[return_dict]` is True
@@ -168,7 +202,7 @@ class jsonUtils:
         Example Use:
         ------------
         ```
-        def look_for_id():
+        def look_for_id() -> str:
             ID = 9
             disease_name = jsonUtils.search(
                 file = "json/symptoms.json",
@@ -176,7 +210,7 @@ class jsonUtils:
                 )
             return disease_name
 
-        def look_for_name():
+        def look_for_name() -> int:
             name="Bad Breath"
             disease_id = jsonUtils.search(
                 file = "json/symptoms.json",
@@ -190,7 +224,8 @@ class jsonUtils:
             ID = 9
             symptom = jsonUtils.search(
                 file = "json/symptoms.json",
-                sentinal = ID
+                sentinal = ID,
+                _return = "Name"
                 )
             return symptom
         ```
@@ -201,31 +236,39 @@ class jsonUtils:
         @staticmethod
         def search(file: str, sentinal: int, **kwargs) -> str | dict:
             data = jsonUtils.open(file)
-            search_for = kwargs.get("search_for", "ID")
-            return_dict = kwargs.get("return_dict", False)
+            search_for = kwargs.pop("search_for", "ID")
+            return_dict = kwargs.pop("return_dict", False)
+            _return = kwargs.pop("_return", "Name")
+            
+            if kwargs:
+                raise TypeError("Unknown kwargs {0}".format(kwargs))
             
             if isinstance(data, dict):
-                return data if return_dict else data[kwargs.get("_return", "Name")]
+                return data if return_dict else data[_return]
             
             for symptom in data:
                 if symptom.get(search_for) == sentinal:
-                    return symptom if return_dict else symptom[kwargs.get("_return", "Name")]
+                    return symptom if return_dict else symptom[_return]
         ```
         '''
         
         data = jsonUtils.open(file)
-        search_for = kwargs.get("search_for", "ID")
-        return_dict = kwargs.get("return_dict", False)
+        search_for = kwargs.pop("search_for", "ID")
+        return_dict = kwargs.pop("return_dict", False)
+        _return = kwargs.pop("_return", "Name")
+        
+        if kwargs:
+            raise TypeError("Unknown kwargs {0}".format(kwargs))
         
         if isinstance(data, dict):
-            return data if return_dict else data[kwargs.get("_return", "Name")]
+            return data if return_dict else data[_return]
         
         for symptom in data:
             if symptom.get(search_for) == sentinal:
-                return symptom if return_dict else symptom[kwargs.get("_return", "Name")]
+                return symptom if return_dict else symptom[_return]
     
     @staticmethod
-    def overwrite(data, file: str, *, dumps = True):
+    def overwrite(data, file: str, *, dumps = True) -> None:
         """Overwrite data in a file
 
         Parameters:
@@ -244,7 +287,7 @@ class jsonUtils:
                 f.write(data)
 
     @staticmethod
-    def read(file: str):
+    def read(file: str) -> None:
         """Wrapper for jsonUtils.open
 
         Args:
@@ -257,7 +300,7 @@ class jsonUtils:
         return jsonUtils.open(file)
 
     @staticmethod
-    def open_json(path: str, action: str = "r"):
+    def open_json(path: str, action: str = "r") -> None:
         """Context manager for opening json files. 
         Instead of returning a file object, the object returned is a json.load(file) object. 
         This should mainly be used for readability
@@ -277,7 +320,7 @@ class jsonUtils:
         return open_json(path, action)
 
     @staticmethod
-    def delete_file(path: str):
+    def delete_file(path: str) -> None:
         os.remove(path)
 
 
@@ -296,16 +339,7 @@ class open_json:
             return json.load(f)
         
     
-    def __exit__(self, exception_type, exception_value, traceback):
+    def __exit__(self, exception_type, exception_value, traceback) -> None:
         if self.return_file:
             self.file.close()
-        exit(0)
-
-def main() -> None:
-    j = jsonUtils
-    j.clearfiles()
-    print(j.search("json/symptoms.json", 17))
-
-if __name__ == "__main__":         
-    main()
     
