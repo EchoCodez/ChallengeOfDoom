@@ -57,7 +57,7 @@ class Program(ctk.CTk, Questions):
         with open("json/medicines.json") as f:
             medicines = json.load(f)
         self.notifications = [medicines]
-        print(self.notifications)
+        self.logger.debug("self.notifications:", self.notifications)
 
         
     
@@ -322,10 +322,9 @@ class Program(ctk.CTk, Questions):
         self.after(16, self.update)
         
 
-    @staticmethod
-    def activate_notifs(notifications) -> None:
+    def activate_notifs(self, notifications) -> None:
         for notif in notifications:
-            print(notif)
+            self.logger.debug("notif:", notif)
             # schedule.every().day.at(notif.time).do(notif.send)
             
         
