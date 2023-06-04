@@ -2,6 +2,10 @@ from logging import Logger
 from utils import jsonUtils
 from logging import Logger
 import customtkinter as ctk
+from datetime import date, datetime
+
+DATE = date | datetime | str
+DATES = date | datetime
 
 class UseLogger:
     '''Defines empty logger init method'''
@@ -58,4 +62,20 @@ class FileHandler(UseLogger):
             except FileNotFoundError:
                 continue
         self.logger.debug("Finished")
+    
+    @staticmethod
+    def get_log(_date: DATE, /, *, logger: Logger = None) -> list[dict[str, str|int]]:
+        if isinstance(_date, str):
+            path = _date
+        elif isinstance(_date, DATES):
+            path = str(_date.strftime("%d_%m_%Y"))
+        else:
+            raise TypeError("Date for get_log must be a properly formatted string or datetime/date object")
+        
+        if logger is not None:
+            logger.info(f"Getting Diagnosis info for {path}")
+        
+        return jsonUtils.open(
+            path
+        )
         
