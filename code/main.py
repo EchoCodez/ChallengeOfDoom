@@ -243,13 +243,14 @@ class Program(ctk.CTk, Questions):
         self.clean()
         self.logger.debug("Health Log Accessed")
         calendar = Calendar(self)
-        calendar.run()
+        calendar.run(mainloop=False)
             
         ctk.CTkButton(
             self,
             text="Back to Homepage",
             command=self.quit
-        ).pack()
+        ).grid()
+        
         self.mainloop()
         self.clean()
         self.home()

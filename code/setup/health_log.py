@@ -1,6 +1,7 @@
 import customtkinter as ctk
 from datetime import datetime
 from calendar import monthrange
+from logging import Logger
 
 class Calendar:
     def __init__(self, master: ctk.CTk) -> None:
@@ -14,8 +15,9 @@ class Calendar:
             5: "Friday",
             6: "Saturday"
         }
+        self.logger: Logger = self.master.logger
     
-    def run(self) -> None:
+    def run(self, mainloop: bool = True) -> None:
         today = datetime.today()
         offset, month = monthrange(today.year, today.month)
         
@@ -35,8 +37,9 @@ class Calendar:
             if (num+1)%7==0:
                 week+=1
         
-        print([element._text for element in days])
-        self.master.mainloop()
+        self.logger.debug([element._text for element in days])
+        if mainloop:
+            self.master.mainloop()
 
 class Day(ctk.CTkButton):
     def __init__(self, num: int, offset: int, master: ctk.CTk) -> None:
