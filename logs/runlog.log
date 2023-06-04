@@ -1,6 +1,5 @@
-2023-06-03 17:33:55 (main.py) DEBUG: Screen dimensions 1536x864 are not recommended
-2023-06-03 17:33:56 (generic.py) DEBUG: Attempted to delete logs/isrunning.log, but it did not exist
-2023-06-03 17:33:56 (main.py) DEBUG: Reached Home Screen
-2023-06-03 17:33:57 (main.py) DEBUG: Medicine Log Accessed
-2023-06-03 17:34:02 (main.py) INFO: User clicked X button
-2023-06-03 17:34:03 (main.py) DEBUG: Exited program
+2023-06-04 09:52:52 (main.py) DEBUG: User has good screen dimensions
+2023-06-04 09:52:52 (main.py) DEBUG: self.notifications: [[{'Medicine Name': 'Bobo', 'Morning': '1', 'Afternoon': '0', 'Evening': '1', 'Breakfast Time': '10:00 AM', 'Lunch Time': '1:00 PM', 'Dinner Time': '8:00 PM', 'Before/After Meal': 'Before'}, {'Medicine Name': 'Bobo', 'Morning': '1', 'Afternoon': '0', 'Evening': '1', 'Breakfast Time': '10:00 AM', 'Lunch Time': '1:00 PM', 'Dinner Time': '8:00 PM', 'Before/After Meal': 'Before'}]]
+2023-06-04 09:52:52 (generic.py) DEBUG: Attempted to delete logs/isrunning.log, but it did not exist
+2023-06-04 09:52:53 (main.py) DEBUG: notif: [{'Medicine Name': 'Bobo', 'Morning': '1', 'Afternoon': '0', 'Evening': '1', 'Breakfast Time': '10:00 AM', 'Lunch Time': '1:00 PM', 'Dinner Time': '8:00 PM', 'Before/After Meal': 'Before'}, {'Medicine Name': 'Bobo', 'Morning': '1', 'Afternoon': '0', 'Evening': '1', 'Breakfast Time': '10:00 AM', 'Lunch Time': '1:00 PM', 'Dinner Time': '8:00 PM', 'Before/After Meal': 'Before'}]
+2023-06-04 09:52:53 (main.py) DEBUG: Reached Home Screen

@@ -56,8 +56,8 @@ class Program(ctk.CTk, Questions):
         self.resizable(width=True, height=True)
         with open("json/medicines.json") as f:
             medicines = json.load(f)
-        self.notifications = [medicines]
-        self.logger.debug("self.notifications:", self.notifications)
+        self.notifications: list[dict[str, str]] = [medicines]
+        self.logger.debug("self.notifications: {0}".format(self.notifications))
 
         
     
@@ -322,9 +322,9 @@ class Program(ctk.CTk, Questions):
         self.after(16, self.update)
         
 
-    def activate_notifs(self, notifications) -> None:
+    def activate_notifs(self, notifications: list) -> None:
         for notif in notifications:
-            self.logger.debug("notif:", notif)
+            self.logger.debug("notif: {0}".format(notif))
             # schedule.every().day.at(notif.time).do(notif.send)
             
         
@@ -337,7 +337,7 @@ class Program(ctk.CTk, Questions):
     
         try:
             os.system("taskkill /im thing.exe")
-        except:
+        except Exception: # ignore keyboard interrupt
             pass
         
         self.activate_notifs(self.notifications)
@@ -345,7 +345,7 @@ class Program(ctk.CTk, Questions):
         self.home()
 
 
-def main(*, erase_data = False) -> None:
+def main(*, erase_data: bool = False) -> None:
     '''Wrapper for running the program
     
     Parameters
