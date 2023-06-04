@@ -1,5 +1,5 @@
 import json
-import os, sys
+import os
 from typing import Callable
 from io import StringIO
 from utils.data_classes import UserInfo

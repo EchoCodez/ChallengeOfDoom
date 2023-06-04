@@ -25,14 +25,13 @@
 ├── .gitignore
 ├── README.md
 ├── code
+│   ├── main.py
 │   ├── api
-│   │   ├── api.py
 │   │   └── diagnosis.py
 │   ├── log
 │   │   ├── health_log.py
 │   │   ├── meal.jpg
 │   │   └── test.py
-│   ├── main.py
 │   ├── medicine
 │   │   ├── medicine.py
 │   │   └── notifications.py
@@ -64,7 +63,6 @@
 │   └── user-data.json
 ├── logs
 │   └── runlog.log
-├── main.spec
 └── random
     ├── code_button.png
     ├── download_zip.png
@@ -75,6 +73,9 @@
 # Parts and Pieces
 To check out what each folder does, read its respective `FolderDescription.md`
 
+# Data gathered by us
+Rest assured that no data is gathered by our team! Every piece of info you put into this program is stored locally on your computer, so you don't have to worry about our policies regarding your personal info!
+
 # Libraries and tools used
 <ul>
     <li>Python 3.11.2</li>
@@ -83,5 +84,7 @@ To check out what each folder does, read its respective `FolderDescription.md`
     <li>customtkinter</li>
     <li>json</li>
     <li>os and sys</li>
-    <li>Other libraries like: typing, io, and dataclasses</li>
+    <li>datetime and calender</li>
+    <li>player and apscheduler</li>
+    <li>typing, io, dataclasses</li>
 </ul>
