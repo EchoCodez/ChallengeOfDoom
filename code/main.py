@@ -63,9 +63,10 @@ class Program(ctk.CTk, Questions):
                 f"Take {self.notifications[i]['Morning']} dose of {self.notifications[i]['Medicine Name']}",
                 self.notifications[i]["Breakfast Time"]
                 )
-            print(self.notifications[i])
+            self.logger.debug(self.notifications[i])
         self.logger.debug("self.notifications: {0}".format(self.notifications))
-
+        global print
+        print = self.logger.debug
         
     
     def raise_exception(self, **kwargs) -> Exception:
@@ -339,11 +340,11 @@ class Program(ctk.CTk, Questions):
         
 
     def activate_notifs(self, notifications: list) -> None:
-        print(notifications)
-        print("WHJKASN")
+        self.logger.debug(notifications)
+        self.logger.debug("WHJKASN")
         for notif in notifications:
             self.logger.debug("notif: {0}".format(notif))
-            print(notif.time)
+            self.logger.debug(notif.time)
             schedule.every().day.at(notif.time).do(notif.send)
             
         
@@ -377,13 +378,8 @@ def main(*, erase_data: bool = False) -> None:
         jsonUtils.clearfiles()
 
     program = Program()
-    files = FileHandler(program.logger)
-    
-    files.clear_old_application()
     
     program.execute()
-    
-    files.create_new_application()
     
 
 

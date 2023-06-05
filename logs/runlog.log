@@ -1,8 +1,13 @@
-2023-06-04 14:02:24 (main.py) DEBUG: Screen dimensions 1536x864 are not recommended
-2023-06-04 14:02:26 (main.py) DEBUG: self.notifications: [<medicine.notifications.Notification object at 0x0000021E19E06050>, <medicine.notifications.Notification object at 0x0000021E1AC7FAD0>]
-2023-06-04 14:02:26 (generic.py) DEBUG: Attempted to delete logs/isrunning.log, but it did not exist
-2023-06-04 14:02:26 (main.py) DEBUG: notif: <medicine.notifications.Notification object at 0x0000021E19E06050>
-2023-06-04 14:02:26 (main.py) DEBUG: notif: <medicine.notifications.Notification object at 0x0000021E1AC7FAD0>
-2023-06-04 14:02:26 (main.py) DEBUG: Reached Home Screen
-2023-06-04 14:03:06 (main.py) INFO: User clicked X button
-2023-06-04 14:03:09 (main.py) DEBUG: Exited program
+2023-06-05 16:30:06 (main.py) DEBUG: User has good screen dimensions
+2023-06-05 16:30:06 (main.py) DEBUG: Notification(title=Medication Reminder, message=Take 1 dose of Bobo, time=14:03:00)
+2023-06-05 16:30:06 (main.py) DEBUG: Notification(title=Medication Reminder, message=Take 1 dose of Bobo, time=10:00:00)
+2023-06-05 16:30:06 (main.py) DEBUG: self.notifications: [Notification(title=Medication Reminder, message=Take 1 dose of Bobo, time=14:03:00), Notification(title=Medication Reminder, message=Take 1 dose of Bobo, time=10:00:00)]
+2023-06-05 16:30:06 (main.py) DEBUG: [Notification(title=Medication Reminder, message=Take 1 dose of Bobo, time=14:03:00), Notification(title=Medication Reminder, message=Take 1 dose of Bobo, time=10:00:00)]
+2023-06-05 16:30:06 (main.py) DEBUG: WHJKASN
+2023-06-05 16:30:06 (main.py) DEBUG: notif: Notification(title=Medication Reminder, message=Take 1 dose of Bobo, time=14:03:00)
+2023-06-05 16:30:06 (main.py) DEBUG: 14:03:00
+2023-06-05 16:30:06 (main.py) DEBUG: notif: Notification(title=Medication Reminder, message=Take 1 dose of Bobo, time=10:00:00)
+2023-06-05 16:30:06 (main.py) DEBUG: 10:00:00
+2023-06-05 16:30:06 (main.py) DEBUG: Reached Home Screen
+2023-06-05 16:30:11 (main.py) INFO: User clicked X button
+2023-06-05 16:30:12 (main.py) DEBUG: Exited program

@@ -19,3 +19,6 @@ class Notification:
             title = self.title,
             message = self.message,
         )
+    
+    def __repr__(self) -> str:
+        return "{0}(title={1}, message={2}, time={3})".format(self.__class__.__name__, self.title, self.message, self.time)

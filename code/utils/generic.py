@@ -32,20 +32,7 @@ def set_theme() -> bool:
             return True
     return False
 
-class FileHandler(UseLogger):
-    def create_new_application(self):
-        with open("logs/isrunning.log", "w"): # create the file
-            pass
-        self.logger.debug("Successfully created logs/isrunning.log")
-
-    def clear_old_application(self):
-        import os
-        try:
-            os.remove("logs/isrunning.log")
-            self.logger.debug("Deleted logs/isrunning.log")
-        except FileNotFoundError:
-            self.logger.debug("Attempted to delete logs/isrunning.log, but it did not exist")
-            
+class FileHandler(UseLogger):       
     def delete_logs(self, logs: list[str] = None):
         '''Delete info
         
