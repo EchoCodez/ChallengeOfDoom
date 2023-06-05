@@ -339,7 +339,7 @@ class Program(ctk.CTk, Questions):
         tmp = self.notifications
         
 
-    def activate_notifs(self, notifications: list) -> None:
+    def activate_notifs(self, notifications: list[Notification]) -> None:
         self.logger.debug(notifications)
         self.logger.debug("WHJKASN")
         for notif in notifications:
