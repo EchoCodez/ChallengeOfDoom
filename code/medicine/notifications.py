@@ -1,13 +1,17 @@
 from plyer import notification
 
 class Notification:
-    def __init__(self, title, message, time, increment=1440):
+    def __init__(self, title: str, message: str, time: str, increment: int =1440):
         self.title = title
         self.message = message
         if len(time) != 8:
             self.time = "0" + time
         else:
             self.time = time
+        if self.time[-2] == "P":
+            self.time = str(int(self.time[0:2])+12)+self.time[2:5]+":00"
+        else:
+            self.time = self.time[0:5]+":00"
         self.increment = increment
 
     def send(self):
