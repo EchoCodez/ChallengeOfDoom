@@ -52,10 +52,10 @@ class Medicine:
             for i in range(8):
                 data[self.labels[i]] = elements[i].get() 
             print(data)
-            with open("json/medicines.json", 'r') as f:
+            with open("json/medicines.json", 'r', encoding="utf-8") as f:
                 feeds = json.load(f)
             feeds.extend([data])
-            with open("json/medicines.json", 'w') as f:
+            with open("json/medicines.json", 'w', encoding="utf-8") as f:
                 json.dump(feeds, f, indent=4)
             self.master.home()
 

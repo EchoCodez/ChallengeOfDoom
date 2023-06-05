@@ -27,7 +27,7 @@ class jsonUtils:
             Which file to add data to.
         '''
 
-        with open(file, "a") as f:
+        with open(file, "a", encoding="utf-8") as f:
             f.write(",\n")
             f.write(json.dumps(data, indent=indent))
 
@@ -44,7 +44,7 @@ class jsonUtils:
             Which file to add data to.
         '''
         
-        with open(file) as f:
+        with open(file, encoding="utf-8") as f:
             original_data: dict | list = json.load(f)
         
         if isinstance(original_data, dict) and isinstance(data, dict):
@@ -63,7 +63,7 @@ class jsonUtils:
                     )
                 )
 
-        with open(file, "w") as f:
+        with open(file, "w", encoding="utf-8") as f:
             f.write(json.dumps(modified_data, indent=indent))
             
     @staticmethod
@@ -81,7 +81,7 @@ class jsonUtils:
         
         if file[-5:] != ".json":
             raise TypeError(f"Invalid file\nExpected file to end in .json. Instead it ended with \"{file[-5:]}\"")
-        with open(file, "w") as f:
+        with open(file, "w", encoding="utf-8") as f:
             f.write("{}")
     
     @staticmethod
@@ -175,7 +175,7 @@ class jsonUtils:
         ``` 
         """
           
-        with open(file) as f:
+        with open(file, encoding="utf-8") as f:
             return json.load(f)
         
     @staticmethod
@@ -280,7 +280,7 @@ class jsonUtils:
             dumps (bool, optional): whether to write `json.dumps(data)`. Defaults to True.
         """
             
-        with open(file, "w") as f:
+        with open(file, "w", encoding="utf-8") as f:
             if dumps:
                 f.write(json.dumps(data, indent=4))
             else:
@@ -335,7 +335,7 @@ class open_json:
             self.file = open(self.path, self.action)
             return (json.load(self.file), self.file)
         
-        with open(self.path, self.action) as f:
+        with open(self.path, self.action, encoding="utf-8") as f:
             return json.load(f)
         
     

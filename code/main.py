@@ -54,8 +54,8 @@ class Program(ctk.CTk, Questions):
             )
         
         self.resizable(width=True, height=True)
-        with open("json/medicines.json") as f:
-            medicines = json.load(f)
+        medicines = jsonUtils.read("json/medicines.json")
+        
         self.notifications: list[dict[str, str]] = medicines
         for i in range(len(self.notifications)):
             self.notifications[i] = Notification(
@@ -65,6 +65,7 @@ class Program(ctk.CTk, Questions):
                 )
             self.logger.debug(self.notifications[i])
         self.logger.debug("self.notifications: {0}".format(self.notifications))
+        
         global print
         print = self.logger.debug
         
