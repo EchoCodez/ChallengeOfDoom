@@ -65,6 +65,7 @@ class Program(ctk.CTk, Questions):
                 )
             self.logger.debug(self.notifications[i])
         self.logger.debug("self.notifications: {0}".format(self.notifications))
+        self.len = len(self.notifications)
         
         global print
         print = self.logger.debug
@@ -329,15 +330,14 @@ class Program(ctk.CTk, Questions):
         self.mainloop()
 
     def update(self) -> None:
-        try:
-            if self.notifications != tmp:
-                notif = self.notifications[-1]
-                schedule.every().day.at(notif.time).do(notif.send)
-        except:
-            pass
+        if len(self.notifications) != self.len:
+            notif = self.notifications[-1]
+            schedule.every().day.at(notif.time).do(notif.send)
+            print("WHAT")
+            self.len = len(self.notifications)
         schedule.run_pending()
-        self.after(16, self.update)
         tmp = self.notifications
+        self.after(16, self.update)
         
 
     def activate_notifs(self, notifications: list[Notification]) -> None:
