@@ -342,7 +342,6 @@ class Program(ctk.CTk, Questions):
 
     def activate_notifs(self, notifications: list[Notification]) -> None:
         self.logger.debug(notifications)
-        self.logger.debug("WHJKASN")
         for notif in notifications:
             self.logger.debug("notif: {0}".format(notif))
             self.logger.debug(notif.time)
