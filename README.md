@@ -85,6 +85,6 @@ Rest assured that no data is gathered by our team! Every piece of info you put i
     <li>json</li>
     <li>os and sys</li>
     <li>datetime and calender</li>
-    <li>player and apscheduler</li>
+    <li>plyer and apscheduler</li>
     <li>typing, io, dataclasses</li>
 </ul>
