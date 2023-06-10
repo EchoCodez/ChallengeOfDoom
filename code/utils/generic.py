@@ -1,11 +1,15 @@
+from __future__ import annotations
+
 from logging import Logger
 from utils import jsonUtils
+from utils.data_classes import InformationSheet
 from logging import Logger
 import customtkinter as ctk
 from datetime import date, datetime
 
 DATE = date | datetime | str
 DATES = date | datetime
+INFORMATION_PAGES = list[InformationSheet]
 
 class UseLogger:
     '''Defines empty logger init method'''
@@ -89,3 +93,38 @@ class FileHandler(UseLogger):
                 level="exception"
             )
             return f"Diagnosis Results for {path} not found"
+        
+class InformationPages(UseLogger):
+    _pages: INFORMATION_PAGES = []
+    
+    @property
+    def pages(self) -> INFORMATION_PAGES:
+        return self._pages
+    
+    @pages.setter
+    def pages(self, pages: INFORMATION_PAGES):
+        if not isinstance(pages, INFORMATION_PAGES):
+            raise TypeError("Pages must be an list of pages")
+        self._pages = pages
+    
+    def add_pages(self, *pages: InformationSheet):
+        for page in pages:
+            self+=page
+    
+    def copy(self):
+        return self.__copy__()
+    
+    def __copy__(self) -> InformationPages:
+        return InformationPages(*self._pages)
+            
+    def __iadd__(self, __o: InformationSheet, /):
+        self.pages.append(__o)
+        
+    def __repr__(self) -> str:
+        return f'''{type(self).__name__}(
+            pages={self._pages}
+            )'''
+    
+    def __set__(self, instance, owner):
+        pass
+    

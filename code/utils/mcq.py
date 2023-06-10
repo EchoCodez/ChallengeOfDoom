@@ -8,14 +8,25 @@ from utils.generic import UseLogger
 
 class MCQbuiler(UseLogger):
     '''Builds a multiple choice quiz, with support for other types of questions. Container for questions.'''
-    def __init__(self, root: ctk.CTk, name: str, logger: Logger, *questions: Question) -> None:
+    def __init__(
+        self,
+        root: ctk.CTk,
+        name: str,
+        logger: Logger,
+        *questions: Question | CustomQuestion,
+        include_start: bool = True,
+        include_end: bool = True,
+        ) -> None:
         """Initialize Multiple Choice Quiz
 
         Parameters:
         -----------
             root (ctk.CTk): customtkinter root
-            
             name (str): Name of test
+            
+            include_start (bool, kwarg, optional): Whether to create a start screen. Defaults to True.
+            
+            include_end (bool, kwarg, optional): Whether to create an end screen. Defaults to True.
             
         Raises:
         -------
@@ -31,6 +42,8 @@ class MCQbuiler(UseLogger):
         self.root = root
         self.name = name
         self.correct = False
+        self.include_start = include_start
+        self.include_end = include_end
     
     def clean(self):
         """Remove all widgets from the screen
@@ -39,7 +52,7 @@ class MCQbuiler(UseLogger):
         for widget in self.root.winfo_children():
             widget.destroy()
     
-    def start(self, title_font= ("DEFAULT", 50), continue_font=("DEFAULT", 30), **kwargs):
+    def _start(self, title_font= ("DEFAULT", 50), continue_font=("DEFAULT", 30), **kwargs):
         """Creates the start page of the quiz
 
         Parameters:
@@ -84,9 +97,8 @@ class MCQbuiler(UseLogger):
             `list[bool] | list[str]`: list of correct and incorrect answers | list of user results as strings
         """
         
-        score = []
-        corrects: list[bool] = []
-        for question in self.questions:
+        results = []
+        for question in self:
             if isinstance(question, Question):
                 self._create_question(question)
             elif isinstance(question, CustomQuestion):
@@ -99,11 +111,8 @@ class MCQbuiler(UseLogger):
             self.clean()
             self.logger.debug("Next Question")
             
-            if scored_quiz:
-                corrects.append(self.correct==question.correct_answer)
-            else:
-                score.append(self.correct)
-        return corrects if scored_quiz else score
+            results.append(self.correct)
+        return [x==q.correct_answer for x, q in zip(results, self)] if scored_quiz else results
     
     def _create_question(self, question: Question, **kwargs):
         """Creates question if `isinstance(question, Question)`
@@ -149,7 +158,7 @@ class MCQbuiler(UseLogger):
 
         self.root.mainloop()
         
-    def end(self, title_next="The End!", continue_text = "Finish", title_font= ("DEFAULT", 50), continue_font=("DEFAULT", 30), **kwargs):
+    def _end(self, title_next="The End!", continue_text = "Finish", title_font= ("DEFAULT", 50), continue_font=("DEFAULT", 30), **kwargs):
         """Creates the end screen of quiz
 
         Parameters:
@@ -186,27 +195,25 @@ class MCQbuiler(UseLogger):
     def begin(self, **kwargs):
         """Wrapper for creating start screen, going through questions, and creating end screen
         """        
-        
-        self.start(**kwargs)
+        if self.include_start:
+            self._start(**kwargs)
+            
         self.logger.debug("Started Quiz")
         self.clean()
+        
         answers = self._start_questions(**kwargs)
         self.clean()
+        
         self.logger.debug("Cleaned")
-        self.end(**kwargs)
+        
+        if self.include_end:
+            self._end(**kwargs)
+        
         self.logger.debug("Ended Quiz")
         
         return answers
         
     def __iter__(self) -> MCQbuiler:
-        return self
+        return self.questions.__iter__()
     
-    def __next__(self) -> Question | CustomQuestion:
-        temp = next(self.iterator, None)
-        
-        if temp is not None:
-            return temp
-        
-        self.iterator = (i for i in self.questions)
-        raise StopIteration
         

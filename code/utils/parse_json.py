@@ -147,12 +147,15 @@ class jsonUtils:
         ```
         """
         
-        prefs, data = jsonUtils.open("json/preferences.json"), jsonUtils.open("json/user-data.json") 
+        prefs, data = jsonUtils.open("json/preferences.json"), jsonUtils.open("json/user-data.json")
+        
         return UserInfo(
             conditions=data.get("conditions", []),
             preferences={preference: prefs.get(preference) for preference in preferences},
             gender=data.get("gender"),
-            birthyear=data.get("birth_year")
+            birthyear=data.get("birth_year"),
+            api_username=data.get("username", ""),
+            api_password=data.get("password", "")
             )
     
     @staticmethod
