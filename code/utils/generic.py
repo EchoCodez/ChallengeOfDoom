@@ -102,23 +102,63 @@ class InformationPages(UseLogger):
         return self._pages
     
     @pages.setter
-    def pages(self, pages: INFORMATION_PAGES):
-        if not isinstance(pages, INFORMATION_PAGES):
+    def pages(self, pages: INFORMATION_PAGES) -> InformationPages:
+        if not all(isinstance(page, InformationSheet) for page in pages):
             raise TypeError("Pages must be an list of pages")
         self._pages = pages
+        return self
     
-    def add_pages(self, *pages: InformationSheet):
-        for page in pages:
-            self+=page
+    def add_pages(self, *pages: InformationSheet) -> InformationPages:
+        self.pages+=pages
+        return self
     
-    def copy(self):
+    def create_pages(self, master: ctk.CTk, **content_kwargs) -> None:
+        def create_page(page: InformationSheet):
+            ctk.CTkButton(
+                master,
+                text="Next Page",
+                command=master.quit
+            ).place(relx=0.8, rely=0.8, anchor="center")
+            
+            ctk.CTkLabel(
+                master,
+                text=page.title
+            ).pack(pady=50)
+            
+            t = ctk.CTkTextbox(
+                master,
+                width=960,
+                height=540,
+                **content_kwargs
+            )
+            t.insert('insert', page.content)
+            t.pack(pady=50)
+            
+            for action_button in page.buttons:
+                ctk.CTkButton(
+                    master,
+                    text=action_button.text,
+                    command=action_button.command,
+                    **action_button.kwargs
+                ).pack(**{"pady": 20} | page.button_pack_kwargs)
+        
+        for page in self:
+            for w in master.winfo_children():
+                w.destroy()
+                
+            create_page(page)
+            master.mainloop()
+            
+    
+    def copy(self) -> InformationPages:
         return self.__copy__()
     
     def __copy__(self) -> InformationPages:
         return InformationPages(*self._pages)
             
-    def __iadd__(self, __o: InformationSheet, /):
-        self.pages.append(__o)
+    def __iadd__(self, __o: InformationSheet, /) -> None:
+        self.pages += [ __o ]
+        return self
         
     def __repr__(self) -> str:
         pages = '\n'.join(self._pages)

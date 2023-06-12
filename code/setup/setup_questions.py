@@ -28,7 +28,6 @@ class Questions:
                 ctk.set_appearance_mode("dark")
             else:
                 ctk.set_appearance_mode("light")
-            label.configure(text=f"You have selected {ctk.get_appearance_mode()} mode")
         
         def cont():
             jsonUtils.write({"appearance_theme":self.__appearance.get()}, file=preferences)
@@ -40,11 +39,6 @@ class Questions:
             self,
             text="Which appearance theme would you like to use?",
             font=("Default", 50)
-            )
-        label = ctk.CTkLabel(
-            self,
-            text="You have selected light mode",
-            font=("Default", 35),
             )
         
         dark_button = ctk.CTkRadioButton(
@@ -71,11 +65,10 @@ class Questions:
             )
     
     
-        question.pack(pady=20)
+        question.pack(pady=100)
         dark_button.pack(pady=20)
         light_button.pack(pady=20)
-        label.pack(pady=20)
-        next_button.pack(pady=20)
+        next_button.pack(pady=50)
         
         self.mainloop()
     
@@ -191,9 +184,9 @@ class Questions:
             else:
                 self.logger.info("User entered valid date of birth")
                 jsonUtils.write(
-                    data={"birth_year": typed}
+                    data={"birth_year": birth_year}
                 )
-                self.logger.info(f"Birth year ::{typed}:: succesfully written to file")
+                self.logger.info(f"Birth year {birth_year} succesfully written to file")
                 self.quit()
         
         typer = ctk.CTkTextbox(self, width=400, font=("Times New Roman", 25))
@@ -214,7 +207,7 @@ class Questions:
             text="Next",
             command=verify_and_continue
         )
-        title.pack(pady=20)
+        title.pack(pady=100)
         subtitle.pack(pady=20)
         typer.pack(pady=20)
         next_button.pack(pady=20)

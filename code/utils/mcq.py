@@ -129,7 +129,7 @@ class MCQbuiler(UseLogger):
             text=question.question,
             font=kwargs.get("question_font", ("DEFAULT", 50))
         )
-        q.pack(pady=20)
+        q.pack(pady=kwargs.get("question_pady", 100))
         
         option = tk.StringVar() # what option they chose
         

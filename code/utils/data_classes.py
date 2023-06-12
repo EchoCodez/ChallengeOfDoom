@@ -61,20 +61,12 @@ class UserInfo:
     birthyear: str
     api_username: str
     api_password: str
-    
-    def __iter__(self):
-        return iter({
-            "conditions": self.conditions,
-            "preferences":self.preferences,
-            "gender":self.gender,
-            "birth_year":self.birthyear,
-            "api_username": self.api_username,
-            "api_password": self.api_password
-            }.items())
-    
-    def __str__(self) -> str:
-        x = '\n\t'.join(f"{k}={v}" for k, v in self)
-        return f"{type(self).__name__}:\n\t{x}"
+
+@dataclasses.dataclass(frozen=True, slots=True)
+class ActionButton:
+    text: str
+    command: typing.Callable
+    kwargs: dict = dataclasses.field(default_factory=dict)
 
 @dataclasses.dataclass(frozen=True, slots=True)
 class InformationSheet:
@@ -86,8 +78,10 @@ class InformationSheet:
         
         content (str): Content shown on that page
         
-        next_command (Callable, optional): The command to be called before the next page method is shown
+        buttons (Iterable[ActionButton], optional): The buttons to be added on each page. Defautls to empty tuple.
     """    
     title: str
     content: str
-    next_command: typing.Callable | None = None
+    buttons: typing.Iterable[ActionButton] = dataclasses.field(default_factory=tuple)
+    button_pack_kwargs: dict = dataclasses.field(default_factory=dict)
+

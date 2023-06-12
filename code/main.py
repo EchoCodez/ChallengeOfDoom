@@ -119,8 +119,6 @@ class Program(ctk.CTk, Questions):
             })
         
         self.clean()
-        jsonUtils.write({"setup_finished": True}, file=preferences)
-        self.logger.debug(jsonUtils.get_values())
     
     def _diagnose(self) -> None:
         def call_api(user):
@@ -364,23 +362,41 @@ class Program(ctk.CTk, Questions):
         tmp = self.notifications
         self.after(16, self.update)
         
-
     def activate_notifs(self, notifications: list[Notification]) -> None:
         self.logger.debug("Scheduling notifications")
         for notif in notifications:
             self.logger.debug("notif: {0}".format(notif))
-            schedule.every().day.at(notif.time).do(notif.send)
-            
+            schedule.every().day.at(notif.time).do(notif.send)    
+
+    def show_register_api_pages(self):
+        sheets = InformationPages(self.logger)
         
+        for d in get_information_texts():
+            buttons, commands = d.pop("buttons", ()), d.pop("commands", ())
+            
+            if len(buttons) != len(commands):
+                raise TypeError("Must be same amount of buttons as commands")
+            
+            total_buttons = [ActionButton(button, command) for button, command in zip(buttons, commands)]
+            sheets+=InformationSheet(
+                buttons=total_buttons,
+                **d
+            )
+        
+        sheets.create_pages(self)
+
 
     def execute(self) -> None:
         if not jsonUtils.open(preferences).get("setup_finished", False):
             self.setup()
+            self.show_register_api_pages()
+            jsonUtils.write({"setup_finished": True}, file=preferences)
+            self.logger.debug(jsonUtils.get_values())
         else:
             set_theme()
     
         try:
-            os.system("taskkill /im thing.exe")
+            os.system("taskkill /im HealthApp.exe")
         except Exception: # ignore keyboard interrupt
             pass
         
@@ -408,5 +424,4 @@ def main(*, erase_data: bool = False) -> None:
 
 
 if __name__ == "__main__":
-    main(erase_data=False)
-    
+    main(erase_data=True)
