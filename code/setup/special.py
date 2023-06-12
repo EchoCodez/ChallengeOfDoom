@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from utils import jsonUtils, InformationSheet, UseLogger
+from utils import jsonUtils, InformationSheet, UseLogger, CustomQuestion
 import customtkinter as ctk
 import tkinter as tk
 from logging import Logger
 
-INFORMATION_PAGES = list[InformationSheet]
+INFORMATION_PAGES = list[InformationSheet | CustomQuestion]
 
 class Settings:
     def __init__(self, master: ctk.CTk, logger: Logger) -> None:
@@ -184,7 +184,7 @@ class InformationPages(UseLogger):
     
     @pages.setter
     def pages(self, pages: INFORMATION_PAGES) -> InformationPages:
-        if not all(isinstance(page, InformationSheet) for page in pages):
+        if not all(isinstance(page, (InformationSheet, CustomQuestion)) for page in pages):
             raise TypeError("Pages must be an list of pages")
         self._pages = pages
         return self
@@ -193,13 +193,24 @@ class InformationPages(UseLogger):
         self.pages+=pages
         return self
     
-    def create_pages(self, master: ctk.CTk, **content_kwargs) -> None:
+    def create_pages(self, master: ctk.CTk, **content_kwargs) -> list:
         def create_page(page: InformationSheet):
+            def _quit():
+                master.quit()
+                self.logger.debug("Next information page")
+                
             ctk.CTkButton(
                 master,
                 text="Next Page",
-                command=master.quit
+                command=_quit
             ).place(relx=0.8, rely=0.8, anchor="center")
+            
+            if self._p != 0:
+                ctk.CTkButton(
+                    master,
+                    text="Back",
+                    command=back
+                ).place(relx=0.2, rely=0.8, anchor='center')
             
             ctk.CTkLabel(
                 master,
@@ -223,13 +234,44 @@ class InformationPages(UseLogger):
                     **action_button.kwargs
                 ).pack(**{"pady": 20} | page.button_pack_kwargs)
         
-        for page in self:
+        def back():
+            master.quit()
             for w in master.winfo_children():
                 w.destroy()
-                
-            create_page(page)
-            master.mainloop()
+            self.logger.debug("Going back a page")
+            self._p-=2
+        
+        self._p = 0
+        results = []
+        while self._p < len(self):
+            for w in master.winfo_children():
+                w.destroy()
             
+            page: InformationSheet | CustomQuestion = self[self._p]
+            if isinstance(page, InformationSheet):
+                create_page(page)
+                master.mainloop()
+            else:
+                results+=[page.question(*page.args, **page.kwargs)]
+                
+                ctk.CTkButton(
+                    master,
+                    text="Next",
+                    command=master.quit
+                ).place(relx=0.8, rely=0.8, anchor=tk.CENTER)
+                
+                ctk.CTkButton(
+                    master,
+                    text="Back",
+                    command=back,
+                ).place(relx=0.2, rely=0.8, anchor=tk.CENTER)
+                
+                master.mainloop()
+                
+            self._p+=1
+
+        self.logger.debug(results)
+        return results
     
     def copy(self) -> InformationPages:
         return self.__copy__()
@@ -245,5 +287,11 @@ class InformationPages(UseLogger):
         pages = '\n'.join(self._pages)
         return f"{type(self).__name__}(pages={pages})"
             
-    def __iter__(self) -> list.__iter__:
+    def __len__(self) -> int:
+        return self._pages.__len__()
+            
+    def __getitem__(self, arg: int | slice) -> InformationSheet:
+        return self._pages[arg] if isinstance(arg, int) else self._pages[arg.start:arg.stop:arg.step]
+            
+    def __iter__(self) -> list:
         return self._pages.__iter__()

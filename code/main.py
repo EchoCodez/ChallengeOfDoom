@@ -382,9 +382,40 @@ class Program(ctk.CTk, Questions):
                 buttons=total_buttons,
                 **d
             )
+        sheets+=CustomQuestion(self.enter_api_username_password)
         
-        sheets.create_pages(self)
+        username, password = sheets.create_pages(self)[0]
+        
+        jsonUtils.add({
+            "api_username": username.get(),
+            "api_password": password.get()
+        })
+        self.logger.debug(f"Added Username {username.get()} and password {password.get()}")
 
+    def enter_api_username_password(self):
+        self.clean()
+        
+        username = tk.StringVar()
+        password = tk.StringVar()
+        
+        ctk.CTkLabel(
+            self,
+            text="Enter your api username and password"
+        ).pack(pady=100)
+        
+        ctk.CTkEntry(
+            self,
+            placeholder_text="Live Username",
+            textvariable=username
+        ).pack(pady=20)
+        
+        ctk.CTkEntry(
+            self,
+            placeholder_text="Live Password",
+            textvariable=password
+        ).pack(pady=20)
+        
+        return username, password
 
     def execute(self) -> None:
         if not jsonUtils.open(preferences).get("setup_finished", False):
@@ -424,4 +455,4 @@ def main(*, erase_data: bool = False) -> None:
 
 
 if __name__ == "__main__":
-    main(erase_data=True)
+    main(erase_data=False)
