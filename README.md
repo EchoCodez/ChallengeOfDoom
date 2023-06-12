@@ -81,10 +81,11 @@ Rest assured that no data is gathered by our team! Every piece of info you put i
     <li>Python 3.11.2</li>
     <li>Github</li>
     <li>tkinter</li>
-    <li>customtkinter</li>
+    <li>customtkinter (and extensions)</li>
     <li>json</li>
     <li>os and sys</li>
     <li>datetime and calender</li>
     <li>plyer and apscheduler</li>
     <li>typing, io, dataclasses</li>
+    <li>hmac, base64, and hashlib</li>
 </ul>
