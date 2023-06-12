@@ -34,9 +34,9 @@ class Diagnosis:
         }
         response = requests.post(url, headers=headers)
         
-        if response.status_code == 500:
-            self.logger.warning(f"Got {response}, attempting to use previous token")
-            return jsonUtils.read("json/user-data.json")["token"]
+        # if response.status_code == 500:
+        #     self.logger.warning(f"Got {response}, attempting to use previous token")
+        #     return jsonUtils.read("json/user-data.json")["token"]
         
         if response.status_code != 200:
             self.logger.error(f"An error occured while fetching user token. Got {response}, expected <Response [200]>")
@@ -45,7 +45,7 @@ class Diagnosis:
         else:
             self.logger.debug("Successfully got token from APImedic")
             token = response.json()['Token']
-            jsonUtils.add({"token": token})
+            # jsonUtils.add({"token": token})
             return token
 
     def make_call(self, file: str = "json/possible_diseases.json"):
