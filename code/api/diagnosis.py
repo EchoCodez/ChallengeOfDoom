@@ -1,46 +1,86 @@
 from utils.parse_json import jsonUtils
 from utils.data_classes import UserInfo
 import requests
+from logging import Logger
 
 
 class Diagnosis:
-    def __init__(self, user: UserInfo) -> None:
+    def __init__(self, user: UserInfo, logger: Logger, testing = True) -> None:
         self.user = user
+        self.logger = logger
+        self.testing = testing
 
     def _get_token(self) -> str:
-        '''TODO: Make call to APImedic to get token'''
-        return "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6IjEwMDA0MzhAbGNwcy5vcmciLCJyb2xlIjoiVXNlciIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL3NpZCI6Ijk0MDIiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3ZlcnNpb24iOiIxMDkiLCJodHRwOi8vZXhhbXBsZS5vcmcvY2xhaW1zL2xpbWl0IjoiMTAwIiwiaHR0cDovL2V4YW1wbGUub3JnL2NsYWltcy9tZW1iZXJzaGlwIjoiQmFzaWMiLCJodHRwOi8vZXhhbXBsZS5vcmcvY2xhaW1zL2xhbmd1YWdlIjoiZW4tZ2IiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL2V4cGlyYXRpb24iOiIyMDk5LTEyLTMxIiwiaHR0cDovL2V4YW1wbGUub3JnL2NsYWltcy9tZW1iZXJzaGlwc3RhcnQiOiIyMDIzLTAzLTI4IiwiaXNzIjoiaHR0cHM6Ly9hdXRoc2VydmljZS5wcmlhaWQuY2giLCJhdWQiOiJodHRwczovL2hlYWx0aHNlcnZpY2UucHJpYWlkLmNoIiwiZXhwIjoxNjg1OTAwNzE3LCJuYmYiOjE2ODU4OTM1MTd9.AmoDtWdf-bDS7f20_qWx9vXqZM6Byz4zryNcBAzKb20"
+        '''Make call to APImedic to get token'''
+        
+        import hmac
+        import base64
+        import hashlib
+        
+        url = f"https://{'sandbox-' if self.testing else ''}authservice.priaid.ch/login"
+        api_key = "1000438@lcps.org" if self.testing else self.user.api_username
+        secret_key = "a7N8Dxe9BAd4n6S3M" if self.testing else self.user.api_password
+        
+        raw_hash: hmac.HMAC = hmac.new(
+            bytes(secret_key, encoding="utf-8"),
+            url.encode("utf-8"),
+            digestmod=hashlib.md5
+            )
+        digested_hash = raw_hash.digest()
+        hashed_credentials = base64.b64encode(digested_hash).decode()
+        
+        headers = {
+            "Authorization": f"Bearer {api_key+':'+hashed_credentials}"
+        }
+        response = requests.post(url, headers=headers)
+        
+        if response.status_code == 500:
+            self.logger.warning(f"Got {response}, attempting to use previous token")
+            return jsonUtils.read("json/user-data.json")["token"]
+        
+        if response.status_code != 200:
+            self.logger.error(f"An error occured while fetching user token. Got {response}, expected <Response [200]>")
+            print(response.text)
+            return ""
+        else:
+            self.logger.debug("Successfully got token from APImedic")
+            token = response.json()['Token']
+            jsonUtils.add({"token": token})
+            return token
 
     def make_call(self, file: str = "json/possible_diseases.json"):
-        # Set the API endpoint and parameters
-        url = "https://healthservice.priaid.ch"
-        action = "/diagnosis"
         token = self._get_token()
-        language = "en-gb"
-
-
-
+        
+        if token == "":
+            return ""
+        
         # Set the query parameters
         params = {
             "token": token,
-            "language": language,
+            "language": "en-gb",
             "symptoms": str(self.user.conditions),
             "gender": str(self.user.gender),
-            "year_of_birth": str(self.user.birthyear)
+            "year_of_birth": str(self.user.birthyear),
+            "format": "json"
         }
 
         # Make a GET request to the API endpoint
         # response = requests.get(url + action, params=params)
         response = requests.get(
-            "https://healthservice.priaid.ch/diagnosis?symptoms={0}&gender={1}&year_of_birth={2}&token={3}&format=json&language={4}".format(
-                params["symptoms"], params["gender"], params["year_of_birth"], params["token"], params["language"]
+            "https://{0}healthservice.priaid.ch/diagnosis?symptoms={1}&gender={2}&year_of_birth={3}&token={4}&format={5}&language={6}".format(
+                'sandbox-' if self.testing else '',
+                params["symptoms"],
+                params["gender"],
+                params["year_of_birth"],
+                params["token"],
+                params["format"],
+                params["language"]
             )
             )
         jsonUtils.overwrite(response.json(), file)
-        return jsonUtils.open(file)
+        return jsonUtils.read(file)
 
 
-if __name__ == "__main__":
-    diag = Diagnosis("")
-    print(diag.make_call())
+class ApiTokenError(Exception):
+    pass
     

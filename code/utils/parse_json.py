@@ -27,9 +27,9 @@ class jsonUtils:
             Which file to add data to.
         '''
 
-        with open(file, "a", encoding="utf-8") as f:
-            f.write(",\n")
-            f.write(json.dumps(data, indent=indent))
+        new_data = jsonUtils.open(file) | data
+        with open(file, "w", encoding="utf-8") as f:
+            f.write(json.dumps(new_data, indent=indent))
 
     @staticmethod
     def write(data: dict, file: str = "json/user-data.json", indent=4) -> None:
@@ -154,8 +154,8 @@ class jsonUtils:
             preferences={preference: prefs.get(preference) for preference in preferences},
             gender=data.get("gender"),
             birthyear=data.get("birth_year"),
-            api_username=data.get("username", ""),
-            api_password=data.get("password", "")
+            api_username=data.get("api_username", ""),
+            api_password=data.get("api_password", "")
             )
     
     @staticmethod

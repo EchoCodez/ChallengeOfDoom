@@ -1,25 +1,33 @@
-2023-06-08 18:19:24 (main.py) DEBUG: Screen dimensions 1536x864 are not recommended
-2023-06-08 18:19:26 (main.py) DEBUG: Notification(title=Medication Reminder, message=Take 1 dose of Bobo, time=17:55:00)
-2023-06-08 18:19:26 (main.py) DEBUG: Notification(title=Medication Reminder, message=Take 1 dose of E, time=18:06:00)
-2023-06-08 18:19:26 (main.py) DEBUG: Notification(title=Medication Reminder, message=Take 1 dose of Eee, time=18:06:00)
-2023-06-08 18:19:26 (main.py) DEBUG: Notification(title=Medication Reminder, message=Take 1 dose of EEEE, time=18:13:00)
-2023-06-08 18:19:26 (main.py) DEBUG: Notification(title=Medication Reminder, message=Take 1 dose of Bobo, time=18:15:00)
-2023-06-08 18:19:26 (main.py) DEBUG: self.notifications: [Notification(title=Medication Reminder, message=Take 1 dose of Bobo, time=17:55:00), Notification(title=Medication Reminder, message=Take 1 dose of E, time=18:06:00), Notification(title=Medication Reminder, message=Take 1 dose of Eee, time=18:06:00), Notification(title=Medication Reminder, message=Take 1 dose of EEEE, time=18:13:00), Notification(title=Medication Reminder, message=Take 1 dose of Bobo, time=18:15:00)]
-2023-06-08 18:19:26 (main.py) DEBUG: [Notification(title=Medication Reminder, message=Take 1 dose of Bobo, time=17:55:00), Notification(title=Medication Reminder, message=Take 1 dose of E, time=18:06:00), Notification(title=Medication Reminder, message=Take 1 dose of Eee, time=18:06:00), Notification(title=Medication Reminder, message=Take 1 dose of EEEE, time=18:13:00), Notification(title=Medication Reminder, message=Take 1 dose of Bobo, time=18:15:00)]
-2023-06-08 18:19:26 (main.py) DEBUG: notif: Notification(title=Medication Reminder, message=Take 1 dose of Bobo, time=17:55:00)
-2023-06-08 18:19:26 (main.py) DEBUG: 17:55:00
-2023-06-08 18:19:26 (main.py) DEBUG: notif: Notification(title=Medication Reminder, message=Take 1 dose of E, time=18:06:00)
-2023-06-08 18:19:26 (main.py) DEBUG: 18:06:00
-2023-06-08 18:19:26 (main.py) DEBUG: notif: Notification(title=Medication Reminder, message=Take 1 dose of Eee, time=18:06:00)
-2023-06-08 18:19:26 (main.py) DEBUG: 18:06:00
-2023-06-08 18:19:26 (main.py) DEBUG: notif: Notification(title=Medication Reminder, message=Take 1 dose of EEEE, time=18:13:00)
-2023-06-08 18:19:26 (main.py) DEBUG: 18:13:00
-2023-06-08 18:19:26 (main.py) DEBUG: notif: Notification(title=Medication Reminder, message=Take 1 dose of Bobo, time=18:15:00)
-2023-06-08 18:19:26 (main.py) DEBUG: 18:15:00
-2023-06-08 18:19:26 (main.py) DEBUG: Reached Home Screen
-2023-06-08 18:19:27 (main.py) DEBUG: Medicine Log Accessed
-2023-06-08 18:19:42 (medicine.py) DEBUG: ['Bobo', '1', '0', '1', '6:20 PM', '10:00 PM', '10:00 PM', 'Before']
-2023-06-08 18:19:42 (main.py) DEBUG: Reached Home Screen
-2023-06-08 18:19:42 (main.py) DEBUG: WHAT
-2023-06-08 18:19:54 (main.py) INFO: User clicked X button
-2023-06-08 18:19:55 (main.py) DEBUG: Exited program
+2023-06-11 21:15:08 (main.py) DEBUG: User has good screen dimensions
+2023-06-11 21:15:08 (main.py) DEBUG: Notification(title=Medication Reminder, message=Take 1 dose of Bobo, time=17:55:00)
+2023-06-11 21:15:08 (main.py) DEBUG: Notification(title=Medication Reminder, message=Take 1 dose of E, time=18:06:00)
+2023-06-11 21:15:08 (main.py) DEBUG: Notification(title=Medication Reminder, message=Take 1 dose of Eee, time=18:06:00)
+2023-06-11 21:15:08 (main.py) DEBUG: Notification(title=Medication Reminder, message=Take 1 dose of EEEE, time=18:13:00)
+2023-06-11 21:15:08 (main.py) DEBUG: Notification(title=Medication Reminder, message=Take 1 dose of Bobo, time=18:15:00)
+2023-06-11 21:15:08 (main.py) DEBUG: Notification(title=Medication Reminder, message=Take 1 dose of Bobo, time=18:20:00)
+2023-06-11 21:15:08 (main.py) DEBUG: self.notifications: [Notification(title=Medication Reminder, message=Take 1 dose of Bobo, time=17:55:00), Notification(title=Medication Reminder, message=Take 1 dose of E, time=18:06:00), Notification(title=Medication Reminder, message=Take 1 dose of Eee, time=18:06:00), Notification(title=Medication Reminder, message=Take 1 dose of EEEE, time=18:13:00), Notification(title=Medication Reminder, message=Take 1 dose of Bobo, time=18:15:00), Notification(title=Medication Reminder, message=Take 1 dose of Bobo, time=18:20:00)]
+2023-06-11 21:15:08 (main.py) DEBUG: [Notification(title=Medication Reminder, message=Take 1 dose of Bobo, time=17:55:00), Notification(title=Medication Reminder, message=Take 1 dose of E, time=18:06:00), Notification(title=Medication Reminder, message=Take 1 dose of Eee, time=18:06:00), Notification(title=Medication Reminder, message=Take 1 dose of EEEE, time=18:13:00), Notification(title=Medication Reminder, message=Take 1 dose of Bobo, time=18:15:00), Notification(title=Medication Reminder, message=Take 1 dose of Bobo, time=18:20:00)]
+2023-06-11 21:15:08 (main.py) DEBUG: notif: Notification(title=Medication Reminder, message=Take 1 dose of Bobo, time=17:55:00)
+2023-06-11 21:15:08 (main.py) DEBUG: 17:55:00
+2023-06-11 21:15:08 (main.py) DEBUG: notif: Notification(title=Medication Reminder, message=Take 1 dose of E, time=18:06:00)
+2023-06-11 21:15:08 (main.py) DEBUG: 18:06:00
+2023-06-11 21:15:08 (main.py) DEBUG: notif: Notification(title=Medication Reminder, message=Take 1 dose of Eee, time=18:06:00)
+2023-06-11 21:15:08 (main.py) DEBUG: 18:06:00
+2023-06-11 21:15:08 (main.py) DEBUG: notif: Notification(title=Medication Reminder, message=Take 1 dose of EEEE, time=18:13:00)
+2023-06-11 21:15:08 (main.py) DEBUG: 18:13:00
+2023-06-11 21:15:08 (main.py) DEBUG: notif: Notification(title=Medication Reminder, message=Take 1 dose of Bobo, time=18:15:00)
+2023-06-11 21:15:08 (main.py) DEBUG: 18:15:00
+2023-06-11 21:15:08 (main.py) DEBUG: notif: Notification(title=Medication Reminder, message=Take 1 dose of Bobo, time=18:20:00)
+2023-06-11 21:15:08 (main.py) DEBUG: 18:20:00
+2023-06-11 21:15:08 (main.py) DEBUG: Reached Home Screen
+2023-06-11 21:15:10 (mcq.py) DEBUG: Started Quiz
+2023-06-11 21:15:18 (mcq.py) DEBUG: Next Question
+2023-06-11 21:15:18 (mcq.py) DEBUG: Cleaned
+2023-06-11 21:15:18 (mcq.py) DEBUG: ended
+2023-06-11 21:15:19 (mcq.py) DEBUG: Ended Quiz
+2023-06-11 21:15:20 (diagnosis.py) DEBUG: Successfully got token from APImedic
+2023-06-11 21:15:21 (main.py) DEBUG: User made daily diagnosis call.
+2023-06-11 21:15:21 (main.py) INFO: Writing to log file 'json/health/11_06_23.json' completed successfully
+2023-06-11 21:15:21 (main.py) INFO: Added log file name to logs.json
+2023-06-11 21:15:31 (main.py) DEBUG: Reached Home Screen
+2023-06-11 21:15:33 (main.py) INFO: QUITTING

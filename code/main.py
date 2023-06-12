@@ -70,7 +70,6 @@ class Program(ctk.CTk, Questions):
         global print
         print = self.logger.debug
         
-    
     def raise_exception(self, **kwargs) -> Exception:
         return CTkMessagebox(self, **kwargs)
     
@@ -95,8 +94,7 @@ class Program(ctk.CTk, Questions):
     
     def clean(self) -> None:
         '''
-        Clean the tkinter window of widgets\n
-        If quit_root is true, it will also run self.quit()
+        Clean the tkinter window of widgets
         '''
         
         for widget in self.winfo_children():
@@ -126,9 +124,24 @@ class Program(ctk.CTk, Questions):
     
     def _diagnose(self) -> None:
         def call_api(user):
-            results = Diagnosis(user=user).make_call()
+            results = Diagnosis(
+                user=user,
+                logger=self.logger,
+                testing=False
+                ).make_call()
+            
+            if results == "":
+                self.raise_exception(
+                    title="API Token Error",
+                    message="An error occured while fetching diagnosis results.\nPlease check username and password",
+                    icon="cancel"
+                )
+                self.logger.debug("Raised API Token Error")
+                self.quit()
+                self.home()
             
             self.logger.debug("User made daily diagnosis call.")
+            
             file = f"json/health/{date.today().strftime('%d_%m_%y')}.json"
             jsonUtils.overwrite(
                 data = results,
@@ -166,14 +179,26 @@ class Program(ctk.CTk, Questions):
         test_results = jsonUtils.read("json/conditions.json")
         user = jsonUtils.get_values()
         
+        conditions = user.conditions.copy()
+        
         for condition in test_results["conditions"]:
-            user.conditions+= [jsonUtils.search(
+            conditions+= [jsonUtils.search(
                 conditions_list,
                 sentinal=condition,
                 search_for="Name",
                 _return="ID"
                 )]
-        call_api(user=user)
+            
+        edited_user = UserInfo(
+            conditions,
+            user.preferences,
+            user.gender,
+            user.birthyear,
+            user.api_username,
+            user.api_password
+        )
+        
+        call_api(user=edited_user)
         
         loading.destroy()
         
