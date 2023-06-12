@@ -290,7 +290,7 @@ class jsonUtils:
                 f.write(data)
 
     @staticmethod
-    def read(file: str) -> None:
+    def read(file: str) -> dict | list[dict]:
         """Wrapper for jsonUtils.open
 
         Args:

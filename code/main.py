@@ -56,15 +56,15 @@ class Program(ctk.CTk, Questions):
         self.resizable(width=True, height=True)
         medicines = jsonUtils.read("json/medicines.json")
         
-        self.notifications: list[dict[str, str]] = medicines
-        for i in range(len(self.notifications)):
-            self.notifications[i] = Notification(
+        self.notifications: list[Notification] = medicines
+        self.logger.info("Loading medicine notifications into memory")
+        for idx, notif in enumerate(self.notifications):
+            self.notifications[idx] = Notification(
                 "Medication Reminder",
-                f"Take {self.notifications[i]['Morning']} dose of {self.notifications[i]['Medicine Name']}",
-                self.notifications[i]["Breakfast Time"]
+                f"Take {notif['Morning']} dose of {notif['Medicine Name']}",
+                notif["Breakfast Time"]
                 )
-            self.logger.debug(self.notifications[i])
-        self.logger.debug("self.notifications: {0}".format(self.notifications))
+            self.logger.debug(self.notifications[idx])
         self.len = len(self.notifications)
         
         global print
@@ -366,10 +366,9 @@ class Program(ctk.CTk, Questions):
         
 
     def activate_notifs(self, notifications: list[Notification]) -> None:
-        self.logger.debug(notifications)
+        self.logger.debug("Scheduling notifications")
         for notif in notifications:
             self.logger.debug("notif: {0}".format(notif))
-            self.logger.debug(notif.time)
             schedule.every().day.at(notif.time).do(notif.send)
             
         

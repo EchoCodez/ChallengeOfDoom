@@ -121,10 +121,9 @@ class InformationPages(UseLogger):
         self.pages.append(__o)
         
     def __repr__(self) -> str:
-        return f'''{type(self).__name__}(
-            pages={self._pages}
-            )'''
-    
-    def __set__(self, instance, owner):
-        pass
+        pages = '\n'.join(self._pages)
+        return f"{type(self).__name__}(pages={pages})"
+            
+    def __iter__(self) -> list.__iter__:
+        return self._pages.__iter__()
     
