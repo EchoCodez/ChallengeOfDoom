@@ -1,7 +1,11 @@
-from utils import jsonUtils
+from __future__ import annotations
+
+from utils import jsonUtils, InformationSheet, UseLogger
 import customtkinter as ctk
 import tkinter as tk
 from logging import Logger
+
+INFORMATION_PAGES = list[InformationSheet]
 
 class Settings:
     def __init__(self, master: ctk.CTk, logger: Logger) -> None:
@@ -25,7 +29,7 @@ class Settings:
             self.logger.debug(f"Appearance Mode: \"{ctk.get_appearance_mode().lower()}\" written to file")
         
         switch_settings = (
-            # ("Toggle Appearance Mode", swap_mode, {}),
+            ("Toggle Appearance Mode", swap_mode, {}),
         )
         
         # TODO: create bar for button colors
@@ -171,3 +175,75 @@ class Settings:
             **button_creation_kwargs
         ).grid_configure(**button_kwargs)
 
+class InformationPages(UseLogger):
+    _pages: INFORMATION_PAGES = []
+    
+    @property
+    def pages(self) -> INFORMATION_PAGES:
+        return self._pages
+    
+    @pages.setter
+    def pages(self, pages: INFORMATION_PAGES) -> InformationPages:
+        if not all(isinstance(page, InformationSheet) for page in pages):
+            raise TypeError("Pages must be an list of pages")
+        self._pages = pages
+        return self
+    
+    def add_pages(self, *pages: InformationSheet) -> InformationPages:
+        self.pages+=pages
+        return self
+    
+    def create_pages(self, master: ctk.CTk, **content_kwargs) -> None:
+        def create_page(page: InformationSheet):
+            ctk.CTkButton(
+                master,
+                text="Next Page",
+                command=master.quit
+            ).place(relx=0.8, rely=0.8, anchor="center")
+            
+            ctk.CTkLabel(
+                master,
+                text=page.title
+            ).pack(pady=50)
+            
+            t = ctk.CTkTextbox(
+                master,
+                width=960,
+                height=540,
+                **content_kwargs
+            )
+            t.insert('insert', page.content)
+            t.pack(pady=50)
+            
+            for action_button in page.buttons:
+                ctk.CTkButton(
+                    master,
+                    text=action_button.text,
+                    command=action_button.command,
+                    **action_button.kwargs
+                ).pack(**{"pady": 20} | page.button_pack_kwargs)
+        
+        for page in self:
+            for w in master.winfo_children():
+                w.destroy()
+                
+            create_page(page)
+            master.mainloop()
+            
+    
+    def copy(self) -> InformationPages:
+        return self.__copy__()
+    
+    def __copy__(self) -> InformationPages:
+        return InformationPages(*self._pages)
+            
+    def __iadd__(self, __o: InformationSheet, /) -> None:
+        self.pages += [ __o ]
+        return self
+        
+    def __repr__(self) -> str:
+        pages = '\n'.join(self._pages)
+        return f"{type(self).__name__}(pages={pages})"
+            
+    def __iter__(self) -> list.__iter__:
+        return self._pages.__iter__()

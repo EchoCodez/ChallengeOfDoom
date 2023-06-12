@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import tkinter as tk
 import customtkinter as ctk
 from logging import Logger
@@ -213,7 +211,7 @@ class MCQbuiler(UseLogger):
         
         return answers
         
-    def __iter__(self) -> MCQbuiler:
+    def __iter__(self) -> list[Question | CustomQuestion]:
         return self.questions.__iter__()
     
         

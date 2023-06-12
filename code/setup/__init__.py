@@ -14,6 +14,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 
 # file imports
+from setup.special import Settings, InformationPages
 from setup.setup_questions import Questions
 from setup.health_log import Calendar, Log
 from medicine.medicine import Medicine
