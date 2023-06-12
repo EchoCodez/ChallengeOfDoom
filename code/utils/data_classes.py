@@ -1,13 +1,13 @@
 import dataclasses
 import typing
 
-@dataclasses.dataclass(frozen=True)
+@dataclasses.dataclass(frozen=True, slots=True)
 class Question:
     """A Question for the Multiple Choice Quiz Builder
     
     Parameters:
     -----------
-        question (str): The Question title. Ex) What is 1+1?
+        question (str): The Question title. Ex) "What is 1+1?"
         
         answers (Iterable[str]): A list of the multiple choice question answers
         
@@ -25,7 +25,7 @@ class Question:
     def __str__(self):
         return f"Question {self.question}"
     
-@dataclasses.dataclass(frozen=True)
+@dataclasses.dataclass(frozen=True, slots=True)
 class CustomQuestion:
     '''A Custom question. Results from the custom requestion must be stored from within the callable.
     If possible, writing to file should be done inside function. Otherwise if return value is not None,
@@ -45,29 +45,43 @@ class CustomQuestion:
     '''
     
     question: typing.Callable
-    args: typing.Iterable = ()
+    args: typing.Iterable = dataclasses.field(default_factory=tuple)
     kwargs: dict = dataclasses.field(default_factory=dict)
     
     def __str__(self):
         return f"CustomQuestion {self.question.__name__}"
 
-@dataclasses.dataclass
+@dataclasses.dataclass(frozen=True, slots=True)
 class UserInfo:
     '''Dataclass storing information about user and user preferences'''
     
     conditions: list[str]
-    preferences: dict[str, bool]
+    preferences: dict[str, bool|str]
     gender: str
     birthyear: str
+    api_username: str
+    api_password: str
+
+@dataclasses.dataclass(frozen=True, slots=True)
+class ActionButton:
+    text: str
+    command: typing.Callable
+    kwargs: dict = dataclasses.field(default_factory=dict)
+
+@dataclasses.dataclass(frozen=True, slots=True)
+class InformationSheet:
+    """Class containing data needed for the InformationPages constructor
     
-    def __iter__(self):
-        return iter({
-            "conditions": self.conditions,
-            "preferences":self.preferences,
-            "gender":self.gender,
-            "birth_year":self.birthyear
-            }.items())
-    
-    def __str__(self) -> str:
-        x = '\n\t'.join(f"{k}={v}" for k, v in self)
-        return f"{self.__class__.__name__}:\n\t{x}"
+    Parameters:
+    -----------
+        title (str): Title of the page
+        
+        content (str): Content shown on that page
+        
+        buttons (Iterable[ActionButton], optional): The buttons to be added on each page. Defautls to empty tuple.
+    """    
+    title: str
+    content: str
+    buttons: typing.Iterable[ActionButton] = dataclasses.field(default_factory=tuple)
+    button_pack_kwargs: dict = dataclasses.field(default_factory=dict)
+

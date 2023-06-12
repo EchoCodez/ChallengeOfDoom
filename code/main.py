@@ -54,13 +54,22 @@ class Program(ctk.CTk, Questions):
             )
         
         self.resizable(width=True, height=True)
-        with open("json/medicines.json") as f:
-            medicines = json.load(f)
-        self.notifications: list[dict[str, str]] = [medicines]
-        self.logger.debug("self.notifications: {0}".format(self.notifications))
-
+        medicines = jsonUtils.read("json/medicines.json")
         
-    
+        self.notifications: list[Notification] = medicines
+        self.logger.info("Loading medicine notifications into memory")
+        for idx, notif in enumerate(self.notifications):
+            self.notifications[idx] = Notification(
+                "Medication Reminder",
+                f"Take {notif['Morning']} dose of {notif['Medicine Name']}",
+                notif["Breakfast Time"]
+                )
+            self.logger.debug(self.notifications[idx])
+        self.len = len(self.notifications)
+        
+        global print
+        print = self.logger.debug
+        
     def raise_exception(self, **kwargs) -> Exception:
         return CTkMessagebox(self, **kwargs)
     
@@ -85,8 +94,7 @@ class Program(ctk.CTk, Questions):
     
     def clean(self) -> None:
         '''
-        Clean the tkinter window of widgets\n
-        If quit_root is true, it will also run self.quit()
+        Clean the tkinter window of widgets
         '''
         
         for widget in self.winfo_children():
@@ -111,14 +119,27 @@ class Program(ctk.CTk, Questions):
             })
         
         self.clean()
-        jsonUtils.write({"setup_finished": True}, file=preferences)
-        self.logger.debug(jsonUtils.get_values())
     
     def _diagnose(self) -> None:
         def call_api(user):
-            results = Diagnosis(user=user).make_call()
+            results = Diagnosis(
+                user=user,
+                logger=self.logger,
+                testing=False
+                ).make_call()
+            
+            if results == "":
+                self.raise_exception(
+                    title="API Token Error",
+                    message="An error occured while fetching diagnosis results.\nPlease check username and password",
+                    icon="cancel"
+                )
+                self.logger.debug("Raised API Token Error")
+                self.quit()
+                self.home()
             
             self.logger.debug("User made daily diagnosis call.")
+            
             file = f"json/health/{date.today().strftime('%d_%m_%y')}.json"
             jsonUtils.overwrite(
                 data = results,
@@ -156,14 +177,26 @@ class Program(ctk.CTk, Questions):
         test_results = jsonUtils.read("json/conditions.json")
         user = jsonUtils.get_values()
         
+        conditions = user.conditions.copy()
+        
         for condition in test_results["conditions"]:
-            user.conditions+= [jsonUtils.search(
+            conditions+= [jsonUtils.search(
                 conditions_list,
                 sentinal=condition,
                 search_for="Name",
                 _return="ID"
                 )]
-        call_api(user=user)
+            
+        edited_user = UserInfo(
+            conditions,
+            user.preferences,
+            user.gender,
+            user.birthyear,
+            user.api_username,
+            user.api_password
+        )
+        
+        call_api(user=edited_user)
         
         loading.destroy()
         
@@ -320,25 +353,50 @@ class Program(ctk.CTk, Questions):
         self.mainloop()
 
     def update(self) -> None:
+        if len(self.notifications) != self.len:
+            notif = self.notifications[-1]
+            schedule.every().day.at(notif.time).do(notif.send)
+            print("WHAT")
+            self.len = len(self.notifications)
         schedule.run_pending()
+        tmp = self.notifications
         self.after(16, self.update)
         
-
-    def activate_notifs(self, notifications: list) -> None:
+    def activate_notifs(self, notifications: list[Notification]) -> None:
+        self.logger.debug("Scheduling notifications")
         for notif in notifications:
             self.logger.debug("notif: {0}".format(notif))
-            # schedule.every().day.at(notif.time).do(notif.send)
-            
+            schedule.every().day.at(notif.time).do(notif.send)    
+
+    def show_register_api_pages(self):
+        sheets = InformationPages(self.logger)
         
+        for d in get_information_texts():
+            buttons, commands = d.pop("buttons", ()), d.pop("commands", ())
+            
+            if len(buttons) != len(commands):
+                raise TypeError("Must be same amount of buttons as commands")
+            
+            total_buttons = [ActionButton(button, command) for button, command in zip(buttons, commands)]
+            sheets+=InformationSheet(
+                buttons=total_buttons,
+                **d
+            )
+        
+        sheets.create_pages(self)
+
 
     def execute(self) -> None:
         if not jsonUtils.open(preferences).get("setup_finished", False):
             self.setup()
+            self.show_register_api_pages()
+            jsonUtils.write({"setup_finished": True}, file=preferences)
+            self.logger.debug(jsonUtils.get_values())
         else:
             set_theme()
     
         try:
-            os.system("taskkill /im thing.exe")
+            os.system("taskkill /im HealthApp.exe")
         except Exception: # ignore keyboard interrupt
             pass
         
@@ -360,16 +418,10 @@ def main(*, erase_data: bool = False) -> None:
         jsonUtils.clearfiles()
 
     program = Program()
-    files = FileHandler(program.logger)
-    
-    files.clear_old_application()
     
     program.execute()
-    
-    files.create_new_application()
     
 
 
 if __name__ == "__main__":
-    main(erase_data=False)
-    
+    main(erase_data=True)

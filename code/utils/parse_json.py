@@ -27,9 +27,9 @@ class jsonUtils:
             Which file to add data to.
         '''
 
-        with open(file, "a") as f:
-            f.write(",\n")
-            f.write(json.dumps(data, indent=indent))
+        new_data = jsonUtils.open(file) | data
+        with open(file, "w", encoding="utf-8") as f:
+            f.write(json.dumps(new_data, indent=indent))
 
     @staticmethod
     def write(data: dict, file: str = "json/user-data.json", indent=4) -> None:
@@ -44,7 +44,7 @@ class jsonUtils:
             Which file to add data to.
         '''
         
-        with open(file) as f:
+        with open(file, encoding="utf-8") as f:
             original_data: dict | list = json.load(f)
         
         if isinstance(original_data, dict) and isinstance(data, dict):
@@ -63,7 +63,7 @@ class jsonUtils:
                     )
                 )
 
-        with open(file, "w") as f:
+        with open(file, "w", encoding="utf-8") as f:
             f.write(json.dumps(modified_data, indent=indent))
             
     @staticmethod
@@ -81,7 +81,7 @@ class jsonUtils:
         
         if file[-5:] != ".json":
             raise TypeError(f"Invalid file\nExpected file to end in .json. Instead it ended with \"{file[-5:]}\"")
-        with open(file, "w") as f:
+        with open(file, "w", encoding="utf-8") as f:
             f.write("{}")
     
     @staticmethod
@@ -147,12 +147,15 @@ class jsonUtils:
         ```
         """
         
-        prefs, data = jsonUtils.open("json/preferences.json"), jsonUtils.open("json/user-data.json") 
+        prefs, data = jsonUtils.open("json/preferences.json"), jsonUtils.open("json/user-data.json")
+        
         return UserInfo(
             conditions=data.get("conditions", []),
             preferences={preference: prefs.get(preference) for preference in preferences},
             gender=data.get("gender"),
-            birthyear=data.get("birth_year")
+            birthyear=data.get("birth_year"),
+            api_username=data.get("api_username", ""),
+            api_password=data.get("api_password", "")
             )
     
     @staticmethod
@@ -175,7 +178,7 @@ class jsonUtils:
         ``` 
         """
           
-        with open(file) as f:
+        with open(file, encoding="utf-8") as f:
             return json.load(f)
         
     @staticmethod
@@ -280,14 +283,14 @@ class jsonUtils:
             dumps (bool, optional): whether to write `json.dumps(data)`. Defaults to True.
         """
             
-        with open(file, "w") as f:
+        with open(file, "w", encoding="utf-8") as f:
             if dumps:
                 f.write(json.dumps(data, indent=4))
             else:
                 f.write(data)
 
     @staticmethod
-    def read(file: str) -> None:
+    def read(file: str) -> dict | list[dict]:
         """Wrapper for jsonUtils.open
 
         Args:
@@ -335,7 +338,7 @@ class open_json:
             self.file = open(self.path, self.action)
             return (json.load(self.file), self.file)
         
-        with open(self.path, self.action) as f:
+        with open(self.path, self.action, encoding="utf-8") as f:
             return json.load(f)
         
     

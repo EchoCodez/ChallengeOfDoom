@@ -1,9 +1,28 @@
-2023-06-04 12:19:13 (main.py) DEBUG: User has good screen dimensions
-2023-06-04 12:19:13 (main.py) DEBUG: self.notifications: [[{'Medicine Name': 'Bobo', 'Morning': '1', 'Afternoon': '0', 'Evening': '1', 'Breakfast Time': '10:00 AM', 'Lunch Time': '1:00 PM', 'Dinner Time': '8:00 PM', 'Before/After Meal': 'Before'}, {'Medicine Name': 'Bobo', 'Morning': '1', 'Afternoon': '0', 'Evening': '1', 'Breakfast Time': '10:00 AM', 'Lunch Time': '1:00 PM', 'Dinner Time': '8:00 PM', 'Before/After Meal': 'Before'}]]
-2023-06-04 12:19:13 (generic.py) DEBUG: Attempted to delete logs/isrunning.log, but it did not exist
-2023-06-04 12:19:13 (main.py) DEBUG: notif: [{'Medicine Name': 'Bobo', 'Morning': '1', 'Afternoon': '0', 'Evening': '1', 'Breakfast Time': '10:00 AM', 'Lunch Time': '1:00 PM', 'Dinner Time': '8:00 PM', 'Before/After Meal': 'Before'}, {'Medicine Name': 'Bobo', 'Morning': '1', 'Afternoon': '0', 'Evening': '1', 'Breakfast Time': '10:00 AM', 'Lunch Time': '1:00 PM', 'Dinner Time': '8:00 PM', 'Before/After Meal': 'Before'}]
-2023-06-04 12:19:13 (main.py) DEBUG: Reached Home Screen
-2023-06-04 12:19:14 (main.py) DEBUG: Health Log Accessed
-2023-06-04 12:19:14 (health_log.py) DEBUG: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30']
-2023-06-04 12:19:18 (main.py) DEBUG: Reached Home Screen
-2023-06-04 12:19:18 (main.py) INFO: QUITTING
+11:52:38 (main.py) [L49] DEBUG: User has good screen dimensions
+11:52:38 (main.py) [L60] INFO: Loading medicine notifications into memory
+11:52:38 (main.py) [L67] DEBUG: Notification(title=Medication Reminder, message=Take 1 dose of Bobo, time=17:55:00)
+11:52:38 (main.py) [L67] DEBUG: Notification(title=Medication Reminder, message=Take 1 dose of E, time=18:06:00)
+11:52:38 (main.py) [L67] DEBUG: Notification(title=Medication Reminder, message=Take 1 dose of Eee, time=18:06:00)
+11:52:38 (main.py) [L67] DEBUG: Notification(title=Medication Reminder, message=Take 1 dose of EEEE, time=18:13:00)
+11:52:38 (main.py) [L67] DEBUG: Notification(title=Medication Reminder, message=Take 1 dose of Bobo, time=18:15:00)
+11:52:40 (mcq.py) [L201] DEBUG: Started Quiz
+11:52:41 (mcq.py) [L112] DEBUG: Next Question
+11:52:43 (mcq.py) [L147] DEBUG: Male
+11:52:43 (mcq.py) [L112] DEBUG: Next Question
+11:52:54 (setup_questions.py) [L176] INFO: User typed 1980 as input for date of birth
+11:52:54 (setup_questions.py) [L179] DEBUG: Transformed 1980 to 1980
+11:52:54 (setup_questions.py) [L185] INFO: User entered valid date of birth
+11:52:54 (setup_questions.py) [L189] INFO: Birth year 1980 succesfully written to file
+11:52:54 (mcq.py) [L112] DEBUG: Next Question
+11:52:54 (mcq.py) [L207] DEBUG: Cleaned
+11:52:54 (mcq.py) [L174] DEBUG: ended
+11:52:56 (mcq.py) [L212] DEBUG: Ended Quiz
+11:53:10 (main.py) [L394] DEBUG: UserInfo(conditions=[], preferences={'appearance_theme': 'dark', 'save_data': None}, gender='Male', birthyear=1980, api_username='', api_password='')
+11:53:10 (main.py) [L366] DEBUG: Scheduling notifications
+11:53:10 (main.py) [L368] DEBUG: notif: Notification(title=Medication Reminder, message=Take 1 dose of Bobo, time=17:55:00)
+11:53:10 (main.py) [L368] DEBUG: notif: Notification(title=Medication Reminder, message=Take 1 dose of E, time=18:06:00)
+11:53:10 (main.py) [L368] DEBUG: notif: Notification(title=Medication Reminder, message=Take 1 dose of Eee, time=18:06:00)
+11:53:10 (main.py) [L368] DEBUG: notif: Notification(title=Medication Reminder, message=Take 1 dose of EEEE, time=18:13:00)
+11:53:10 (main.py) [L368] DEBUG: notif: Notification(title=Medication Reminder, message=Take 1 dose of Bobo, time=18:15:00)
+11:53:10 (main.py) [L303] DEBUG: Reached Home Screen
+11:53:11 (main.py) [L27] INFO: QUITTING

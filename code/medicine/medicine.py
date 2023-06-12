@@ -1,5 +1,6 @@
 import customtkinter as ctk
 from logging import Logger
+from medicine.notifications import Notification
 import json
 
 class Medicine:
@@ -20,7 +21,7 @@ class Medicine:
     def submit(self, elements) -> None:
         
         try:
-            for i in range(1, 4):
+            '''for i in range(1, 4):
                 int(elements[i].get())
             if elements[0] == "":
                 raise SystemError
@@ -46,20 +47,27 @@ class Medicine:
                     if elements[i].get()[1] != ":":
                         raise SystemError
                     if elements[i].get()[5]+elements[i].get()[6] != "AM" and elements[i].get()[5]+elements[i].get()[6] != "PM":
-                        raise SystemError
+                        raise SystemError'''
             self.logger.debug([element.get() for element in elements])
             data = {}
             for i in range(8):
                 data[self.labels[i]] = elements[i].get() 
             print(data)
-            with open("json/medicines.json", 'r') as f:
+            with open("json/medicines.json", 'r', encoding="utf-8") as f:
                 feeds = json.load(f)
             feeds.extend([data])
-            with open("json/medicines.json", 'w') as f:
+            with open("json/medicines.json", 'w', encoding="utf-8") as f:
                 json.dump(feeds, f, indent=4)
+            notifs = self.master.notifications
+            notifs.append(Notification(
+                "Medication Reminder",
+                f"Take {data['Morning']} dose of {data['Medicine Name']}",
+                data["Breakfast Time"]
+                ))
             self.master.home()
 
-        except:
+        except Exception as e:
+            self.logger.debug(e)
             self.logger.debug("User failed to input correctly")
             ctk.CTkLabel(
                 self.master,
