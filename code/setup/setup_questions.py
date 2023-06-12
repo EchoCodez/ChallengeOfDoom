@@ -14,6 +14,7 @@ conditions_list = "json/symptoms.json"
 
 class Questions:
     '''Setup questions for application'''
+    # TODO: Add information pages to tell user how to create API medic account
     def __init__(self) -> None:
         self.__appearance = tk.StringVar(value="light")
     
