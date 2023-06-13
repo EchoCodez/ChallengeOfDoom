@@ -85,7 +85,7 @@ class jsonUtils:
             f.write("{}")
     
     @staticmethod
-    def clearfiles(files: tuple[str]=files, clearlogs = True) -> None:
+    def clearfiles(files: tuple[str]=files, clearlogs = False) -> None:
         """wrapper for doing:
         ```
         for file in files:

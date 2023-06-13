@@ -39,7 +39,6 @@ class MCQbuiler(UseLogger):
         self.iterator = (i for i in self.questions)
         self.root = root
         self.name = name
-        self.correct = False
         self.include_start = include_start
         self.include_end = include_end
     
@@ -95,22 +94,27 @@ class MCQbuiler(UseLogger):
             `list[bool] | list[str]`: list of correct and incorrect answers | list of user results as strings
         """
         
-        results = []
-        for question in self:
+        self.results = [None] * len(self)
+        self._index = 0
+        while self._index < len(self):
+            
+            question = self[self._index]
+            
             if isinstance(question, Question):
                 self._create_question(question)
             elif isinstance(question, CustomQuestion):
-                result = question.question(*question.args, **question.kwargs)
-                if result is not None:
-                    self.correct = result
+                self.answer = question.question(*question.args, **question.kwargs)
             elif question() is not None:
                 raise TypeError("Invalid Question {0}".format(question))
             
             self.clean()
             self.logger.debug("Next Question")
+            self._index+=1
             
-            results.append(self.correct)
-        return [x==q.correct_answer for x, q in zip(results, self)] if scored_quiz else results
+            if self.answer is not None:
+                self.results[self._index] = self.answer
+                
+        return [x==q.correct_answer for x, q in zip(self.results, self)] if scored_quiz else self.results
     
     def _create_question(self, question: Question, **kwargs):
         """Creates question if `isinstance(question, Question)`
@@ -142,8 +146,14 @@ class MCQbuiler(UseLogger):
             button.pack(pady=20)
         
         def leave():
-            self.logger.debug(option.get())
-            self.correct = option.get()
+            self.logger.debug(f"User choose option {option.get()}")
+            self.answer = option.get()
+            self.root.quit()
+        
+        def back():
+            self.logger.debug("User went back a page")
+            self.answer = None
+            self._index-=2
             self.root.quit()
         
         next_button = ctk.CTkButton(
@@ -152,7 +162,14 @@ class MCQbuiler(UseLogger):
             command=leave
         )
         
-        next_button.pack(pady=10)
+        next_button.place(relx=0.8, rely=0.8, anchor=tk.CENTER)
+
+        if self._index:
+            ctk.CTkButton(
+                self.root,
+                text="Back",
+                command=back
+            ).place(relx=0.2, rely=0.8, anchor = tk.CENTER)
 
         self.root.mainloop()
         
@@ -214,4 +231,8 @@ class MCQbuiler(UseLogger):
     def __iter__(self) -> list[Question | CustomQuestion]:
         return self.questions.__iter__()
     
+    def __getitem__(self, *args) -> Question | CustomQuestion:
+        return self.questions.__getitem__(*args)
         
+    def __len__(self) -> int:
+        return self.questions.__len__()
