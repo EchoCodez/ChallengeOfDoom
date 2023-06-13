@@ -110,7 +110,8 @@ class Program(ctk.CTk, Questions):
             self.logger,
             CustomQuestion(self.set_appearance if not set_theme() else lambda: None),
             Question("What is your gender?", ["Male", "Female"]),
-            CustomQuestion(self.get_year_of_birth)
+            CustomQuestion(self.get_year_of_birth),
+            include_end=False
         )
         answers = prequiz.begin()
         
@@ -395,25 +396,26 @@ class Program(ctk.CTk, Questions):
     def enter_api_username_password(self):
         self.clean()
         
-        username = tk.StringVar()
-        password = tk.StringVar()
-        
         ctk.CTkLabel(
             self,
             text="Enter your api username and password"
         ).pack(pady=100)
         
-        ctk.CTkEntry(
+        username = ctk.CTkEntry(
             self,
             placeholder_text="Live Username",
-            textvariable=username
-        ).pack(pady=20)
+            width=280,
+            height=56
+        )
+        username.pack(pady=20)
         
-        ctk.CTkEntry(
+        password = ctk.CTkEntry(
             self,
             placeholder_text="Live Password",
-            textvariable=password
-        ).pack(pady=20)
+            width=280,
+            height=56
+        )
+        password.pack(pady=20)
         
         return username, password
 

@@ -133,7 +133,7 @@ class MCQbuiler(UseLogger):
         )
         q.pack(pady=kwargs.get("question_pady", 100))
         
-        option = tk.StringVar() # what option they chose
+        option = tk.StringVar(value=answers[0]) # what option they chose
         
         for answer in answers:
             button = ctk.CTkRadioButton(
@@ -223,6 +223,8 @@ class MCQbuiler(UseLogger):
         
         if self.include_end:
             self._end(**kwargs)
+        else:
+            self.clean()
         
         self.logger.debug("Ended Quiz")
         

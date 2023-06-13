@@ -175,10 +175,20 @@ class Questions:
             year = datetime.now().year
             self.logger.info(f"User typed {typed} as input for date of birth")
             
-            birth_year = int(re.sub("\D", "", typed))
+            birth_year = re.sub("\D", "", typed)
+            
+            if birth_year == "":
+                CTkMessagebox(
+                    self,
+                    title="Date of Birth Submission Error",
+                    message=f"Expected year between 1930 and {year}, but got \"{typed}\""
+                )
+                return
+            
+            birth_year = int(birth_year)
             self.logger.debug(f"Transformed {typed} to {birth_year}")
             
-            if int(birth_year) not in range(1930, year+1):
+            if birth_year not in range(1930, year+1):
                 self.logger.info(f"User entered date of birth outside 1930 and {year}")
                 CTkMessagebox(self, title="Date of Birth Submission Error",message=f"Must be a year between 1930 and {year}", icon="cancel")
             else:
