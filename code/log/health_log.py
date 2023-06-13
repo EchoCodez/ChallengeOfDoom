@@ -64,6 +64,8 @@ class Log(ctk.CTkToplevel):
         self.label = ctk.CTkLabel(self, text=f"")
         self.label.pack(padx=20, pady=20)
 
+        self.transient(self.master)
+
 
 if __name__ == "__main__":
     ctk.set_appearance_mode("dark")
