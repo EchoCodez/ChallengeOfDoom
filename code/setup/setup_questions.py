@@ -171,7 +171,7 @@ class Questions:
 
     def get_year_of_birth(self, font = ("None", 50)): # CustomQuestion
         def verify_and_continue():
-            typed = typer.get(1.0, tk.END).strip()
+            typed = typer.get().strip()
             year = datetime.now().year
             self.logger.info(f"User typed {typed} as input for date of birth")
             
@@ -181,7 +181,8 @@ class Questions:
                 CTkMessagebox(
                     self,
                     title="Date of Birth Submission Error",
-                    message=f"Expected year between 1930 and {year}, but got \"{typed}\""
+                    message=f"Expected year between 1930 and {year}, but got \"{typed}\"",
+                    icon="cancel"
                 )
                 return
             
@@ -199,9 +200,14 @@ class Questions:
                 self.logger.info(f"Birth year {birth_year} succesfully written to file")
                 self.quit()
         
-        typer = ctk.CTkTextbox(self, width=400, font=("Times New Roman", 25))
-        typer.insert(tk.END, "Type Here")
-        
+        typer = ctk.CTkEntry(
+            self,
+            width=400,
+            height=400,
+            font=("Times New Roman", 25),
+            placeholder_text="Type Here"
+            )
+
         title = ctk.CTkLabel(
             self,
             text="What year were you born?",

@@ -224,6 +224,7 @@ class InformationPages(UseLogger):
                 **content_kwargs
             )
             t.insert('insert', page.content)
+            t.configure(state=state)
             t.pack(pady=50)
             
             for action_button in page.buttons:
@@ -241,8 +242,12 @@ class InformationPages(UseLogger):
             self.logger.debug("Going back a page")
             self._p-=2
         
+        # Driver code
+        
         self._p = 0
         results = []
+        state = content_kwargs.pop("state", "normal")
+        
         while self._p < len(self):
             for w in master.winfo_children():
                 w.destroy()

@@ -385,8 +385,14 @@ class Program(ctk.CTk, Questions):
                 **d
             )
         sheets+=CustomQuestion(self.enter_api_username_password)
-        
-        username, password = sheets.create_pages(self)[0]
+        sheets: InformationPages
+        username, password = sheets.create_pages(
+            self,
+            font=("DEFAULT", 30),
+            text_color="#FFFFFF",
+            state="disabled",
+            wrap="word"
+            )[0]
         
         jsonUtils.add({
             "api_username": username.get(),
@@ -458,4 +464,4 @@ def main(*, erase_data: bool = False) -> None:
 
 
 if __name__ == "__main__":
-    main(erase_data=False)
+    main(erase_data=True)
