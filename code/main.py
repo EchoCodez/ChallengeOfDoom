@@ -53,7 +53,6 @@ class Program(ctk.CTk, Questions):
             self=self
             )
         
-        self.resizable(width=True, height=True)
         medicines = jsonUtils.read("json/medicines.json")
         
         self.notifications: list[Notification] = medicines
@@ -149,7 +148,9 @@ class Program(ctk.CTk, Questions):
             self.logger.info(f"Writing to log file '{file}' completed successfully")
             
             # writes it to list of logs
-            logs = set(jsonUtils.open("json/logs.json")["logs_list"]).union((file,))
+            logs: list[str] = jsonUtils.open("json/logs.json")["logs_list"]
+            logs+=[file] if file not in logs else []
+            logs.sort(key=lambda d: datetime.strptime(d.replace("json/health/", "")[:-5], "%d_%m_%y"))
             jsonUtils.write(
                 data={"logs_list": list(logs)},
                 file="json/logs.json"
@@ -227,7 +228,7 @@ class Program(ctk.CTk, Questions):
         tabview.pack(padx=20, pady=20)
         
         
-        diseases = jsonUtils.read("json/possible_diseases.json")
+        diseases = jsonUtils.read(date.today().strftime("json/health/%d_%m_%y.json"))
         self.get_diagnosis_info(diseases, tabview, font)
         self.mainloop()
         

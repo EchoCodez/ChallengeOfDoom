@@ -1,0 +1,247 @@
+[
+    {
+        "Issue": {
+            "ID": 80,
+            "Name": "Cold",
+            "Accuracy": 90,
+            "Icd": "J00",
+            "IcdName": "Acute nasopharyngitis [common cold]",
+            "ProfName": "Common cold",
+            "Ranking": 1
+        },
+        "Specialisation": [
+            {
+                "ID": 15,
+                "Name": "General practice",
+                "SpecialistID": 3
+            }
+        ]
+    },
+    {
+        "Issue": {
+            "ID": 15,
+            "Name": "Hypersensitivity reaction",
+            "Accuracy": 73.07625,
+            "Icd": "T78.4",
+            "IcdName": "Allergy, unspecified",
+            "ProfName": "Allergy",
+            "Ranking": 2
+        },
+        "Specialisation": [
+            {
+                "ID": 5,
+                "Name": "Allergology",
+                "SpecialistID": 1
+            },
+            {
+                "ID": 15,
+                "Name": "General practice",
+                "SpecialistID": 3
+            }
+        ]
+    },
+    {
+        "Issue": {
+            "ID": 11,
+            "Name": "Flu",
+            "Accuracy": 63.75,
+            "Icd": "J10;J11",
+            "IcdName": "Influenza due to other identified influenza virus;Influenza, virus not identified",
+            "ProfName": "Influenza",
+            "Ranking": 3
+        },
+        "Specialisation": [
+            {
+                "ID": 15,
+                "Name": "General practice",
+                "SpecialistID": 3
+            },
+            {
+                "ID": 19,
+                "Name": "Internal medicine",
+                "SpecialistID": 4
+            }
+        ]
+    },
+    {
+        "Issue": {
+            "ID": 14,
+            "Name": "Inflammatory disease of the airways",
+            "Accuracy": 60.75,
+            "Icd": "J45",
+            "IcdName": "Asthma",
+            "ProfName": "Bronchial asthma",
+            "Ranking": 4
+        },
+        "Specialisation": [
+            {
+                "ID": 5,
+                "Name": "Allergology",
+                "SpecialistID": 1
+            },
+            {
+                "ID": 15,
+                "Name": "General practice",
+                "SpecialistID": 3
+            },
+            {
+                "ID": 35,
+                "Name": "Pulmonology",
+                "SpecialistID": 6
+            }
+        ]
+    },
+    {
+        "Issue": {
+            "ID": 113,
+            "Name": "Acute inflammation of lung",
+            "Accuracy": 52.3874931,
+            "Icd": "J12;J13;J14;J15;J16;J17;J18;P23",
+            "IcdName": "Viral pneumonia, not elsewhere classified;Pneumonia due to Streptococcus pneumoniae;Pneumonia due to Haemophilus influenzae;Bacterial pneumonia, not elsewhere classified;Pneumonia due to other infectious organisms, not elsewhere classified;Pneumonia in diseases classified elsewhere;Pneumonia, organism unspecified;Congenital pneumonia",
+            "ProfName": "Pneumonia",
+            "Ranking": 5
+        },
+        "Specialisation": [
+            {
+                "ID": 15,
+                "Name": "General practice",
+                "SpecialistID": 3
+            },
+            {
+                "ID": 19,
+                "Name": "Internal medicine",
+                "SpecialistID": 4
+            },
+            {
+                "ID": 35,
+                "Name": "Pulmonology",
+                "SpecialistID": 6
+            }
+        ]
+    },
+    {
+        "Issue": {
+            "ID": 64,
+            "Name": "Chronic obstructive lung disease",
+            "Accuracy": 41.25,
+            "Icd": "J40;J41;J42;J43;J44",
+            "IcdName": "Bronchitis, not specified as acute or chronic;Simple and mucopurulent chronic bronchitis;Unspecified chronic bronchitis;Emphysema;Other chronic obstructive pulmonary disease",
+            "ProfName": "Chronic obstructive pulmonary disease",
+            "Ranking": 6
+        },
+        "Specialisation": [
+            {
+                "ID": 15,
+                "Name": "General practice",
+                "SpecialistID": 3
+            },
+            {
+                "ID": 19,
+                "Name": "Internal medicine",
+                "SpecialistID": 4
+            },
+            {
+                "ID": 35,
+                "Name": "Pulmonology",
+                "SpecialistID": 6
+            }
+        ]
+    },
+    {
+        "Issue": {
+            "ID": 431,
+            "Name": "Drug side effect",
+            "Accuracy": 23.75,
+            "Icd": "T88.7",
+            "IcdName": "Unspecified adverse effect of drug or medicament",
+            "ProfName": "Adverse drug reaction",
+            "Ranking": 7
+        },
+        "Specialisation": [
+            {
+                "ID": 15,
+                "Name": "General practice",
+                "SpecialistID": 3
+            },
+            {
+                "ID": 19,
+                "Name": "Internal medicine",
+                "SpecialistID": 4
+            }
+        ]
+    },
+    {
+        "Issue": {
+            "ID": 44,
+            "Name": "Inflammation of the nose and throat",
+            "Accuracy": 17.9999981,
+            "Icd": "J02;J31.2",
+            "IcdName": "Acute pharyngitis;Chronic pharyngitis",
+            "ProfName": "Nasopharyngitis",
+            "Ranking": 8
+        },
+        "Specialisation": [
+            {
+                "ID": 15,
+                "Name": "General practice",
+                "SpecialistID": 3
+            },
+            {
+                "ID": 32,
+                "Name": "Otolaryngology",
+                "SpecialistID": 49
+            }
+        ]
+    },
+    {
+        "Issue": {
+            "ID": 153,
+            "Name": "Inflammation of the bronchi",
+            "Accuracy": 12.5,
+            "Icd": "J20;J21",
+            "IcdName": "Acute bronchitis;Acute bronchiolitis with bronchospasm ",
+            "ProfName": "Acute bronchitis",
+            "Ranking": 9
+        },
+        "Specialisation": [
+            {
+                "ID": 15,
+                "Name": "General practice",
+                "SpecialistID": 3
+            },
+            {
+                "ID": 19,
+                "Name": "Internal medicine",
+                "SpecialistID": 4
+            },
+            {
+                "ID": 35,
+                "Name": "Pulmonology",
+                "SpecialistID": 6
+            }
+        ]
+    },
+    {
+        "Issue": {
+            "ID": 374,
+            "Name": "Systemic disorder with granulomatous inflammation",
+            "Accuracy": 9.375,
+            "Icd": "D86",
+            "IcdName": "Sarcoidosis",
+            "ProfName": "Sarcoidosis",
+            "Ranking": 10
+        },
+        "Specialisation": [
+            {
+                "ID": 15,
+                "Name": "General practice",
+                "SpecialistID": 3
+            },
+            {
+                "ID": 19,
+                "Name": "Internal medicine",
+                "SpecialistID": 4
+            }
+        ]
+    }
+]

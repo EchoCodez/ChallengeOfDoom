@@ -2,6 +2,7 @@ from utils.parse_json import jsonUtils
 from utils.data_classes import UserInfo
 import requests
 from logging import Logger
+from datetime import date
 
 
 class Diagnosis:
@@ -48,8 +49,9 @@ class Diagnosis:
             # jsonUtils.add({"token": token})
             return token
 
-    def make_call(self, file: str = "json/possible_diseases.json"):
+    def make_call(self, file: str = None):
         token = self._get_token()
+        file = file if file is not None else date.today().strftime("json/health/%d_%m_%y.json")
         
         if token == "":
             return ""
