@@ -30,9 +30,7 @@ def set_theme() -> bool:
     '''
     
     with open("json/preferences.json") as f:
-        if jsonUtils.get(f, "appearance_theme", func = ctk.set_appearance_mode):
-            return True
-    return False
+        return jsonUtils.get(f, "appearance_theme", func = ctk.set_appearance_mode):
 
 class FileHandler(UseLogger):       
     def delete_logs(self, logs: list[str] = None):
