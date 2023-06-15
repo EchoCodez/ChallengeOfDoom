@@ -70,14 +70,14 @@ class FileHandler(UseLogger):
             `str`: Diagnosis Results for <day> not found
         """        
         
-        def print(txt: str, level="info"):
+        def print(txt: str, level="info",  **kwargs):
             if logger is not None:
-                exec(f"logger.{level}(\"{txt}\")")
+                exec(f"logger.{level}(\"{txt}\")", **kwargs)
         
         if isinstance(_date, str):
             path = _date
         elif isinstance(_date, DATES):
-            path = str(_date.strftime("%d_%m_%Y"))
+            path = str(_date.strftime("%d_%m_%y"))
         else:
             raise TypeError("Date for get_log must be a properly formatted string or datetime/date object")
         
