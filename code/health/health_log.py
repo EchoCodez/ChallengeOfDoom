@@ -15,7 +15,7 @@ class Calendar:
             5: "Friday",
             6: "Saturday"
         }
-        self.logger: Logger = self.master.logger
+        self.logger = self.master.logger
     
     def run(self, mainloop: bool = True) -> None:
         today = datetime.today()
