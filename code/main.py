@@ -33,6 +33,16 @@ class Program(ctk.CTk, Questions):
         self.bind("<Button-2>", quit_app) # for testing code faster
         self.geometry(f"{self.winfo_screenwidth()}x{self.winfo_screenheight()}+0+0")
         self.focus_force()
+        self.labels = {
+            0: "Medicine Name",
+            1: "Morning", 
+            2: "Afternoon", 
+            3: "Evening",
+            4: "Breakfast Time",
+            5: "Lunch Time",
+            6: "Dinner Time",
+            7: "Before/After Meal",
+        }
         if (self.winfo_screenwidth(), self.winfo_screenheight()) != (1920, 1080):
             self.logger.debug(f"Screen dimensions {self.winfo_screenwidth()}x{self.winfo_screenheight()} are not recommended")
             answer = self.raise_exception(
@@ -55,15 +65,18 @@ class Program(ctk.CTk, Questions):
         
         medicines = jsonUtils.read("json/medicines.json")
         
-        self.notifications: list[Notification] = medicines
+        self.notifications = medicines
         self.logger.info("Loading medicine notifications into memory")
-        for idx, notif in enumerate(self.notifications):
-            self.notifications[idx] = Notification(
-                "Medication Reminder",
-                f"Take {notif['Morning']} dose of {notif['Medicine Name']}",
-                notif["Breakfast Time"]
-                )
-            self.logger.debug(self.notifications[idx])
+        for i in range(len(self.notifications)):
+            notification = self.notifications.pop(0)
+            for j in range(3):
+                if notification[self.labels[j+1]] != "0":
+                    self.notifications.append(Notification(
+                        "Medication Reminder",
+                        f"Take {notification[self.labels[j+1]]} dose of {notification['Medicine Name']}",
+                        notification[self.labels[j+4]]
+                        ))
+            self.logger.debug(self.notifications[i])
         self.len = len(self.notifications)
         
         global print
@@ -368,7 +381,7 @@ class Program(ctk.CTk, Questions):
         self.logger.debug("Scheduling notifications")
         for notif in notifications:
             self.logger.debug("notif: {0}".format(notif))
-            schedule.every().day.at(notif.time).do(notif.send)    
+            schedule.every().day.at(notif.time).do(notif.send)
 
     def show_register_api_pages(self):
         sheets = InformationPages(self.logger)
