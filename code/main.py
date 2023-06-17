@@ -68,14 +68,8 @@ class Program(ctk.CTk, Questions):
         self.notifications = medicines
         self.logger.info("Loading medicine notifications into memory")
         for i in range(len(self.notifications)):
-            notification = self.notifications.pop(0)
-            for j in range(3):
-                if notification[self.labels[j+1]] != "0":
-                    self.notifications.append(Notification(
-                        "Medication Reminder",
-                        f"Take {notification[self.labels[j+1]]} dose of {notification['Medicine Name']}",
-                        notification[self.labels[j+4]]
-                        ))
+            notif = self.notifications.pop(0)
+            self.add_notifs(notif)
             self.logger.debug(self.notifications[i])
         self.len = len(self.notifications)
         
@@ -369,9 +363,9 @@ class Program(ctk.CTk, Questions):
 
     def update(self) -> None:
         if len(self.notifications) != self.len:
-            notif = self.notifications[-1]
-            schedule.every().day.at(notif.time).do(notif.send)
-            print("WHAT")
+            for i in range(1, 4):
+                notif = self.notifications[-i]
+                schedule.every().day.at(notif.time).do(notif.send)
             self.len = len(self.notifications)
         schedule.run_pending()
         tmp = self.notifications
@@ -382,6 +376,32 @@ class Program(ctk.CTk, Questions):
         for notif in notifications:
             self.logger.debug("notif: {0}".format(notif))
             schedule.every().day.at(notif.time).do(notif.send)
+
+    def add_minutes(self, data, hh, mm, i, minutes):
+        return str(timedelta(seconds=int(hh) * 3600 + int(mm) * 60 + minutes))[0:-3] + " " + data[self.labels[i+4]][-2] + data[self.labels[i+4]][-1]
+
+    def add_notifs(self, data):
+        for i in range(3):
+            hh, mm = data[self.labels[i+4]][0:-2].split(":")
+            before = False
+            if data[self.labels[7]] == "Before":
+                before = True
+            else:
+                before = False
+            for j in range(3):
+                minutes = 0
+                if j == 0:
+                    minutes -= 1800
+                if j == 2:
+                    minutes += 1800
+                if before:
+                    minutes -= 1800
+                if data[self.labels[i+1]] != "0":
+                    self.notifications.append(Notification(
+                        "Medication Reminder",
+                        f"Take {data[self.labels[i+1]]} dose of {data['Medicine Name']} {data[self.labels[7]].lower()} {self.labels[i+4].lower()}",
+                        self.add_minutes(data, hh, mm, i, minutes)
+                        ))
 
     def show_register_api_pages(self):
         sheets = InformationPages(self.logger)

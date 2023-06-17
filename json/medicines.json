@@ -24,9 +24,19 @@
         "Morning": "1",
         "Afternoon": "1",
         "Evening": "0",
-        "Breakfast Time": "5:00 AM",
-        "Lunch Time": "5:01 AM",
-        "Dinner Time": "5:02 AM",
-        "Before/After Meal": "Before"
+        "Breakfast Time": "5:08 AM",
+        "Lunch Time": "5:09 AM",
+        "Dinner Time": "5:10 AM",
+        "Before/After Meal": "After"
+    },
+    {
+        "Medicine Name": "Bobo",
+        "Morning": "1",
+        "Afternoon": "0",
+        "Evening": "1",
+        "Breakfast Time": "5:15 AM",
+        "Lunch Time": "10:00 AM",
+        "Dinner Time": "10:00 PM",
+        "Before/After Meal": "After"
     }
 ]

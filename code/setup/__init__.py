@@ -10,6 +10,7 @@ from datetime import date
 from CTkMessagebox import CTkMessagebox
 from plyer import notification
 from datetime import datetime
+from datetime import timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 

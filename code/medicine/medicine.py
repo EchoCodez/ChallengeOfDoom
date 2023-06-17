@@ -58,14 +58,7 @@ class Medicine:
             feeds.extend([data])
             with open("json/medicines.json", 'w', encoding="utf-8") as f:
                 json.dump(feeds, f, indent=4)
-            notifs = self.master.notifications
-            for i in range(3):
-                if data[self.labels[i+1]] != "0":
-                    notifs.append(Notification(
-                        "Medication Reminder",
-                        f"Take {data[self.labels[i+1]]} dose of {data['Medicine Name']}",
-                        data[self.labels[i+4]]
-                        ))
+            self.master.add_notifs(data)
             self.master.home()
 
         except Exception as e:
