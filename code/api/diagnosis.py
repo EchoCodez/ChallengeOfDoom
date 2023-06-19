@@ -81,8 +81,4 @@ class Diagnosis:
             )
         jsonUtils.overwrite(response.json(), file)
         return jsonUtils.read(file)
-
-
-class ApiTokenError(Exception):
-    pass
     
