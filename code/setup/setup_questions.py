@@ -17,6 +17,7 @@ class Questions:
     # TODO: Add information pages to tell user how to create API medic account
     def __init__(self) -> None:
         self.__appearance = tk.StringVar(value="light")
+        self._selected_conditions: list = None
     
     def set_appearance(self) -> None:
         '''Choose dark or light theme for custom tkinter'''
@@ -124,7 +125,7 @@ class Questions:
             
         return conditions
     
-    def get_previous_medical_conditions(self, font="Default", file="json/conditions.json") -> None: # CustomQuestion
+    def _get_previous_medical_conditions(self, font="Default") -> None: # CustomQuestion
         """Create checkboxes of previous medical conditions
 
         Parameters:
@@ -134,10 +135,7 @@ class Questions:
         
         def continue_button():
             self.__conditions = {key: value.get() for key, value in self.__conditions.items() if value.get()}
-            jsonUtils.overwrite(
-                {"conditions": list(self.__conditions.keys())},
-                file=file
-                )
+            self._selected_conditions = list(self.__conditions.keys())
             self.quit()
 
              

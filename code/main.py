@@ -25,7 +25,7 @@ class Program(ctk.CTk, Questions):
         
         def quit_app(event):
             self.logger.info("QUITTING")
-            sys.exit(0)
+            os._exit(0)
             
         self.logger = setup_logging()
         self.title("Congressional App Challenge 2023")
@@ -76,7 +76,7 @@ class Program(ctk.CTk, Questions):
         global print
         print = self.logger.debug
         
-    def raise_exception(self, **kwargs) -> Exception:
+    def raise_exception(self, **kwargs) -> CTkMessagebox:
         return CTkMessagebox(self, **kwargs)
     
     def on_closing(self) -> None:
@@ -171,24 +171,17 @@ class Program(ctk.CTk, Questions):
             self,
             "Daily Checkup",
             self.logger,
-            CustomQuestion(self.get_previous_medical_conditions, kwargs={"file": "json/conditions.json"})
+            CustomQuestion(self._get_previous_medical_conditions)
         ).begin()
         
         self.quit()
         
-        loading = ctk.CTkLabel(
-            self,
-            text="Saving results to health log", # TODO
-            font=("Times New Roman", 50)
-        )
-        loading.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-        
-        test_results = jsonUtils.read("json/conditions.json")
+        test_results = self._selected_conditions.copy()
         user = jsonUtils.get_values()
         
         conditions = user.conditions.copy()
         
-        for condition in test_results["conditions"]:
+        for condition in test_results:
             conditions+= [jsonUtils.search(
                 conditions_list,
                 sentinal=condition,
@@ -206,19 +199,10 @@ class Program(ctk.CTk, Questions):
         )
         
         call_api(user=edited_user)
-        
-        loading.destroy()
+        self.logger.debug("Finished gathering data")
         
         self._show_diagnosis_results()
         self.home()
-    
-    def open_health_log(self) -> None:
-        MCQbuiler(
-            self,
-            "Daily Checkup",
-            self.logger,
-            CustomQuestion(self.get_previous_medical_conditions, kwargs={"file": "json/conditions.json"})
-        ).begin()
      
     def _show_diagnosis_results(self, font: str | tuple[str, int] = ("Times New Roman", 35)) -> None:
         self.clean()

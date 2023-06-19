@@ -34,19 +34,26 @@ class Medicine:
                 int(hours)
                 if len(hours) != 1:
                     if int(elements[i].get()[0])*10+int(elements[i].get()[1]) > 12:
+                        self.logger.debug("Exiting Program")
                         raise SystemError
                     if int(elements[i].get()[3])*10+int(elements[i].get()[4]) > 60:
+                        self.logger.debug("Exiting Program")
                         raise SystemError
                     if elements[i].get()[2] != ":":
+                        self.logger.debug("Exiting Program")
                         raise SystemError
                     if elements[i].get()[6]+elements[i].get()[7] != "AM" and elements[i].get()[6]+elements[i].get()[7] != "PM":
+                        self.logger.debug("Exiting Program")
                         raise SystemError
                 else:
                     if int(elements[i].get()[2])*10+int(elements[i].get()[3]) > 60:
+                        self.logger.debug("Exiting Program")
                         raise SystemError
                     if elements[i].get()[1] != ":":
+                        self.logger.debug("Exiting Program")
                         raise SystemError
                     if elements[i].get()[5]+elements[i].get()[6] != "AM" and elements[i].get()[5]+elements[i].get()[6] != "PM":
+                        self.logger.debug("Exiting Program")
                         raise SystemError
             self.logger.debug([element.get() for element in elements])
             data = {}
