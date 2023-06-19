@@ -172,7 +172,12 @@ class Program(ctk.CTk, Questions):
             "Daily Checkup",
             self.logger,
             CustomQuestion(self._get_previous_medical_conditions)
-        ).begin()
+        ).begin(
+            title_next="Data gathered!",
+            continue_text="Diagnose me",
+            next_button_width=300,
+            next_button_height=70
+            )
         
         self.quit()
         

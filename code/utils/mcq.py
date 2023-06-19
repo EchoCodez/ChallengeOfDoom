@@ -78,7 +78,7 @@ class MCQbuiler(UseLogger):
         next_button.place(relx=0.5, rely=0.6, anchor=tk.CENTER)
         self.root.mainloop()
     
-    def _start_questions(self, scored_quiz = False) -> list[bool] | list[str]:
+    def _start_questions(self, scored_quiz = False, **kwargs) -> list[bool] | list[str]:
         """Wrapper for iterating through and creating questions
 
         Parameters:
@@ -108,7 +108,6 @@ class MCQbuiler(UseLogger):
                 raise TypeError("Invalid Question {0}".format(question))
             
             self.clean()
-            self.logger.debug("Next Question")
             self._index+=1
             
             if self.answer is not None:
@@ -173,7 +172,17 @@ class MCQbuiler(UseLogger):
 
         self.root.mainloop()
         
-    def _end(self, title_next="The End!", continue_text = "Finish", title_font= ("DEFAULT", 50), continue_font=("DEFAULT", 30), **kwargs):
+        
+    def _end(
+        self,
+        title_next="The End!",
+        continue_text = "Finish",
+        title_font= ("DEFAULT", 50),
+        continue_font=("DEFAULT", 30),
+        next_button_width: int = 140,
+        next_button_height: int = 28,
+        **kwargs
+        ) -> None:
         """Creates the end screen of quiz
 
         Parameters:
@@ -185,6 +194,10 @@ class MCQbuiler(UseLogger):
             title_font (tuple, optional): Font options for title. Defaults to `("DEFAULT", 50)`.
             
             continue_font (tuple, optional): Font options for button. Defaults to `("DEFAULT", 30)`.
+            
+            next_button_width (int, optional): height of next button on end screen. Defaults to 140
+            
+            next_button_height (int, optional): height of next button on end screen. Defaults to 28
         """
         self.logger.debug("ended")
         
@@ -200,7 +213,9 @@ class MCQbuiler(UseLogger):
             self.root,
             text=continue_text,
             font=continue_font,
-            command=self.root.quit
+            command=self.root.quit,
+            width=next_button_width,
+            height=next_button_height
         )
         
         ctk_title.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
