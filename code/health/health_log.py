@@ -56,23 +56,33 @@ class Day(ctk.CTkButton):
             command=self.open_log
         )
         self.log = None
+        self.days = None # list of days
         self.fulldate = fulldate
-        self.isactive = False
-        self.days = None
+
+    @property
+    def isactive(self):
+        return self.log is not None
 
     def open_log(self):
+        '''Open a new window containing information about that date'''
+        
         if not self.days:
             raise Exception("Days must be passed in before creating log")
+        
+        # delete previous day windows so only one log is open at a time
         for day in self.days:
             if day.isactive:
-                day.log.destroy()
-                
-        self.log = Log(self.master, self.fulldate)
-        self.isactive = True
+                day.destroy()
         
+        # create window
+        self.log = Log(self.master, self.fulldate)
+    
     def destroy(self):
+        '''Destroy log and set `self.log=None`'''
+        
         self.log.destroy()
-        self.isactive = False
+        self.log = None
+
         
     def add_days(self, *days: Day):
         self.days = days
