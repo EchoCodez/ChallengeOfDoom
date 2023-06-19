@@ -14,11 +14,13 @@ from datetime import timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 
-# file imports
+# folder imports
 from utils import *
 from api import *
 from health import *
 from medicine import *
+
+# setup file imports
 from setup.special import Settings, InformationPages
 from setup.setup_questions import Questions
 from setup.setup import setup_logging, get_information_texts
