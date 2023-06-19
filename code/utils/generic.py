@@ -6,6 +6,7 @@ from logging import Logger
 import customtkinter as ctk
 from datetime import date, datetime
 
+# aliases
 DATE = date | datetime | str
 DATES = date | datetime
 
@@ -90,4 +91,9 @@ class FileHandler(UseLogger):
             )
             return f"Diagnosis Results for {path} not found"
         
+class HomepageSection(ctk.CTkButton):
+    def __init__(self, *args, **kwargs):
+        placement = kwargs.pop("placement")
+        super().__init__(*args, **kwargs)
+        self.place(**placement)
     

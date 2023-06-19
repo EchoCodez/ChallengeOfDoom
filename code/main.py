@@ -301,7 +301,7 @@ class Program(ctk.CTk, Questions):
         self.logger.debug("Reached Home Screen")
         self.clean()
         
-        ctk.CTkButton( # top left
+        HomepageSection( # top left
             self,
             fg_color="#ADD8E6",
             text="Medicine Log",
@@ -311,9 +311,10 @@ class Program(ctk.CTk, Questions):
             width=self.winfo_screenwidth()*0.2,
             font=("Times New Roman", 30),
             text_color="#000000",
-            ).place(relx=0.15, rely=0.3, anchor=tk.CENTER)
+            placement={"relx":0.15, "rely":0.3, "anchor":tk.CENTER}
+            )
         
-        ctk.CTkButton( # bottom right
+        HomepageSection( # bottom right
             self,
             text="Daily Diagnosis",
             command=self._diagnose,
@@ -322,10 +323,11 @@ class Program(ctk.CTk, Questions):
             width=self.winfo_screenwidth()*0.2,
             text_color="#000000",
             font=("Times New Roman", 30),
-            corner_radius=40
-            ).place(relx=0.85, rely=0.6, anchor=tk.CENTER)
+            corner_radius=40,
+            placement={"relx":0.85, "rely":0.6, "anchor":tk.CENTER}
+            )
         
-        ctk.CTkButton( # bottom left
+        HomepageSection( # bottom left
             self,
             fg_color="#ADD8E6",
             text="Settings",
@@ -335,8 +337,10 @@ class Program(ctk.CTk, Questions):
             width=self.winfo_screenwidth()*0.2,
             font=("Times New Roman", 30),
             text_color="#000000",
-            ).place(relx=0.15, rely=0.75, anchor=tk.CENTER)
-        ctk.CTkButton( # top right
+            placement={"relx":0.15, "rely":0.75, "anchor":tk.CENTER}
+            )
+        
+        HomepageSection( # top right
             self,
             text="Health Log",
             fg_color="#ADD8E6",
@@ -346,7 +350,8 @@ class Program(ctk.CTk, Questions):
             width=self.winfo_screenwidth()*0.2,
             font=("Times New Roman", 30),
             text_color="#000000",
-            ).place(relx=0.85, rely=0.15, anchor=tk.CENTER)
+            placement={"relx":0.85, "rely":0.15, "anchor":tk.CENTER}
+        )
         
         self.mainloop()
 

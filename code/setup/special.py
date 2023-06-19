@@ -37,7 +37,8 @@ class Settings:
         button_settings = (
             ("Delete Diagnosis Logs", FileHandler(self.logger).delete_logs, {}),
             ("Delete Health Logs", lambda: FileHandler(self.logger).delete_logs([]), {}),
-            ("Delete Medicine Logs", lambda: FileHandler(self.logger).delete_logs([]), {})
+            ("Delete Medicine Logs", lambda: FileHandler(self.logger).delete_logs([]), {}),
+            ("Delete all data", lambda: jsonUtils.clearfiles(clearlogs=True))
         )
         
         for name, command, kwargs in switch_settings:
@@ -139,6 +140,8 @@ class Settings:
             "pady": 50,
             "sticky": tk.E
             } | kwargs.pop("button_place_kwargs", {})
+        
+        
         
         label_kwargs = {
             "column":0,
