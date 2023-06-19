@@ -1,0 +1,1 @@
+from api.diagnosis import Diagnosis
