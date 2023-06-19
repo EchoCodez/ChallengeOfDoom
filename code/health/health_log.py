@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import customtkinter as ctk
 from datetime import datetime
 from calendar import monthrange
@@ -36,37 +38,50 @@ class Calendar:
             days.append(day)
             if (num+1)%7==0:
                 week+=1
-        
+                
+        for day in days:
+            day.add_days(*days)
+            
         self.logger.debug([element._text for element in days])
         if mainloop:
             self.master.mainloop()
 
 class Day(ctk.CTkButton):
-    def __init__(self, num: int, offset: int, master: ctk.CTk, fulldate: str) -> None:
+    def __init__(self, num: int, offset: int, master: ctk.CTk, fulldate: str) -> None:      
         super().__init__(
-                master, 
-                text=f"{num-offset}",
-                height=140,
-                font=("Default", 30),
-                fg_color=None,
-                command=self.open_log
-                )
+            master, 
+            text=f"{num-offset}",
+            height=140,
+            font=("Default", 30),
+            command=self.open_log
+        )
         self.log = None
-        self.win = None
         self.fulldate = fulldate
+        self.isactive = False
+        self.days = None
 
     def open_log(self):
-        if self.win is None:
-            self.win = Log(self.master, self.fulldate)
-        else:
-            self.win.destroy()
-            self.win = None
-            self.open_log()
+        if not self.days:
+            raise Exception("Days must be passed in before creating log")
+        for day in self.days:
+            if day.isactive:
+                day.log.destroy()
+                
+        self.log = Log(self.master, self.fulldate)
+        self.isactive = True
+        
+    def destroy(self):
+        self.log.destroy()
+        self.isactive = False
+        
+    def add_days(self, *days: Day):
+        self.days = days
+    
     
 class Log(ctk.CTkToplevel):
     def __init__(self, master, title) -> None:
         super().__init__(master,)
-        self.geometry("400x300")
+        self.geometry("400x300+0+0")
         super(Log, self).title(title)
 
         self.label = ctk.CTkLabel(self, text=f"")
