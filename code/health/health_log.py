@@ -31,7 +31,7 @@ class Calendar:
         days = []
         for num in range(1, month+1):
             num += offset
-            day = Day(num, offset, self.master)
+            day = Day(num, offset, self.master, f"{today.month}/{num-offset}/{today.year}")
             day.grid(row=week, column=num%7, padx=5, pady=5)
             days.append(day)
             if (num+1)%7==0:
@@ -42,7 +42,7 @@ class Calendar:
             self.master.mainloop()
 
 class Day(ctk.CTkButton):
-    def __init__(self, num: int, offset: int, master: ctk.CTk) -> None:
+    def __init__(self, num: int, offset: int, master: ctk.CTk, fulldate: str) -> None:
         super().__init__(
                 master, 
                 text=f"{num-offset}",
@@ -52,14 +52,22 @@ class Day(ctk.CTkButton):
                 command=self.open_log
                 )
         self.log = None
+        self.win = None
+        self.fulldate = fulldate
 
     def open_log(self):
-        win = Log()
+        if self.win is None:
+            self.win = Log(self.master, self.fulldate)
+        else:
+            self.win.destroy()
+            self.win = None
+            self.open_log()
     
 class Log(ctk.CTkToplevel):
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, master, title) -> None:
+        super().__init__(master,)
         self.geometry("400x300")
+        super(Log, self).title(title)
 
         self.label = ctk.CTkLabel(self, text=f"")
         self.label.pack(padx=20, pady=20)
