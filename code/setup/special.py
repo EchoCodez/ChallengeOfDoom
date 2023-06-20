@@ -38,7 +38,7 @@ class Settings:
             ("Delete Diagnosis Logs", FileHandler(self.logger).delete_logs, {}),
             ("Delete Health Logs", lambda: FileHandler(self.logger).delete_logs([]), {}),
             ("Delete Medicine Logs", lambda: FileHandler(self.logger).delete_logs([]), {}),
-            ("Delete all data", lambda: jsonUtils.clearfiles(clearlogs=True))
+            ("Delete all data", lambda: jsonUtils.clearfiles(clearlogs=True), {})
         )
         
         for name, command, kwargs in switch_settings:
@@ -132,7 +132,7 @@ class Settings:
         '''
         
         width, height = kwargs.pop("width", 300), kwargs.pop("height", 72)
-        font, button_font = kwargs.pop("font", None), kwargs.pop("button_font", None)
+        font = kwargs.pop("font", None)
         
         button_kwargs = {
             "column":4,
@@ -140,8 +140,6 @@ class Settings:
             "pady": 50,
             "sticky": tk.E
             } | kwargs.pop("button_place_kwargs", {})
-        
-        
         
         label_kwargs = {
             "column":0,
@@ -168,13 +166,29 @@ class Settings:
             **label_creation_kwargs
         ).grid(**label_kwargs)
         
+        temp_placements = button_kwargs.copy()
+        TRANSPARENT = "#00000000"
+        for i in range(1, button_kwargs["column"]):
+            temp_placements["column"] = i
+            
+            ctk.CTkButton(
+                self.master,
+                width=width,
+                height=height,
+                text="",
+                fg_color=TRANSPARENT,
+                bg_color=TRANSPARENT,
+                hover_color=TRANSPARENT,
+                border_color=TRANSPARENT,
+                text_color=TRANSPARENT
+            ).grid(**temp_placements)
+        
         ctk.CTkButton(
             self.master,
             command=command,
             width=width,
             height=height,
-            font=button_font,
-            text="",
+            text="f",
             **button_creation_kwargs
         ).grid_configure(**button_kwargs)
 
