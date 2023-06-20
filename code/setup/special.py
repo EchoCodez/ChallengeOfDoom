@@ -135,7 +135,7 @@ class Settings:
         font = kwargs.pop("font", None)
         
         button_kwargs = {
-            "column":4,
+            "column":6,
             "row":int(self.y_place*10),
             "pady": 50,
             "sticky": tk.E
@@ -167,8 +167,8 @@ class Settings:
         ).grid(**label_kwargs)
         
         temp_placements = button_kwargs.copy()
-        TRANSPARENT = "#00000000"
-        for i in range(1, button_kwargs["column"]):
+        TRANSPARENT = self.master.cget("bg")
+        for i in range(label_kwargs["columnspan"]+1, button_kwargs["column"]):
             temp_placements["column"] = i
             
             ctk.CTkButton(
@@ -177,10 +177,9 @@ class Settings:
                 height=height,
                 text="",
                 fg_color=TRANSPARENT,
-                bg_color=TRANSPARENT,
                 hover_color=TRANSPARENT,
                 border_color=TRANSPARENT,
-                text_color=TRANSPARENT
+                text_color=TRANSPARENT,
             ).grid(**temp_placements)
         
         ctk.CTkButton(
