@@ -12,7 +12,7 @@ class Settings:
         self.master = master
         self.logger = logger
         self.logger.debug("Settings Clicked")
-        self.y_place = 0.3
+        self.row = 0
         self.show_settings()
     
     def show_settings(self, mainloop=True, font=("", 50)) -> dict | None:
@@ -76,14 +76,30 @@ class Settings:
         """
         
         width, height = kwargs.pop("width", 300), kwargs.pop("height", 72)
-        font, switch_font = kwargs.pop("font", None), kwargs.pop("switch_font", None)
+        font = kwargs.pop("font", None)
+        
         var = kwargs.pop("var", tk.StringVar)()
-        switch_kwargs = kwargs.pop("switch_place_kwargs", {"relx":0.7, "rely":self.y_place, "anchor":tk.CENTER})
-        label_kwargs = kwargs.pop("label_place_kwargs", {"relx":0.2, "rely":self.y_place, "anchor":tk.CENTER})
+        
+        switch_kwargs = {
+            "column":6,
+            "row":self.row,
+            "sticky": tk.E,
+            "pady": 50,
+            } | kwargs.pop("switch_place_kwargs", {})
+        
+        label_kwargs = {
+            "column":0,
+            "row":self.row,
+            "sticky": tk.E,
+            "pady": 50,
+            "padx": 50,
+            "columnspan": 2
+            } | kwargs.pop("label_place_kwargs", {})
+        
         on, off = kwargs.pop("on_off", ("on", "off"))
         command = kwargs.pop("command", None)
         switch_creation_kwargs, label_creation_kwargs = kwargs.pop("switch_kwargs", {}), kwargs.pop("label_kwargs", {})
-        self.y_place+=.1
+        self.row+=1
         
         if kwargs:
             raise TypeError("Invalid kwargs {0}".format(kwargs))
@@ -94,6 +110,15 @@ class Settings:
             font=font,
             **label_creation_kwargs
         )
+        
+        self._create_invisible_buttons(
+            label_kwargs["column"]+label_kwargs["columnspan"]+1,
+            switch_kwargs["column"],
+            switch_kwargs.copy(),
+            width,
+            height
+            )
+        
         ctk.CTkSwitch(
             self.master,
             onvalue=on,
@@ -102,17 +127,14 @@ class Settings:
             command=command,
             switch_width=width,
             switch_height=height,
-            font=switch_font,
             text="",
             **switch_creation_kwargs
-        ).place(**switch_kwargs)
-        l.place(**label_kwargs)
+        ).grid(**switch_kwargs)
+        l.grid(**label_kwargs)
         return var
 
     def _create_button_setting(self, name: str, **kwargs) -> None:
         '''
-        WORK IN PROGRESS!!!!!!!!!!
-        
         Create a setting button controlled by a switch
 
         Parameters:
@@ -136,14 +158,14 @@ class Settings:
         
         button_kwargs = {
             "column":6,
-            "row":int(self.y_place*10),
+            "row":self.row,
             "pady": 50,
             "sticky": tk.E
             } | kwargs.pop("button_place_kwargs", {})
         
         label_kwargs = {
             "column":0,
-            "row":int(self.y_place*10),
+            "row":self.row,
             "pady": 30,
             "padx": 50,
             "sticky": tk.W,
@@ -153,10 +175,10 @@ class Settings:
         label_creation_kwargs = kwargs.pop("label_kwargs", {})
         button_creation_kwargs = kwargs.pop("button_kwargs", {})
         
-        self.y_place+=.1
+        self.row+=1
         
         if kwargs:
-            raise TypeError("Invalid kwargs {0}".format(kwargs))
+            raise TypeError(f"Invalid kwargs {kwargs}")
         
         
         ctk.CTkLabel(
@@ -167,9 +189,37 @@ class Settings:
         ).grid(**label_kwargs)
         
         temp_placements = button_kwargs.copy()
+        
+        self._create_invisible_buttons(
+            label_kwargs["column"]+label_kwargs["columnspan"]+1,
+            button_kwargs["column"],
+            temp_placements,
+            width,
+            height
+            )
+        
+        ctk.CTkButton(
+            self.master,
+            command=command,
+            width=width,
+            height=height,
+            text="Click here",
+            **button_creation_kwargs
+        ).grid_configure(**button_kwargs)
+
+    def _create_invisible_buttons(
+            self,
+            start: int,
+            end: int,
+            temp_placements: dict,
+            width: int,
+            height:int
+        ) -> None:
+        
         TRANSPARENT = self.master.cget("bg")
-        for i in range(label_kwargs["columnspan"]+1, button_kwargs["column"]):
-            temp_placements["column"] = i
+        
+        for col in range(start, end):
+            temp_placements["column"] = col
             
             ctk.CTkButton(
                 self.master,
@@ -181,15 +231,6 @@ class Settings:
                 border_color=TRANSPARENT,
                 text_color=TRANSPARENT,
             ).grid(**temp_placements)
-        
-        ctk.CTkButton(
-            self.master,
-            command=command,
-            width=width,
-            height=height,
-            text="f",
-            **button_creation_kwargs
-        ).grid_configure(**button_kwargs)
 
 class InformationPages(UseLogger):
     _pages: INFORMATION_PAGES = []
