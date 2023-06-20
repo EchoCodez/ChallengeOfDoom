@@ -29,6 +29,7 @@ Click on the folder you extracted the GitHub repository too. You have officially
 # Running the program
 1. Download python (3.10 or higher preferred) from [here](https://www.python.org/downloads/). Run the installer, and if you are on Windows, make sure to put a check on adding python and pip to your path.
 2. Then open a new terminal in VSCode. ![Open Terminal in VS Code](images/create_new_terminal.jpg)
+
 In this terminal, type `pip install poetry`.
 3. After poetry has finished installing, type in the terminal `poetry install`. It should install all required packages.
 4. Navigate to `code/main.py` and run the `py` file. The app should now run and show you a setup scene!
