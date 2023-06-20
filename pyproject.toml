@@ -6,15 +6,15 @@ authors = []
 
 [tool.poetry.dependencies]
 python = '^3.10'
-tkinter = '>= 2.2'
-customtkinter = '>=4.5.6'
-CTkMessagebox = ">=1."
+tk = '>= 0.1'
+customtkinter = '>=5.2'
+CTkMessagebox = ">=2.0"
 google = ">=3.0"
-schedule = ">=1"
-plyer = ">=1"
-apscheduler = ">=1"
-google_auth_ouathlib = ">=1"
-googleapiclient = ">=1"
+schedule = ">=1.2"
+plyer = ">=2.1"
+apscheduler = ">=3.9"
+google-auth-oauthlib = ">=1.0"
+google-api-python-client = ">=2.89"
 
 [build-system]
 requires = ['poetry-core~=1.0']
