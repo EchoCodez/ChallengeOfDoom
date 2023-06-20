@@ -51,7 +51,7 @@ class Day(ctk.CTkButton):
                 fg_color=None,
                 command=self.open_log
                 )
-        self.log, self.win = None
+        self.log, self.win = None, None
         self.fulldate = fulldate
         self.calendar = calendar
 
