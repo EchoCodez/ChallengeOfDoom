@@ -2,28 +2,30 @@
 Check out the website of the creators:
 - https://jasongrace2282.github.io
 
-# Downloading the program
-- To do: Use PyInstaller and InstallForge to create the builder- 
-    x, y, z
-- Cloning the GitHub repository
-Alternatively, you could go to our GitHub repository (linked <a href=https://github.com/EchoCodez/ChallengeOfDoom>here</a>) and clone it from here.
-On Windows:
-1. Go to the code button on the top right:<br> ![Code Button](images/code_button.png)
+#  Downloading the program
 
-2. Click on it and select download zip. <br>![Download Zip](images/download_zip.png)
+- To do: Use PyInstaller and InstallForge to create the builder-
 
-3. Now navigate to the zipped file and click extract all. Remember your extracted location.<br> ![Save Extraction Location](images/extract_zip.png)
+x, y, z
 
-4. Now open a new window in Visual Studio Code (download [here](https://code.visualstudio.com/download)). Click open folder.<br> ![Open New Folder in VS Code](images/open_folder_vscode.png)
+- Cloning the GitHub repository<br>Alternatively, you could go to our GitHub repository (linked <a  href=https://github.com/EchoCodez/ChallengeOfDoom>here</a>) and clone it from here.<br>On Windows:
 
-5. Click on the folder you extracted the GitHub repository too. You have officially cloned the repository!
+    1. Go to the code button on the top right:<br> ![Code Button](images/code_button.png)
 
-# Running the program
-1. Download python (3.10 or higher preferred) from [here](https://www.python.org/downloads/). Run the installer, and if you are on Windows, make sure to put a check on adding python and pip to your path.
-2. Then open a new terminal in VSCode. ![Open Terminal in VS Code](images/create_new_terminal.jpg)<br>In this terminal, type `pip install poetry`.
-3. After poetry has finished installing, type in the terminal `poetry install`. It should install all required packages.
-4. Navigate to `code/main.py` and run the `py` file. The app should now run and show you a setup scene!
-5. Congratulations, you have now installed and ran the program!
+	2. Click on it and select download zip. <br>![Download Zip](images/download_zip.png)
+
+	3. Now navigate to the zipped file and click extract all. Remember your extracted location.<br> ![Save Extraction Location](images/extract_zip.png)
+
+	4. Now open a new window in Visual Studio Code (download [here](https://code.visualstudio.com/download)). Click open folder.<br> ![Open New Folder in VS Code](images/open_folder_vscode.png)
+
+	5. Click on the folder you extracted the GitHub repository too. You have officially cloned the repository!
+
+    # Running the program
+    1. Download python (3.10 or higher preferred) from [here](https://www.python.org/downloads/). Run the installer, and if you are on Windows, make sure to put a check on adding python and pip to your path.
+    2. Then open a new terminal in VSCode. ![Open Terminal in VS Code](images/create_new_terminal.jpg)<br>In this terminal, type `pip install poetry`.
+    3. After poetry has finished installing, type in the terminal `poetry install`. It should install all required packages.
+    4. Navigate to `code/main.py` and run the `py` file. The app should now run and show you a setup scene!
+    5. Congratulations, you have now installed and ran the program!
 
 # Directory Structure
 ```bash
