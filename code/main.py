@@ -362,7 +362,6 @@ class Program(ctk.CTk, Questions):
                 schedule.every().day.at(notif.time).do(notif.send)
             self.len = len(self.notifications)
         schedule.run_pending()
-        tmp = self.notifications
         self.after(16, self.update)
         
     def activate_notifs(self, notifications: list[Notification]) -> None:

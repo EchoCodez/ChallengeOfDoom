@@ -8,55 +8,5 @@
         "Lunch Time": "4:56 AM",
         "Dinner Time": "4:57 AM",
         "Before/After Meal": "Before"
-    },
-    {
-        "Medicine Name": "Quantum",
-        "Morning": "1",
-        "Afternoon": "0",
-        "Evening": "1",
-        "Breakfast Time": "4:58 AM",
-        "Lunch Time": "4:58 AM",
-        "Dinner Time": "4:59 AM",
-        "Before/After Meal": "Before"
-    },
-    {
-        "Medicine Name": "ez dubs",
-        "Morning": "1",
-        "Afternoon": "1",
-        "Evening": "0",
-        "Breakfast Time": "5:08 AM",
-        "Lunch Time": "5:09 AM",
-        "Dinner Time": "5:10 AM",
-        "Before/After Meal": "After"
-    },
-    {
-        "Medicine Name": "Bobo",
-        "Morning": "1",
-        "Afternoon": "0",
-        "Evening": "1",
-        "Breakfast Time": "5:15 AM",
-        "Lunch Time": "10:00 AM",
-        "Dinner Time": "10:00 PM",
-        "Before/After Meal": "After"
-    },
-    {
-        "Medicine Name": "COOOLNESS",
-        "Morning": "1",
-        "Afternoon": "0",
-        "Evening": "1",
-        "Breakfast Time": "1:53 AM",
-        "Lunch Time": "1:54 AM",
-        "Dinner Time": "1:55 AM",
-        "Before/After Meal": "Before"
-    },
-    {
-        "Medicine Name": "COOOOOOOOOOOOOLNES",
-        "Morning": "1",
-        "Afternoon": "1",
-        "Evening": "1",
-        "Breakfast Time": "2:10 AM",
-        "Lunch Time": "2:11 AM",
-        "Dinner Time": "2:12 AM",
-        "Before/After Meal": "After"
     }
 ]
