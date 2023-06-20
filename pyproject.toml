@@ -2,7 +2,7 @@
 name = 'Congressional App Challenge'
 version = '1.0'
 description = "Congressional App Challenge 2023"
-authors = ["JasonGrace2282 <aarush.deshpande@gmail.com>"]
+authors = []
 
 [tool.poetry.dependencies]
 python = '^3.10'
