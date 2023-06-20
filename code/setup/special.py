@@ -11,13 +11,19 @@ class Settings:
     def __init__(self, master: ctk.CTk, logger: Logger) -> None:
         self.master = master
         self.logger = logger
+        self.screen = master.master if not isinstance(master, ctk.CTk) else master
         self.logger.debug("Settings Clicked")
         self.row = 0
         self.show_settings()
+        self.logger.debug("Done")
+    
+    def clean(self):
+        for w in self.screen.winfo_children():
+            w.destroy()
     
     def show_settings(self, mainloop=True, font=("", 50)) -> dict | None:
         from utils import FileHandler
-        self.master.clean()
+        self.clean()
         self.setting_vars = {}
         
         def swap_mode():
@@ -216,7 +222,7 @@ class Settings:
             height:int
         ) -> None:
         
-        TRANSPARENT = self.master.cget("bg")
+        TRANSPARENT = self.screen.cget("bg")
         
         for col in range(start, end):
             temp_placements["column"] = col
