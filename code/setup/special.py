@@ -237,17 +237,17 @@ class InformationPages(UseLogger):
     
     @property
     def pages(self) -> INFORMATION_PAGES:
-        return self._pages
+        return self._current_page_numberages
     
     @pages.setter
     def pages(self, pages: INFORMATION_PAGES) -> InformationPages:
         if not all(isinstance(page, (InformationSheet, CustomQuestion)) for page in pages):
             raise TypeError("Pages must be an list of pages")
-        self._pages = pages
+        self._current_page_numberages = pages
         return self
     
     def add_pages(self, *pages: InformationSheet) -> InformationPages:
-        self.pages+=pages
+        self.pages = self.pages+pages
         return self
     
     def create_pages(self, master: ctk.CTk, **content_kwargs) -> list:
@@ -262,7 +262,7 @@ class InformationPages(UseLogger):
                 command=_quit
             ).place(relx=0.8, rely=0.8, anchor="center")
             
-            if self._p != 0:
+            if self._current_page_number != 0:
                 ctk.CTkButton(
                     master,
                     text="Back",
@@ -297,22 +297,20 @@ class InformationPages(UseLogger):
             for w in master.winfo_children():
                 w.destroy()
             self.logger.debug("Going back a page")
-            self._p-=2
+            self._current_page_number-=2
         
         # Driver code
-        
-        self._p = 0
+        self._current_page_number = 0
         results = []
         state = content_kwargs.pop("state", "normal")
         
-        while self._p < len(self):
+        while self._current_page_number < len(self):
             for w in master.winfo_children():
                 w.destroy()
             
-            page: InformationSheet | CustomQuestion = self[self._p]
+            page: InformationSheet | CustomQuestion = self[self._current_page_number]
             if isinstance(page, InformationSheet):
                 create_page(page)
-                master.mainloop()
             else:
                 results+=[page.question(*page.args, **page.kwargs)]
                 
@@ -328,9 +326,8 @@ class InformationPages(UseLogger):
                     command=back,
                 ).place(relx=0.2, rely=0.8, anchor=tk.CENTER)
                 
-                master.mainloop()
-                
-            self._p+=1
+            master.mainloop()    
+            self._current_page_number+=1
 
         self.logger.debug(results)
         return results
@@ -339,21 +336,21 @@ class InformationPages(UseLogger):
         return self.__copy__()
     
     def __copy__(self) -> InformationPages:
-        return InformationPages(*self._pages)
+        return InformationPages(*self._current_page_numberages)
             
     def __iadd__(self, __o: InformationSheet, /) -> None:
         self.pages += [ __o ]
         return self
         
     def __repr__(self) -> str:
-        pages = '\n'.join(self._pages)
+        pages = '\n'.join(self._current_page_numberages)
         return f"{type(self).__name__}(pages={pages})"
             
     def __len__(self) -> int:
-        return self._pages.__len__()
+        return self._current_page_numberages.__len__()
             
     def __getitem__(self, arg: int | slice) -> InformationSheet:
-        return self._pages[arg] if isinstance(arg, int) else self._pages[arg.start:arg.stop:arg.step]
+        return self._current_page_numberages[arg] if isinstance(arg, int) else self._current_page_numberages[arg.start:arg.stop:arg.step]
             
     def __iter__(self) -> list:
-        return self._pages.__iter__()
+        return self._current_page_numberages.__iter__()
