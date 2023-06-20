@@ -6,10 +6,13 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from email.mime.text import MIMEText
+from utils.parse_json import jsonUtils
+from logging import Logger
 
 class Notification:
-    def __init__(self, title: str, message: str, time: str, increment: int =1440):
+    def __init__(self, title: str, message: str, time: str, logger: Logger, increment: int =1440):
         self.title = title
+        self.logger = logger
         self.message = message
         if len(time) != 8:
             self.time = "0" + time
@@ -21,18 +24,30 @@ class Notification:
             self.time = self.time[0:5]+":00"
         self.increment = increment
 
-    def send(self):
-        notification.notify(
-            title = self.title,
-            message = self.message,
-        )
         self.credentials_file = 'json/credentials.json'
         self.token_file = 'json/token.json'
         self.scopes = ['https://www.googleapis.com/auth/gmail.send']
         
         self.sender_email = 'healthapp317@gmail.com'
-        self.recipient_email = 'mihir.nimkar@gmail.com'
+        self.recipient_email = ""
+        provider = jsonUtils.read("json/user-data.json")["provider"]
+        contact = jsonUtils.read("json/user-data.json")["contact"]
+        if provider == "Email":
+            self.recipient_email = contact
+        elif provider == "T-Mobile":
+            self.recipient_email = contact + "@tmomail.net"
+        elif provider == "Verizon":
+            self.recipient_email = contact + "@vtext.com"
+        elif provider == "AT&T":
+            self.recipient_email = contact + "@txt.att.net"
 
+
+    def send(self):
+        notification.notify(
+            title = self.title,
+            message = self.message,
+        )
+        self.logger.debug("Message sent successfuly to computer!")
         self.send_email(self.sender_email, self.recipient_email)
 
     def send_email(self, sender, to):
@@ -56,10 +71,10 @@ class Notification:
         try:
             message = (service.users().messages().send(userId="me", body=email)
                     .execute())
-            print('Message sent successfully.')
+            self.logger.debug('Message sent successfully by email/phone!')
             return message
         except HttpError as error:
-            print('An error occurred:', error)        
+            self.logger.debug(error)        
     
     def __repr__(self) -> str:
         return "{0}(title={1}, message={2}, time={3})".format(self.__class__.__name__, self.title, self.message, self.time)

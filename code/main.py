@@ -43,7 +43,7 @@ class Program(ctk.CTk, Questions):
             6: "Dinner Time",
             7: "Before/After Meal",
         }
-        if (self.winfo_screenwidth(), self.winfo_screenheight()) != (1920, 1080):
+        """if (self.winfo_screenwidth(), self.winfo_screenheight()) != (1920, 1080):
             self.logger.debug(f"Screen dimensions {self.winfo_screenwidth()}x{self.winfo_screenheight()} are not recommended")
             answer = self.raise_exception(
                 title="Screen Dimensions",
@@ -56,7 +56,7 @@ class Program(ctk.CTk, Questions):
             if answer.get() == "Quit":
                 self.on_closing()
         else:
-            self.logger.debug("User has good screen dimensions")
+            self.logger.debug("User has good screen dimensions")"""
         
         if not jsonUtils.open(preferences).get("setup_finished", False):
             Questions.__init__(
@@ -117,6 +117,7 @@ class Program(ctk.CTk, Questions):
             CustomQuestion(self.set_appearance if not set_theme() else lambda: None),
             Question("What is your gender?", ["Male", "Female"]),
             CustomQuestion(self.get_year_of_birth),
+            CustomQuestion(self.get_contact),
             include_end=False
         )
         answers = prequiz.begin()
@@ -394,7 +395,8 @@ class Program(ctk.CTk, Questions):
                     self.notifications.append(Notification(
                         "Medication Reminder",
                         f"Take {data[self.labels[i+1]]} dose of {data['Medicine Name']} {data[self.labels[7]].lower()} {self.labels[i+4].lower()}",
-                        self.add_minutes(data, hh, mm, i, minutes)
+                        self.add_minutes(data, hh, mm, i, minutes),
+                        self.logger
                         ))
 
     def show_register_api_pages(self):
