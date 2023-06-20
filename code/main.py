@@ -357,9 +357,10 @@ class Program(ctk.CTk, Questions):
 
     def update(self) -> None:
         if len(self.notifications) != self.len:
-            for i in range(1, 4):
-                notif = self.notifications[-i]
+            for i in range(self.len, len(self.notifications)):
+                notif = self.notifications[i]
                 schedule.every().day.at(notif.time).do(notif.send)
+                print(notif)
             self.len = len(self.notifications)
         schedule.run_pending()
         self.after(16, self.update)
