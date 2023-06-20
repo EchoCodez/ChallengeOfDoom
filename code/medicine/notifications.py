@@ -35,7 +35,7 @@ class Notification:
 
         self.send_email(self.sender_email, self.recipient_email)
 
-    def get_authenticated_service(self):
+    def send_email(self, sender, to):
         flow = InstalledAppFlow.from_client_secrets_file(self.credentials_file, self.scopes)
         if os.path.exists(self.token_file):
             credentials = Credentials.from_authorized_user_file(self.token_file, self.scopes)
@@ -46,30 +46,20 @@ class Notification:
                 token.write(credentials.to_json())
 
         service = build('gmail', 'v1', credentials=credentials)
-        return service
 
-    def send_email(self, sender, to):
-        service = self.get_authenticated_service()
-
-        email = self.create_message(sender, to, self.title, self.message)
-        self.send_message(service, 'me', email)
-
-    def create_message(self, sender, to, subject, message_text):
-        message = MIMEText(message_text)
+        message = MIMEText(self.message)
         message['to'] = to
         message['from'] = sender
-        message['subject'] = subject
+        message['subject'] = self.title
         raw_message = base64.urlsafe_b64encode(message.as_bytes()).decode('utf-8')
-        return {'raw': raw_message}
-
-    def send_message(self, service, user_id, message):
+        email = {'raw': raw_message}
         try:
-            message = (service.users().messages().send(userId=user_id, body=message)
+            message = (service.users().messages().send(userId="me", body=email)
                     .execute())
             print('Message sent successfully.')
             return message
         except HttpError as error:
-            print('An error occurred:', error)
+            print('An error occurred:', error)        
     
     def __repr__(self) -> str:
         return "{0}(title={1}, message={2}, time={3})".format(self.__class__.__name__, self.title, self.message, self.time)
