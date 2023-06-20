@@ -328,11 +328,20 @@ class Program(ctk.CTk, Questions):
             placement={"relx":0.85, "rely":0.6, "anchor":tk.CENTER}
             )
         
+        def create_settings():
+            frame = ctk.CTkScrollableFrame(
+                self,
+                width=self.winfo_screenwidth()-100,
+                height=self.winfo_screenheight()-100
+            ) # not working
+            frame = self
+            Settings(frame, self.logger)
+        
         HomepageSection( # bottom left
             self,
             fg_color="#ADD8E6",
             text="Settings",
-            command=lambda: Settings(self, self.logger),
+            command=create_settings,
             corner_radius=40,
             height=self.winfo_screenheight()*0.25,
             width=self.winfo_screenwidth()*0.2,
