@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import customtkinter as ctk
 from datetime import datetime
 from calendar import monthrange
@@ -33,66 +31,35 @@ class Calendar:
         days = []
         for num in range(1, month+1):
             num += offset
-            day = Day(num, offset, self.master, f"{today.month}/{num-offset}/{today.year}")
+            day = Day(num, offset, self.master)
             day.grid(row=week, column=num%7, padx=5, pady=5)
             days.append(day)
             if (num+1)%7==0:
                 week+=1
-                
-        for day in days:
-            day.add_days(*days)
-            
+        
         self.logger.debug([element._text for element in days])
         if mainloop:
             self.master.mainloop()
 
 class Day(ctk.CTkButton):
-    def __init__(self, num: int, offset: int, master: ctk.CTk, fulldate: str) -> None:      
+    def __init__(self, num: int, offset: int, master: ctk.CTk) -> None:
         super().__init__(
-            master, 
-            text=f"{num-offset}",
-            height=140,
-            font=("Default", 30),
-            command=self.open_log
-        )
+                master, 
+                text=f"{num-offset}",
+                height=140,
+                font=("Default", 30),
+                fg_color=None,
+                command=self.open_log
+                )
         self.log = None
-        self.days = None # list of days
-        self.fulldate = fulldate
-
-    @property
-    def isactive(self):
-        return self.log is not None
 
     def open_log(self):
-        '''Open a new window containing information about that date'''
-        
-        if not self.days:
-            raise Exception("Days must be passed in before creating log")
-        
-        # delete previous day windows so only one log is open at a time
-        for day in self.days:
-            if day.isactive:
-                day.destroy()
-        
-        # create window
-        self.log = Log(self.master, self.fulldate)
-    
-    def destroy(self):
-        '''Destroy log and set `self.log=None`'''
-        
-        self.log.destroy()
-        self.log = None
-
-        
-    def add_days(self, *days: Day):
-        self.days = days
-    
+        win = Log()
     
 class Log(ctk.CTkToplevel):
-    def __init__(self, master, title) -> None:
-        super().__init__(master,)
-        self.geometry("400x300+0+0")
-        super(Log, self).title(title)
+    def __init__(self) -> None:
+        super().__init__()
+        self.geometry("400x300")
 
         self.label = ctk.CTkLabel(self, text=f"")
         self.label.pack(padx=20, pady=20)
