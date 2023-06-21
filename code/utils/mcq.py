@@ -110,6 +110,7 @@ class MCQbuiler(UseLogger):
             self.clean()
             self._index+=1
             
+            self.logger.debug(f"Answer to this question was {self.answer}")
             if self.answer is not None:
                 self.results[self._index] = self.answer
                 

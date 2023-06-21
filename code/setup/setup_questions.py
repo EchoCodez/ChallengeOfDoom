@@ -14,7 +14,6 @@ conditions_list = "json/symptoms.json"
 
 class Questions:
     '''Setup questions for application'''
-    # TODO: Add information pages to tell user how to create API medic account
     def __init__(self) -> None:
         self.__appearance = tk.StringVar(value="light")
         self._selected_conditions: list = None
@@ -32,6 +31,7 @@ class Questions:
         
         def cont():
             jsonUtils.write({"appearance_theme":self.__appearance.get()}, file=preferences)
+            self.logger.debug(f"Successfully wrote appearance theme {self.__appearance.get()} to file")
             self.quit()
         
         # get user input for choice of theme

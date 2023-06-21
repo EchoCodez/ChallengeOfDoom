@@ -243,13 +243,13 @@ class InformationPages(UseLogger):
     
     @property
     def pages(self) -> INFORMATION_PAGES:
-        return self._current_page_numberages
+        return self._pages
     
     @pages.setter
     def pages(self, pages: INFORMATION_PAGES) -> InformationPages:
         if not all(isinstance(page, (InformationSheet, CustomQuestion)) for page in pages):
             raise TypeError("Pages must be an list of pages")
-        self._current_page_numberages = pages
+        self._pages = pages
         return self
     
     def add_pages(self, *pages: InformationSheet) -> InformationPages:
@@ -353,10 +353,10 @@ class InformationPages(UseLogger):
         return f"{type(self).__name__}(pages={pages})"
             
     def __len__(self) -> int:
-        return self._current_page_numberages.__len__()
+        return self.pages.__len__()
             
     def __getitem__(self, arg: int | slice) -> InformationSheet:
-        return self._current_page_numberages[arg] if isinstance(arg, int) else self._current_page_numberages[arg.start:arg.stop:arg.step]
+        return self.pages[arg] if isinstance(arg, int) else self._current_page_numberages[arg.start:arg.stop:arg.step]
             
     def __iter__(self) -> list:
-        return self._current_page_numberages.__iter__()
+        return self.pages.__iter__()

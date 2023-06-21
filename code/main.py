@@ -62,6 +62,13 @@ class Program(ctk.CTk, Questions):
             Questions.__init__(
             self=self
             )
+            self.setup()
+            self.show_register_api_pages()
+            jsonUtils.write({"setup_finished": True}, file=preferences)
+            self.logger.debug(jsonUtils.get_values())
+
+        set_theme()
+            
         
         medicines = jsonUtils.read("json/medicines.json")
         
@@ -427,7 +434,7 @@ class Program(ctk.CTk, Questions):
         username, password = sheets.create_pages(
             self,
             font=("DEFAULT", 30),
-            text_color="#FFFFFF",
+            text_color="#FFFFFF" if self.cget("bg")=="gray14" else "#000000",
             state="disabled",
             wrap="word"
             )[0]
@@ -464,15 +471,7 @@ class Program(ctk.CTk, Questions):
         
         return username, password
 
-    def execute(self) -> None:
-        if not jsonUtils.open(preferences).get("setup_finished", False):
-            self.setup()
-            self.show_register_api_pages()
-            jsonUtils.write({"setup_finished": True}, file=preferences)
-            self.logger.debug(jsonUtils.get_values())
-        else:
-            set_theme()
-    
+    def execute(self) -> None:    
         try:
             os.system("taskkill /im HealthApp.exe")
         except Exception: # ignore keyboard interrupt
@@ -502,4 +501,4 @@ def main(*, erase_data: bool = False) -> None:
 
 
 if __name__ == "__main__":
-    main(erase_data=False)
+    main(erase_data=True)
