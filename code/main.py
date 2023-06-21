@@ -305,8 +305,8 @@ class Program(ctk.CTk, Questions):
         HomepageSection( # top left
             self,
             fg_color="#ADD8E6",
-            text="Medicine Log",
-            command=self.medicine,
+            text="Health Log",
+            command=self.health_log,
             corner_radius=40,
             height=self.winfo_screenheight()*0.55,
             width=self.winfo_screenwidth()*0.2,
@@ -352,9 +352,9 @@ class Program(ctk.CTk, Questions):
         
         HomepageSection( # top right
             self,
-            text="Health Log",
+            text="Medicine Log",
             fg_color="#ADD8E6",
-            command=self.health_log,
+            command=self.medicine,
             corner_radius=40,
             height=self.winfo_screenheight()*0.25,
             width=self.winfo_screenwidth()*0.2,
