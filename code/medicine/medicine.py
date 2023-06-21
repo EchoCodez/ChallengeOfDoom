@@ -34,27 +34,20 @@ class Medicine:
                 int(hours)
                 if len(hours) != 1:
                     if int(elements[i].get()[0])*10+int(elements[i].get()[1]) > 12:
-                        self.logger.warning("An Error occured when processing the date/time for medicines")
-                        raise ValueError("Invalid Time Format for medicine")
+                        raise ValueError
                     if int(elements[i].get()[3])*10+int(elements[i].get()[4]) > 60:
-                        self.logger.warning("An Error occured when processing the date/time for medicines")
-                        raise ValueError("Invalid Time Format for medicine")
+                        raise ValueError
                     if elements[i].get()[2] != ":":
-                        self.logger.warning("An Error occured when processing the date/time for medicines")
-                        raise ValueError("Invalid Time Format for medicine")
+                        raise ValueError
                     if elements[i].get()[6]+elements[i].get()[7] != "AM" and elements[i].get()[6]+elements[i].get()[7] != "PM":
-                        self.logger.warning("An Error occured when processing the date/time for medicines")
-                        raise ValueError("Invalid Time Format for medicine")
+                        raise ValueError
                 else:
                     if int(elements[i].get()[2])*10+int(elements[i].get()[3]) > 60:
-                        self.logger.warning("An Error occured when processing the date/time for medicines")
-                        raise ValueError("Invalid Time Format for medicine")
+                        raise ValueError
                     if elements[i].get()[1] != ":":
-                        self.logger.warning("An Error occured when processing the date/time for medicines")
-                        raise ValueError("Invalid Time Format for medicine")
+                        raise ValueError
                     if elements[i].get()[5]+elements[i].get()[6] != "AM" and elements[i].get()[5]+elements[i].get()[6] != "PM":
-                        self.logger.warning("An Error occured when processing the date/time for medicines")
-                        raise ValueError("Invalid Time Format for medicine")
+                        raise ValueError
             self.logger.debug([element.get() for element in elements])
             data = {}
             for i in range(8):
