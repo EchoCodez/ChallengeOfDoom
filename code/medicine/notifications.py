@@ -29,17 +29,10 @@ class Notification:
         self.scopes = ['https://www.googleapis.com/auth/gmail.send']
         
         self.sender_email = 'healthapp317@gmail.com'
-        self.recipient_email = ""
-        provider = jsonUtils.read("json/user-data.json")["provider"]
-        contact = jsonUtils.read("json/user-data.json")["contact"]
-        if provider == "Email":
-            self.recipient_email = contact
-        elif provider == "T-Mobile":
-            self.recipient_email = contact + "@tmomail.net"
-        elif provider == "Verizon":
-            self.recipient_email = contact + "@vtext.com"
-        elif provider == "AT&T":
-            self.recipient_email = contact + "@txt.att.net"
+        self.recipient_email = jsonUtils.read("json/user-data.json")["contact"]
+        self.we_good = True
+        if "@" not in self.recipient_email or "." not in self.recipient_email:
+            self.we_good = False
 
 
     def send(self):
@@ -48,7 +41,8 @@ class Notification:
             message = self.message,
         )
         self.logger.debug("Message sent successfuly to computer!")
-        self.send_email(self.sender_email, self.recipient_email)
+        if self.we_good:
+            self.send_email(self.sender_email, self.recipient_email)
 
     def send_email(self, sender, to):
         flow = InstalledAppFlow.from_client_secrets_file(self.credentials_file, self.scopes)

@@ -230,35 +230,10 @@ class Questions:
     def get_contact(self, font = ("None", 50)):
         def verify_and_continue():
             contact = typer.get().strip()
-            provider = menu.get().strip()
-            we_good = False
-            if provider == "Skip":
-                we_good = True
-            elif provider == "Email":
-                if "@" in contact and "." in contact:
-                    we_good = True
-            else:
-                if len(contact) == 10:
-                    we_good = True
-            
-            if we_good:
-                jsonUtils.write(
-                    data={"contact": contact}
-                )
-                jsonUtils.write(
-                    data={"provider": provider}
-                )
-                self.quit()
-            else:
-                CTkMessagebox(self, title="Contact Error",message=f"Make sure email is valid", icon="cancel")
-        
-        menu = ctk.CTkOptionMenu(
-            self,
-            width=100,
-            height=30,
-            font=("Times New Roman", 25),
-            values=["Skip", "Email", "T-Mobile", "Verizon", "AT&T"]
-        )
+            jsonUtils.write(
+                data={"contact": contact}
+            )
+            self.quit()
 
         typer = ctk.CTkEntry(
             self,
@@ -276,13 +251,13 @@ class Questions:
         
         subtitle = ctk.CTkLabel(
             self,
-            text="Enter your phone number in the format xxxxxxxxxx where x is one digit of the phone number",
+            text="Enter your email in the format youremail@example.com.",
             font=("", 20)
         )
 
         subtitle2 = ctk.CTkLabel(
             self,
-            text="OR Enter your email in the format youremail@example.com. Choose skip from the dropdown if you want to only be notified on the computer.",
+            text="Note that leaving blank or inputting an invalid adress will result in no emails being sent for notifications.",
             font=("", 20)
         )
 
@@ -294,7 +269,6 @@ class Questions:
         title.pack(pady=100)
         subtitle.pack(pady=20)
         subtitle2.pack(pady=5)
-        menu.pack(pady=50)
         typer.pack(pady=20)
         next_button.pack(pady=20)
         self.mainloop()
