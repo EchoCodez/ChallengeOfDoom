@@ -6,6 +6,7 @@ from apscheduler.triggers.cron import CronTrigger
 from CTkMessagebox import CTkMessagebox
 import tkinter as tk
 import customtkinter as ctk
+import re
 import sys, os
 import webbrowser
 import time, schedule
