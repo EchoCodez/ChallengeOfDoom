@@ -44,20 +44,20 @@ class Program(ctk.CTk, Questions):
             6: "Dinner Time",
             7: "Before/After Meal",
         }
-        # if (self.winfo_screenwidth(), self.winfo_screenheight()) != (1920, 1080):
-        #     self.logger.debug(f"Screen dimensions {self.winfo_screenwidth()}x{self.winfo_screenheight()} are not recommended")
-        #     answer = self.raise_exception(
-        #         title="Screen Dimensions",
-        #         message=f"Your screen dimensions are not of the recommended 1980x1080 pixels. This may cause some errors.\
-        #             \nCurrent dimensions: {self.winfo_screenwidth()}x{self.winfo_screenheight()}",
-        #         icon="warning",
-        #         option_1="Quit",
-        #         option_2="Understood",
-        #     )
-        #     if answer.get() == "Quit":
-        #         self.on_closing()
-        # else:
-        #     self.logger.debug("User has good screen dimensions")
+        if (self.winfo_screenwidth(), self.winfo_screenheight()) != (1920, 1080):
+            self.logger.debug(f"Screen dimensions {self.winfo_screenwidth()}x{self.winfo_screenheight()} are not recommended")
+            answer = self.raise_exception(
+                title="Screen Dimensions",
+                message=f"Your screen dimensions are not of the recommended 1980x1080 pixels. This may cause some errors.\
+                    \nCurrent dimensions: {self.winfo_screenwidth()}x{self.winfo_screenheight()}",
+                icon="warning",
+                option_1="Quit",
+                option_2="Understood",
+            )
+            if answer.get() == "Quit":
+                self.on_closing()
+        else:
+            self.logger.debug("User has good screen dimensions")
         
         if not jsonUtils.open(preferences).get("setup_finished", False):
             Questions.__init__(
