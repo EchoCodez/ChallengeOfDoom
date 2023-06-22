@@ -14,9 +14,9 @@ conditions_list = "json/symptoms.json"
 
 class Questions:
     '''Setup questions for application'''
-    # TODO: Add information pages to tell user how to create API medic account
     def __init__(self) -> None:
         self.__appearance = tk.StringVar(value="light")
+        self._selected_conditions: list = None
     
     def set_appearance(self) -> None:
         '''Choose dark or light theme for custom tkinter'''
@@ -31,6 +31,7 @@ class Questions:
         
         def cont():
             jsonUtils.write({"appearance_theme":self.__appearance.get()}, file=preferences)
+            self.logger.debug(f"Successfully wrote appearance theme {self.__appearance.get()} to file")
             self.quit()
         
         # get user input for choice of theme
@@ -124,7 +125,7 @@ class Questions:
             
         return conditions
     
-    def get_previous_medical_conditions(self, font="Default", file="json/conditions.json") -> None: # CustomQuestion
+    def _get_previous_medical_conditions(self, font="Default") -> None: # CustomQuestion
         """Create checkboxes of previous medical conditions
 
         Parameters:
@@ -134,10 +135,7 @@ class Questions:
         
         def continue_button():
             self.__conditions = {key: value.get() for key, value in self.__conditions.items() if value.get()}
-            jsonUtils.overwrite(
-                {"conditions": list(self.__conditions.keys())},
-                file=file
-                )
+            self._selected_conditions = list(self.__conditions.keys())
             self.quit()
 
              
@@ -171,14 +169,25 @@ class Questions:
 
     def get_year_of_birth(self, font = ("None", 50)): # CustomQuestion
         def verify_and_continue():
-            typed = typer.get(1.0, tk.END).strip()
+            typed = typer.get().strip()
             year = datetime.now().year
             self.logger.info(f"User typed {typed} as input for date of birth")
             
-            birth_year = int(re.sub("\D", "", typed))
+            birth_year = re.sub("\D", "", typed)
+            
+            if birth_year == "":
+                CTkMessagebox(
+                    self,
+                    title="Date of Birth Submission Error",
+                    message=f"Expected year between 1930 and {year}, but got \"{typed}\"",
+                    icon="cancel"
+                )
+                return
+            
+            birth_year = int(birth_year)
             self.logger.debug(f"Transformed {typed} to {birth_year}")
             
-            if int(birth_year) not in range(1930, year+1):
+            if birth_year not in range(1930, year+1):
                 self.logger.info(f"User entered date of birth outside 1930 and {year}")
                 CTkMessagebox(self, title="Date of Birth Submission Error",message=f"Must be a year between 1930 and {year}", icon="cancel")
             else:
@@ -189,9 +198,14 @@ class Questions:
                 self.logger.info(f"Birth year {birth_year} succesfully written to file")
                 self.quit()
         
-        typer = ctk.CTkTextbox(self, width=400, font=("Times New Roman", 25))
-        typer.insert(tk.END, "Type Here")
-        
+        typer = ctk.CTkEntry(
+            self,
+            width=400,
+            height=400,
+            font=("Times New Roman", 25),
+            placeholder_text="Type Here"
+            )
+
         title = ctk.CTkLabel(
             self,
             text="What year were you born?",
@@ -209,6 +223,52 @@ class Questions:
         )
         title.pack(pady=100)
         subtitle.pack(pady=20)
+        typer.pack(pady=20)
+        next_button.pack(pady=20)
+        self.mainloop()
+
+    def get_contact(self, font = ("None", 50)):
+        def verify_and_continue():
+            contact = typer.get().strip()
+            jsonUtils.write(
+                data={"contact": contact}
+            )
+            self.quit()
+
+        typer = ctk.CTkEntry(
+            self,
+            width=200,
+            height=50,
+            font=("Times New Roman", 25),
+            placeholder_text="Type Here"
+            )
+
+        title = ctk.CTkLabel(
+            self,
+            text="Enter contact information",
+            font=font
+        )
+        
+        subtitle = ctk.CTkLabel(
+            self,
+            text="Enter your email in the format youremail@example.com.",
+            font=("", 20)
+        )
+
+        subtitle2 = ctk.CTkLabel(
+            self,
+            text="Note that leaving blank or inputting an invalid adress will result in no emails being sent for notifications.",
+            font=("", 20)
+        )
+
+        next_button = ctk.CTkButton(
+            self,
+            text="Next",
+            command=verify_and_continue
+        )
+        title.pack(pady=100)
+        subtitle.pack(pady=20)
+        subtitle2.pack(pady=5)
         typer.pack(pady=20)
         next_button.pack(pady=20)
         self.mainloop()

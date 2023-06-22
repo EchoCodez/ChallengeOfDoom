@@ -85,20 +85,31 @@ class jsonUtils:
             f.write("{}")
     
     @staticmethod
-    def clearfiles(files: tuple[str]=files) -> None:
+    def clearfiles(files: tuple[str]=files, clearlogs = False) -> None:
         """wrapper for doing:
         ```
         for file in files:
             jsonUtils.clearfile(file=file)
+            
+        if clearlogs:
+            for log in jsonUtils.read("json/logs.json")["logs_list"]:
+                jsonUtils.delete_file(log)
+            jsonUtils.overwrite({"logs_list": []}, file="json/logs.json")
         ```
 
         Parameters:
         ----------
-            files (tuple[str], optional): an iterable of file names to clear. Defaults to ("preferences.json", "user-data.json").
+            files (tuple[str], optional): an iterable of file names to clear. Defaults to ("preferences.json", "user-data.json").\n
+            clearlogs (bool, optional): clear old health diagnosis logs. Defaults to False.
         """
             
         for file in files:
             jsonUtils.clearfile(file=file)
+            
+        if clearlogs:
+            for log in jsonUtils.read("json/logs.json")["logs_list"]:
+                jsonUtils.delete_file(log)
+            jsonUtils.overwrite({"logs_list": []}, file="json/logs.json")
     
     @staticmethod
     def get(file: StringIO, sentinal: str|int, *, func: Callable = lambda x: None) -> bool:

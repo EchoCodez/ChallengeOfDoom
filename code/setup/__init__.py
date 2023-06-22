@@ -1,23 +1,23 @@
 # library imports
-import tkinter as tk
-import customtkinter as ctk
-import os
-import sys
-import time
-import schedule
-import webbrowser
-from datetime import date
-from CTkMessagebox import CTkMessagebox
+from datetime import datetime, timedelta, date
 from plyer import notification
-from datetime import datetime
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
+from CTkMessagebox import CTkMessagebox
+import tkinter as tk
+import customtkinter as ctk
+import re
+import sys, os
+import webbrowser
+import time, schedule
 
-# file imports
-from setup.setup_questions import Questions
-from setup.health_log import Calendar, Log
-from medicine.medicine import Medicine
-from setup.setup import setup_logging, get_information_texts
-from api.diagnosis import Diagnosis
+# folder imports
 from utils import *
-from medicine.notifications import Notification
+from api import *
+from health import *
+from medicine import *
+
+# setup file imports
+from setup.special import Settings, InformationPages
+from setup.setup_questions import Questions
+from setup.setup import setup_logging, get_information_texts

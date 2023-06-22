@@ -1,4 +1,8 @@
 {
-    "birth_year": 1980,
-    "gender": "Male"
+    "birth_year": 1970,
+    "gender": null,
+    "api_username": "",
+    "api_password": "",
+    "contact": "youremail@example.com",
+    "provider": "Verizon"
 }

@@ -21,7 +21,7 @@ class Medicine:
     def submit(self, elements) -> None:
         
         try:
-            '''for i in range(1, 4):
+            for i in range(1, 4):
                 int(elements[i].get())
             if elements[0] == "":
                 raise SystemError
@@ -34,20 +34,20 @@ class Medicine:
                 int(hours)
                 if len(hours) != 1:
                     if int(elements[i].get()[0])*10+int(elements[i].get()[1]) > 12:
-                        raise SystemError
+                        raise ValueError
                     if int(elements[i].get()[3])*10+int(elements[i].get()[4]) > 60:
-                        raise SystemError
+                        raise ValueError
                     if elements[i].get()[2] != ":":
-                        raise SystemError
+                        raise ValueError
                     if elements[i].get()[6]+elements[i].get()[7] != "AM" and elements[i].get()[6]+elements[i].get()[7] != "PM":
-                        raise SystemError
+                        raise ValueError
                 else:
                     if int(elements[i].get()[2])*10+int(elements[i].get()[3]) > 60:
-                        raise SystemError
+                        raise ValueError
                     if elements[i].get()[1] != ":":
-                        raise SystemError
+                        raise ValueError
                     if elements[i].get()[5]+elements[i].get()[6] != "AM" and elements[i].get()[5]+elements[i].get()[6] != "PM":
-                        raise SystemError'''
+                        raise ValueError
             self.logger.debug([element.get() for element in elements])
             data = {}
             for i in range(8):
@@ -58,12 +58,7 @@ class Medicine:
             feeds.extend([data])
             with open("json/medicines.json", 'w', encoding="utf-8") as f:
                 json.dump(feeds, f, indent=4)
-            notifs = self.master.notifications
-            notifs.append(Notification(
-                "Medication Reminder",
-                f"Take {data['Morning']} dose of {data['Medicine Name']}",
-                data["Breakfast Time"]
-                ))
+            self.master.add_notifs(data)
             self.master.home()
 
         except Exception as e:

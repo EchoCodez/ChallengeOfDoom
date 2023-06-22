@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import tkinter as tk
 import customtkinter as ctk
 from logging import Logger
@@ -41,7 +39,6 @@ class MCQbuiler(UseLogger):
         self.iterator = (i for i in self.questions)
         self.root = root
         self.name = name
-        self.correct = False
         self.include_start = include_start
         self.include_end = include_end
     
@@ -81,7 +78,7 @@ class MCQbuiler(UseLogger):
         next_button.place(relx=0.5, rely=0.6, anchor=tk.CENTER)
         self.root.mainloop()
     
-    def _start_questions(self, scored_quiz = False) -> list[bool] | list[str]:
+    def _start_questions(self, scored_quiz = False, **kwargs) -> list[bool] | list[str]:
         """Wrapper for iterating through and creating questions
 
         Parameters:
@@ -97,22 +94,27 @@ class MCQbuiler(UseLogger):
             `list[bool] | list[str]`: list of correct and incorrect answers | list of user results as strings
         """
         
-        results = []
-        for question in self:
+        self.results = [None] * len(self)
+        self._index = 0
+        while self._index < len(self):
+            
+            question = self[self._index]
+            
             if isinstance(question, Question):
                 self._create_question(question)
             elif isinstance(question, CustomQuestion):
-                result = question.question(*question.args, **question.kwargs)
-                if result is not None:
-                    self.correct = result
+                self.answer = question.question(*question.args, **question.kwargs)
             elif question() is not None:
                 raise TypeError("Invalid Question {0}".format(question))
             
             self.clean()
-            self.logger.debug("Next Question")
+            self._index+=1
             
-            results.append(self.correct)
-        return [x==q.correct_answer for x, q in zip(results, self)] if scored_quiz else results
+            self.logger.debug(f"Answer to this question was {self.answer}")
+            if self.answer is not None:
+                self.results[self._index] = self.answer
+                
+        return [x==q.correct_answer for x, q in zip(self.results, self)] if scored_quiz else self.results
     
     def _create_question(self, question: Question, **kwargs):
         """Creates question if `isinstance(question, Question)`
@@ -131,7 +133,7 @@ class MCQbuiler(UseLogger):
         )
         q.pack(pady=kwargs.get("question_pady", 100))
         
-        option = tk.StringVar() # what option they chose
+        option = tk.StringVar(value=answers[0]) # what option they chose
         
         for answer in answers:
             button = ctk.CTkRadioButton(
@@ -144,8 +146,14 @@ class MCQbuiler(UseLogger):
             button.pack(pady=20)
         
         def leave():
-            self.logger.debug(option.get())
-            self.correct = option.get()
+            self.logger.debug(f"User choose option {option.get()}")
+            self.answer = option.get()
+            self.root.quit()
+        
+        def back():
+            self.logger.debug("User went back a page")
+            self.answer = None
+            self._index-=2
             self.root.quit()
         
         next_button = ctk.CTkButton(
@@ -154,11 +162,28 @@ class MCQbuiler(UseLogger):
             command=leave
         )
         
-        next_button.pack(pady=10)
+        next_button.place(relx=0.8, rely=0.8, anchor=tk.CENTER)
+
+        if self._index:
+            ctk.CTkButton(
+                self.root,
+                text="Back",
+                command=back
+            ).place(relx=0.2, rely=0.8, anchor = tk.CENTER)
 
         self.root.mainloop()
         
-    def _end(self, title_next="The End!", continue_text = "Finish", title_font= ("DEFAULT", 50), continue_font=("DEFAULT", 30), **kwargs):
+        
+    def _end(
+        self,
+        title_next="The End!",
+        continue_text = "Finish",
+        title_font= ("DEFAULT", 50),
+        continue_font=("DEFAULT", 30),
+        next_button_width: int = 140,
+        next_button_height: int = 28,
+        **kwargs
+        ) -> None:
         """Creates the end screen of quiz
 
         Parameters:
@@ -170,6 +195,10 @@ class MCQbuiler(UseLogger):
             title_font (tuple, optional): Font options for title. Defaults to `("DEFAULT", 50)`.
             
             continue_font (tuple, optional): Font options for button. Defaults to `("DEFAULT", 30)`.
+            
+            next_button_width (int, optional): height of next button on end screen. Defaults to 140
+            
+            next_button_height (int, optional): height of next button on end screen. Defaults to 28
         """
         self.logger.debug("ended")
         
@@ -185,7 +214,9 @@ class MCQbuiler(UseLogger):
             self.root,
             text=continue_text,
             font=continue_font,
-            command=self.root.quit
+            command=self.root.quit,
+            width=next_button_width,
+            height=next_button_height
         )
         
         ctk_title.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
@@ -208,12 +239,18 @@ class MCQbuiler(UseLogger):
         
         if self.include_end:
             self._end(**kwargs)
+        else:
+            self.clean()
         
         self.logger.debug("Ended Quiz")
         
         return answers
         
-    def __iter__(self) -> MCQbuiler:
+    def __iter__(self) -> list[Question | CustomQuestion]:
         return self.questions.__iter__()
     
+    def __getitem__(self, *args) -> Question | CustomQuestion:
+        return self.questions.__getitem__(*args)
         
+    def __len__(self) -> int:
+        return self.questions.__len__()

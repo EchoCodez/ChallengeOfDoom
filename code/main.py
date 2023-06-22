@@ -1,3 +1,4 @@
+from __future__ import annotations
 from setup import *
 
 
@@ -13,7 +14,7 @@ class Program(ctk.CTk, Questions):
         ctk (str): window background color, tuple: (light_color, dark_color) or single color
     """    
     
-    def __init__(self, fg = None) -> None:
+    def __init__(self: Program, fg = None) -> None:
         '''
         Initilize self and set up program, if not already set up
         '''
@@ -25,7 +26,7 @@ class Program(ctk.CTk, Questions):
         
         def quit_app(event):
             self.logger.info("QUITTING")
-            sys.exit(0)
+            os._exit(0)
             
         self.logger = setup_logging()
         self.title("Congressional App Challenge 2023")
@@ -33,6 +34,16 @@ class Program(ctk.CTk, Questions):
         self.bind("<Button-2>", quit_app) # for testing code faster
         self.geometry(f"{self.winfo_screenwidth()}x{self.winfo_screenheight()}+0+0")
         self.focus_force()
+        self.labels = {
+            0: "Medicine Name",
+            1: "Morning", 
+            2: "Afternoon", 
+            3: "Evening",
+            4: "Breakfast Time",
+            5: "Lunch Time",
+            6: "Dinner Time",
+            7: "Before/After Meal",
+        }
         if (self.winfo_screenwidth(), self.winfo_screenheight()) != (1920, 1080):
             self.logger.debug(f"Screen dimensions {self.winfo_screenwidth()}x{self.winfo_screenheight()} are not recommended")
             answer = self.raise_exception(
@@ -52,26 +63,29 @@ class Program(ctk.CTk, Questions):
             Questions.__init__(
             self=self
             )
+            # self.setup()
+            self.show_register_api_pages()
+            jsonUtils.write({"setup_finished": True}, file=preferences)
+            self.logger.debug(jsonUtils.get_values())
+
+        set_theme()
+            
         
-        self.resizable(width=True, height=True)
         medicines = jsonUtils.read("json/medicines.json")
         
-        self.notifications: list[Notification] = medicines
+        self.notifications = medicines
         self.logger.info("Loading medicine notifications into memory")
-        for idx, notif in enumerate(self.notifications):
-            self.notifications[idx] = Notification(
-                "Medication Reminder",
-                f"Take {notif['Morning']} dose of {notif['Medicine Name']}",
-                notif["Breakfast Time"]
-                )
-            self.logger.debug(self.notifications[idx])
+        for i in range(len(self.notifications)):
+            notif = self.notifications.pop(0)
+            self.add_notifs(notif)
+            self.logger.debug(self.notifications[i])
         self.len = len(self.notifications)
         
         global print
         print = self.logger.debug
         
-    def raise_exception(self, **kwargs) -> Exception:
-        return CTkMessagebox(self, **kwargs)
+    def raise_exception(self: Program, **kwargs) -> CTkMessagebox:
+        return CTkMessagebox(self, **kwargs).mainloop()
     
     def on_closing(self) -> None:
         '''Confirm if user wanted to end application'''
@@ -110,7 +124,9 @@ class Program(ctk.CTk, Questions):
             self.logger,
             CustomQuestion(self.set_appearance if not set_theme() else lambda: None),
             Question("What is your gender?", ["Male", "Female"]),
-            CustomQuestion(self.get_year_of_birth)
+            CustomQuestion(self.get_year_of_birth),
+            CustomQuestion(self.get_contact),
+            include_end=False
         )
         answers = prequiz.begin()
         
@@ -148,7 +164,9 @@ class Program(ctk.CTk, Questions):
             self.logger.info(f"Writing to log file '{file}' completed successfully")
             
             # writes it to list of logs
-            logs = set(jsonUtils.open("json/logs.json")["logs_list"]).union((file,))
+            logs: list[str] = jsonUtils.open("json/logs.json")["logs_list"]
+            logs+=[file] if file not in logs else []
+            logs.sort(key=lambda d: datetime.strptime(d.replace("json/health/", "")[:-5], "%d_%m_%y"))
             jsonUtils.write(
                 data={"logs_list": list(logs)},
                 file="json/logs.json"
@@ -162,24 +180,22 @@ class Program(ctk.CTk, Questions):
             self,
             "Daily Checkup",
             self.logger,
-            CustomQuestion(self.get_previous_medical_conditions, kwargs={"file": "json/conditions.json"})
-        ).begin()
+            CustomQuestion(self._get_previous_medical_conditions)
+        ).begin(
+            title_next="Data gathered!",
+            continue_text="Diagnose me",
+            next_button_width=300,
+            next_button_height=70
+            )
         
         self.quit()
         
-        loading = ctk.CTkLabel(
-            self,
-            text="Saving results to health log", # TODO
-            font=("Times New Roman", 50)
-        )
-        loading.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-        
-        test_results = jsonUtils.read("json/conditions.json")
+        test_results = self._selected_conditions.copy()
         user = jsonUtils.get_values()
         
         conditions = user.conditions.copy()
         
-        for condition in test_results["conditions"]:
+        for condition in test_results:
             conditions+= [jsonUtils.search(
                 conditions_list,
                 sentinal=condition,
@@ -197,21 +213,12 @@ class Program(ctk.CTk, Questions):
         )
         
         call_api(user=edited_user)
-        
-        loading.destroy()
+        self.logger.debug("Finished gathering data")
         
         self._show_diagnosis_results()
         self.home()
-    
-    def open_health_log(self) -> None:
-        MCQbuiler(
-            self,
-            "Daily Checkup",
-            self.logger,
-            CustomQuestion(self.get_previous_medical_conditions, kwargs={"file": "json/conditions.json"})
-        ).begin()
      
-    def _show_diagnosis_results(self, font: str | tuple[str, int] = ("Times New Roman", 35)) -> None:
+    def _show_diagnosis_results(self: Program, font: str | tuple[str, int] = ("Times New Roman", 35)) -> None:
         self.clean()
         ctk.CTkLabel(
             self,
@@ -226,11 +233,11 @@ class Program(ctk.CTk, Questions):
         tabview.pack(padx=20, pady=20)
         
         
-        diseases = jsonUtils.read("json/possible_diseases.json")
+        diseases = jsonUtils.read(date.today().strftime("json/health/%d_%m_%y.json"))
         self.get_diagnosis_info(diseases, tabview, font)
         self.mainloop()
         
-    def get_diagnosis_info(self, diseases: str|list[dict], tabview: ctk.CTkTabview, font = ("Times New Roman", 35), loop=False) -> None:
+    def get_diagnosis_info(self: Program, diseases: str|list[dict], tabview: ctk.CTkTabview, font = ("Times New Roman", 35), loop=False) -> None:
         if isinstance(diseases, str):
             self.logger.error(f"Unable to get diagnosis results: {diseases}")
             
@@ -303,19 +310,20 @@ class Program(ctk.CTk, Questions):
         self.logger.debug("Reached Home Screen")
         self.clean()
         
-        ctk.CTkButton( # top left
+        HomepageSection( # top left
             self,
             fg_color="#ADD8E6",
-            text="Medicine Log",
-            command=self.medicine,
+            text="Health Log",
+            command=self.health_log,
             corner_radius=40,
             height=self.winfo_screenheight()*0.55,
             width=self.winfo_screenwidth()*0.2,
             font=("Times New Roman", 30),
             text_color="#000000",
-            ).place(relx=0.15, rely=0.3, anchor=tk.CENTER)
+            placement={"relx":0.15, "rely":0.3, "anchor":tk.CENTER}
+            )
         
-        ctk.CTkButton( # bottom right
+        HomepageSection( # bottom right
             self,
             text="Daily Diagnosis",
             command=self._diagnose,
@@ -324,51 +332,100 @@ class Program(ctk.CTk, Questions):
             width=self.winfo_screenwidth()*0.2,
             text_color="#000000",
             font=("Times New Roman", 30),
-            corner_radius=40
-            ).place(relx=0.85, rely=0.6, anchor=tk.CENTER)
+            corner_radius=40,
+            placement={"relx":0.85, "rely":0.6, "anchor":tk.CENTER}
+            )
         
-        ctk.CTkButton( # bottom left
+        def create_settings():
+            frame = ctk.CTkScrollableFrame(
+                self,
+                width=self.winfo_screenwidth()-100,
+                height=self.winfo_screenheight()-100
+            ) # not working
+            frame = self
+            Settings(frame, self.logger)
+        
+        HomepageSection( # bottom left
             self,
             fg_color="#ADD8E6",
             text="Settings",
-            command=lambda: Settings(self, self.logger),
+            command=create_settings,
             corner_radius=40,
             height=self.winfo_screenheight()*0.25,
             width=self.winfo_screenwidth()*0.2,
             font=("Times New Roman", 30),
             text_color="#000000",
-            ).place(relx=0.15, rely=0.75, anchor=tk.CENTER)
-        ctk.CTkButton( # top right
+            placement={"relx":0.15, "rely":0.75, "anchor":tk.CENTER}
+            )
+        
+        HomepageSection( # top right
             self,
-            text="Health Log",
+            text="Medicine Log",
             fg_color="#ADD8E6",
-            command=self.health_log,
+            command=self.medicine,
             corner_radius=40,
             height=self.winfo_screenheight()*0.25,
             width=self.winfo_screenwidth()*0.2,
             font=("Times New Roman", 30),
             text_color="#000000",
-            ).place(relx=0.85, rely=0.15, anchor=tk.CENTER)
+            placement={"relx":0.85, "rely":0.15, "anchor":tk.CENTER}
+        )
         
         self.mainloop()
 
     def update(self) -> None:
         if len(self.notifications) != self.len:
-            notif = self.notifications[-1]
-            schedule.every().day.at(notif.time).do(notif.send)
-            print("WHAT")
+            for i in range(self.len, len(self.notifications)):
+                notif = self.notifications[i]
+                schedule.every().day.at(notif.time).do(notif.send)
+                print(notif)
             self.len = len(self.notifications)
         schedule.run_pending()
-        tmp = self.notifications
         self.after(16, self.update)
         
-    def activate_notifs(self, notifications: list[Notification]) -> None:
+    def activate_notifs(self: Program, notifications: list[Notification]) -> None:
         self.logger.debug("Scheduling notifications")
         for notif in notifications:
             self.logger.debug("notif: {0}".format(notif))
-            schedule.every().day.at(notif.time).do(notif.send)    
+            schedule.every().day.at(notif.time).do(notif.send)
+
+    def add_minutes(self: Program, data, hh, mm, i, minutes):
+        return str(timedelta(seconds=int(hh) * 3600 + int(mm) * 60 + minutes))[0:-3] + " " + data[self.labels[i+4]][-2] + data[self.labels[i+4]][-1]
+
+    def add_notifs(self: Program, data):
+        for i in range(3):
+            hh, mm = data[self.labels[i+4]][0:-2].split(":")
+            before = False
+            if data[self.labels[7]] == "Before":
+                before = True
+            else:
+                before = False
+            for j in range(3):
+                minutes = 0
+                if j == 0:
+                    minutes -= 1800
+                if j == 2:
+                    minutes += 1800
+                if before:
+                    minutes -= 1800
+                if data[self.labels[i+1]] != "0":
+                    self.notifications.append(Notification(
+                        "Medication Reminder",
+                        f"Take {data[self.labels[i+1]]} dose of {data['Medicine Name']} {data[self.labels[7]].lower()} {self.labels[i+4].lower()}",
+                        self.add_minutes(data, hh, mm, i, minutes),
+                        self.logger
+                        ))
 
     def show_register_api_pages(self):
+        def create_pages() -> tuple[ctk.CTkEntry, ctk.CTkEntry]:
+            return sheets.create_pages(
+            self,
+            font=("DEFAULT", 30),
+            text_color="#FFFFFF" if self.cget("bg")=="gray14" else "#000000",
+            state="disabled",
+            wrap="word"
+            )[0]
+        
         sheets = InformationPages(self.logger)
         
         for d in get_information_texts():
@@ -382,19 +439,68 @@ class Program(ctk.CTk, Questions):
                 buttons=total_buttons,
                 **d
             )
+        sheets+=CustomQuestion(self.enter_api_username_password)
+        sheets: InformationPages
         
-        sheets.create_pages(self)
+        self.clean()
+        username, password = create_pages()
+        
+        while True:
+            if not username.get() or not password.get():
+                self.logger.debug("Null username or null password")
+                self.raise_exception(
+                    title="No Username/Password Inputted",
+                    message="Username/Password cannot be null. Please note if you put an incorrect username/password, we will be unable to get diagnosis results.",
+                    icon="warning"
+                )
+                self.logger.debug("User entered invalid username/password (null value)")
+                self.clean()
+                username, password = create_pages()
+            elif re.sub("[a-zA-Z0-9]", "", username.get()) or re.sub("[a-zA-Z0-9]", "", password.get()):
+                self.raise_exception(
+                    title="Invalid Characters",
+                    message="Username/Password must only contain latin characters",
+                    icon="warning"
+                )
+                self.logger.debug("User entered invalid username/password (non-latin)")
+                self.clean()
+                username, password = create_pages()
+            else:
+                break
+        
+        jsonUtils.add({
+            "api_username": username.get(),
+            "api_password": password.get()
+        })
+        self.logger.debug(f"Added Username {username.get()} and password {password.get()}")
 
+    def enter_api_username_password(self):
+        self.clean()
+        
+        ctk.CTkLabel(
+            self,
+            text="Enter your api username and password"
+        ).pack(pady=100)
+        
+        username = ctk.CTkEntry(
+            self,
+            placeholder_text="Live Username",
+            width=280,
+            height=56
+        )
+        username.pack(pady=20)
+        
+        password = ctk.CTkEntry(
+            self,
+            placeholder_text="Live Password",
+            width=280,
+            height=56
+        )
+        password.pack(pady=20)
+        
+        return username, password
 
-    def execute(self) -> None:
-        if not jsonUtils.open(preferences).get("setup_finished", False):
-            self.setup()
-            self.show_register_api_pages()
-            jsonUtils.write({"setup_finished": True}, file=preferences)
-            self.logger.debug(jsonUtils.get_values())
-        else:
-            set_theme()
-    
+    def execute(self) -> None:    
         try:
             os.system("taskkill /im HealthApp.exe")
         except Exception: # ignore keyboard interrupt
