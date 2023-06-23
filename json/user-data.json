@@ -1,6 +1,6 @@
 {
     "birth_year": 1970,
-    "gender": null,
+    "gender": "Male",
     "api_username": "",
     "api_password": "",
     "contact": "youremail@example.com",
