@@ -63,7 +63,7 @@ class Program(ctk.CTk, Questions):
             Questions.__init__(
             self=self
             )
-            # self.setup()
+            self.setup()
             self.show_register_api_pages()
             jsonUtils.write({"setup_finished": True}, file=preferences)
             self.logger.debug(jsonUtils.get_values())
@@ -391,9 +391,9 @@ class Program(ctk.CTk, Questions):
 
     def add_minutes(self: Program, data, hh, mm, i, minutes):
         return "{0} {1}".format(
-            timedelta(
+            str(timedelta(
                 seconds=int(hh) * 3600 + int(mm) * 60 + minutes
-                )[0:-3],
+                ))[0:-3],
             data[self.labels[i+4]][-2] + data[self.labels[i+4]][-1]
             )
 
@@ -535,4 +535,4 @@ def main(*, erase_data: bool = False) -> None:
 
 
 if __name__ == "__main__":
-    main(erase_data=True)
+    main(erase_data=False)

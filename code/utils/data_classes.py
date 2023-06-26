@@ -85,3 +85,21 @@ class InformationSheet:
     buttons: typing.Iterable[ActionButton] = dataclasses.field(default_factory=tuple)
     button_pack_kwargs: dict = dataclasses.field(default_factory=dict)
 
+@dataclasses.dataclass(frozen=True, slots=True)
+class SettingsAttr:
+    """An Attribute for settings
+    
+    Parameters:
+    -----------
+        name (str): Name of label
+        
+        command (Callable): What to do when button is clicked
+        
+        kwargs (dict, optional): kwargs to be passed in to constructer when creating setting
+    """    
+    name: str
+    command: typing.Callable
+    kwargs: dict = dataclasses.field(default_factory=dict)
+
+    def __iter__(self):
+        return (self.name, self.command, self.kwargs).__iter__()
