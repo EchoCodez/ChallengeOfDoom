@@ -41,9 +41,10 @@ class Settings:
         # TODO: create bar for button colors
         
         button_settings = (
+            ("Reset API Username", lambda: None, {}),
             ("Delete Diagnosis Logs", FileHandler(self.logger).delete_logs, {}),
-            ("Delete Health Logs", lambda: FileHandler(self.logger).delete_logs([]), {}),
-            ("Delete Medicine Logs", lambda: FileHandler(self.logger).delete_logs([]), {}),
+            ("Delete Health Logs", lambda: FileHandler(self.logger).delete_logs([]), {}), # TODO
+            ("Delete Medicine Logs", lambda: FileHandler(self.logger).delete_logs([]), {}), # TODO
             ("Delete all data", lambda: jsonUtils.clearfiles(clearlogs=True), {})
         )
         

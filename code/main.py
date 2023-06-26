@@ -390,7 +390,12 @@ class Program(ctk.CTk, Questions):
             schedule.every().day.at(notif.time).do(notif.send)
 
     def add_minutes(self: Program, data, hh, mm, i, minutes):
-        return str(timedelta(seconds=int(hh) * 3600 + int(mm) * 60 + minutes))[0:-3] + " " + data[self.labels[i+4]][-2] + data[self.labels[i+4]][-1]
+        return "{0} {1}".format(
+            timedelta(
+                seconds=int(hh) * 3600 + int(mm) * 60 + minutes
+                )[0:-3],
+            data[self.labels[i+4]][-2] + data[self.labels[i+4]][-1]
+            )
 
     def add_notifs(self: Program, data):
         for i in range(3):
