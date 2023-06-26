@@ -386,7 +386,7 @@ class Program(ctk.CTk, Questions):
     def activate_notifs(self: Program, notifications: list[Notification]) -> None:
         self.logger.debug("Scheduling notifications")
         for notif in notifications:
-            self.logger.debug("notif: {0}".format(notif))
+            # self.logger.debug("notif: {0}".format(notif))
             schedule.every().day.at(notif.time).do(notif.send)
 
     def add_minutes(self: Program, data, hh, mm, i, minutes):
