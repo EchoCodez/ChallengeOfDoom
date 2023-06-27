@@ -44,7 +44,7 @@ class Program(ctk.CTk, Questions):
             6: "Dinner Time",
             7: "Before/After Meal",
         }
-        if (self.winfo_screenwidth(), self.winfo_screenheight()) != (1920, 1080):
+        """if (self.winfo_screenwidth(), self.winfo_screenheight()) != (1920, 1080):
             self.logger.debug(f"Screen dimensions {self.winfo_screenwidth()}x{self.winfo_screenheight()} are not recommended")
             answer = self.raise_exception(
                 title="Screen Dimensions",
@@ -57,7 +57,7 @@ class Program(ctk.CTk, Questions):
             if answer.get() == "Quit":
                 self.on_closing()
         else:
-            self.logger.debug("User has good screen dimensions")
+            self.logger.debug("User has good screen dimensions")"""
         
         if not jsonUtils.open(preferences).get("setup_finished", False):
             Questions.__init__(
@@ -96,7 +96,7 @@ class Program(ctk.CTk, Questions):
             title="Quit?",
             icon="question",
             message="Do you want to close the application?",
-            option_1 = "Cancel",
+            option_1="Cancel",
             option_2="Yes"
             )
         if answer.get() == "Yes":
