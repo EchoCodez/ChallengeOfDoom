@@ -85,7 +85,7 @@ class Program(ctk.CTk, Questions):
         print = self.logger.debug
         
     def raise_exception(self: Program, **kwargs) -> CTkMessagebox:
-        return CTkMessagebox(self, **kwargs).mainloop()
+        return CTkMessagebox(self, **kwargs)
     
     def on_closing(self) -> None:
         '''Confirm if user wanted to end application'''
