@@ -90,6 +90,82 @@ class FileHandler(UseLogger):
                 level="exception"
             )
             return f"Diagnosis Results for {path} not found"
+    
+    @staticmethod
+    def get_entry(
+        master: ctk.CTk | ctk.CTkScrollableFrame,
+        placement_kwargs: dict = dict,
+        **kwargs
+        ) -> ctk.CTkEntry:
+        
+        """
+        Creates an entry textbox on the scene
+
+        Parameters:
+        -----------
+            master (CTk, CTkScrollableFrame): entrybox and label master
+            
+            placement_kwargs (dict, optional): kwargs for placing the label
+            
+            text (str): Title text
+            
+            placeholder (str): placeholder for `CTkEntry`
+            
+            width (int): width of entry widget
+            
+            height (int): height of entry widget
+            
+            entry_kwargs (dict, optional): kwargs for creating the `CTkEntry` widget
+            
+            kwargs (dict, optional): kwargs to be passed in when packing `CTkEntry`
+
+        Raises:
+        --------
+            TypeError: Unexpected Kwarg
+
+        Returns:
+        --------
+            CTkEntry
+        """        
+        
+        default_label_kwargs = {"pady": 100}
+        label_kwargs = default_label_kwargs | (placement_kwargs() if placement_kwargs is dict else placement_kwargs)
+        
+        
+        text = kwargs.pop("text", "")
+        placeholder = kwargs.pop("placeholder", "")
+        
+        if kwargs:
+            raise TypeError(f"Unexpected kwarg(s) {kwargs.keys()}")
+        
+        ctk.CTkLabel(
+            master,
+            text=text
+        ).pack(**label_kwargs)
+        
+        result = ctk.CTkEntry(
+            master,
+            placeholder_text=placeholder,
+            width=kwargs.pop("width", 280),
+            height=kwargs.pop("height", 56),
+            **kwargs.pop("entry_kwargs", {})
+        )
+        result.pack(**({"pady": 20} | kwargs.pop("kwargs", {})))
+        
+        master.mainloop()
+        
+        return result
+        
+    
+    @staticmethod
+    def reset_username(master: ctk.CTk | ctk.CTkScrollableFrame, **kwargs):
+        username = FileHandler.get_entry(master, **kwargs)
+        jsonUtils.add({"api_username": username.get()})
+        
+    @staticmethod
+    def reset_password(master: ctk.CTk | ctk.CTkScrollableFrame, **kwargs):
+        username = FileHandler.get_entry(master, **kwargs)
+        jsonUtils.add({"api_username": username.get()})
         
 class HomepageSection(ctk.CTkButton):
     def __init__(self, *args, **kwargs):

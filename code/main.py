@@ -44,7 +44,7 @@ class Program(ctk.CTk, Questions):
             6: "Dinner Time",
             7: "Before/After Meal",
         }
-        if (self.winfo_screenwidth(), self.winfo_screenheight()) != (1920, 1080):
+        """if (self.winfo_screenwidth(), self.winfo_screenheight()) != (1920, 1080):
             self.logger.debug(f"Screen dimensions {self.winfo_screenwidth()}x{self.winfo_screenheight()} are not recommended")
             answer = self.raise_exception(
                 title="Screen Dimensions",
@@ -57,13 +57,13 @@ class Program(ctk.CTk, Questions):
             if answer.get() == "Quit":
                 self.on_closing()
         else:
-            self.logger.debug("User has good screen dimensions")
+            self.logger.debug("User has good screen dimensions")"""
         
         if not jsonUtils.open(preferences).get("setup_finished", False):
             Questions.__init__(
             self=self
             )
-            # self.setup()
+            self.setup()
             self.show_register_api_pages()
             jsonUtils.write({"setup_finished": True}, file=preferences)
             self.logger.debug(jsonUtils.get_values())
@@ -85,7 +85,7 @@ class Program(ctk.CTk, Questions):
         print = self.logger.debug
         
     def raise_exception(self: Program, **kwargs) -> CTkMessagebox:
-        return CTkMessagebox(self, **kwargs).mainloop()
+        return CTkMessagebox(self, **kwargs)
     
     def on_closing(self) -> None:
         '''Confirm if user wanted to end application'''
@@ -96,7 +96,7 @@ class Program(ctk.CTk, Questions):
             title="Quit?",
             icon="question",
             message="Do you want to close the application?",
-            option_1 = "Cancel",
+            option_1="Cancel",
             option_2="Yes"
             )
         if answer.get() == "Yes":
@@ -386,11 +386,16 @@ class Program(ctk.CTk, Questions):
     def activate_notifs(self: Program, notifications: list[Notification]) -> None:
         self.logger.debug("Scheduling notifications")
         for notif in notifications:
-            self.logger.debug("notif: {0}".format(notif))
+            # self.logger.debug("notif: {0}".format(notif))
             schedule.every().day.at(notif.time).do(notif.send)
 
     def add_minutes(self: Program, data, hh, mm, i, minutes):
-        return str(timedelta(seconds=int(hh) * 3600 + int(mm) * 60 + minutes))[0:-3] + " " + data[self.labels[i+4]][-2] + data[self.labels[i+4]][-1]
+        return "{0} {1}".format(
+            str(timedelta(
+                seconds=int(hh) * 3600 + int(mm) * 60 + minutes
+                ))[0:-3],
+            data[self.labels[i+4]][-2] + data[self.labels[i+4]][-1]
+            )
 
     def add_notifs(self: Program, data):
         for i in range(3):
@@ -530,4 +535,4 @@ def main(*, erase_data: bool = False) -> None:
 
 
 if __name__ == "__main__":
-    main(erase_data=True)
+    main(erase_data=False)

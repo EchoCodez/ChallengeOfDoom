@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from utils import jsonUtils, InformationSheet, UseLogger, CustomQuestion
+from utils import jsonUtils, InformationSheet, UseLogger, CustomQuestion, SettingsAttr
 import customtkinter as ctk
 import tkinter as tk
 from logging import Logger
@@ -35,26 +35,48 @@ class Settings:
             self.logger.debug(f"Appearance Mode: \"{ctk.get_appearance_mode().lower()}\" written to file")
         
         switch_settings = (
-            ("Toggle Appearance Mode", swap_mode, {}),
+            SettingsAttr("Toggle Appearance Mode", swap_mode),
         )
         
         # TODO: create bar for button colors
-        
-        button_settings = (
-            ("Delete Diagnosis Logs", FileHandler(self.logger).delete_logs, {}),
-            ("Delete Health Logs", lambda: FileHandler(self.logger).delete_logs([]), {}),
-            ("Delete Medicine Logs", lambda: FileHandler(self.logger).delete_logs([]), {}),
-            ("Delete all data", lambda: jsonUtils.clearfiles(clearlogs=True), {})
+        files = FileHandler(self.logger)
+        button_settings: tuple[SettingsAttr] = (
+            SettingsAttr(
+                "Reset API Username",
+                lambda: None
+            ),
+            SettingsAttr(
+                "Delete Diagnosis Logs",
+                lambda: files.delete_logs()
+            ),
+            SettingsAttr(
+                "Delete Health Logs",
+                lambda: files.delete_logs([])
+            ), # TODO
+            SettingsAttr(
+                "Delete Medicine Logs",
+                lambda: files.delete_logs([])
+            ), # TODO
+            SettingsAttr(
+                "Delete all data",
+                lambda: jsonUtils.clearfiles(clearlogs=True)
+            )
         )
         
-        for name, command, kwargs in switch_settings:
-            self.setting_vars[name] = self._create_switch_setting(
-                name, command=command, font=font, **kwargs
+        for setting in switch_settings:
+            self.setting_vars[setting.name] = self._create_switch_setting(
+                    setting.name,
+                    command=setting.command,
+                    font=font,
+                    **setting.kwargs
                 )
         
-        for name, command, kwargs in button_settings:
-            self.setting_vars[name] = self._create_button_setting(
-                name, font=font, command=command, **kwargs
+        for setting in button_settings:
+            self.setting_vars[setting.name] = self._create_button_setting(
+                    setting.name,
+                    font=font,
+                    command=setting.command,
+                    **setting.kwargs
                 )
         
         if mainloop:
