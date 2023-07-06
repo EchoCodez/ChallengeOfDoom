@@ -364,21 +364,21 @@ class InformationPages(UseLogger):
         return self.__copy__()
     
     def __copy__(self) -> InformationPages:
-        return InformationPages(*self._current_page_numberages)
+        return InformationPages(*self.logger).add_pages(*self.pages)
             
-    def __iadd__(self, __o: InformationSheet, /) -> None:
+    def __iadd__(self, __o: InformationSheet, /) -> InformationSheet:
         self.pages += [ __o ]
         return self
         
     def __repr__(self) -> str:
-        pages = '\n'.join(self._current_page_numberages)
-        return f"{type(self).__name__}(pages={pages})"
+        pages = '\n'.join(self.pages)
+        return f"{type(self).__name__}({pages=})"
             
     def __len__(self) -> int:
         return self.pages.__len__()
             
     def __getitem__(self, arg: int | slice) -> InformationSheet:
-        return self.pages[arg] if isinstance(arg, int) else self._current_page_numberages[arg.start:arg.stop:arg.step]
+        return self.pages.__getitem__(arg)
             
     def __iter__(self) -> list:
         return self.pages.__iter__()

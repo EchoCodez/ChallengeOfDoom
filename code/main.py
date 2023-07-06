@@ -14,7 +14,7 @@ class Program(ctk.CTk, Questions):
         ctk (str): window background color, tuple: (light_color, dark_color) or single color
     """    
     
-    def __init__(self: Program, fg = None) -> None:
+    def __init__(self, fg = None) -> None:
         '''
         Initilize self and set up program, if not already set up
         '''
@@ -84,7 +84,7 @@ class Program(ctk.CTk, Questions):
         global print
         print = self.logger.debug
         
-    def raise_exception(self: Program, **kwargs) -> CTkMessagebox:
+    def raise_exception(self, **kwargs) -> CTkMessagebox:
         return CTkMessagebox(self, **kwargs).mainloop()
     
     def on_closing(self) -> None:
@@ -218,7 +218,7 @@ class Program(ctk.CTk, Questions):
         self._show_diagnosis_results()
         self.home()
      
-    def _show_diagnosis_results(self: Program, font: str | tuple[str, int] = ("Times New Roman", 35)) -> None:
+    def _show_diagnosis_results(self, font: str | tuple[str, int] = ("Times New Roman", 35)) -> None:
         self.clean()
         ctk.CTkLabel(
             self,
@@ -237,7 +237,7 @@ class Program(ctk.CTk, Questions):
         self.get_diagnosis_info(diseases, tabview, font)
         self.mainloop()
         
-    def get_diagnosis_info(self: Program, diseases: str|list[dict], tabview: ctk.CTkTabview, font = ("Times New Roman", 35), loop=False) -> None:
+    def get_diagnosis_info(self, diseases: str|list[dict], tabview: ctk.CTkTabview, font = ("Times New Roman", 35), loop=False) -> None:
         if isinstance(diseases, str):
             self.logger.error(f"Unable to get diagnosis results: {diseases}")
             
@@ -383,13 +383,13 @@ class Program(ctk.CTk, Questions):
         schedule.run_pending()
         self.after(16, self.update)
         
-    def activate_notifs(self: Program, notifications: list[Notification]) -> None:
+    def activate_notifs(self, notifications: list[Notification]) -> None:
         self.logger.debug("Scheduling notifications")
         for notif in notifications:
             # self.logger.debug("notif: {0}".format(notif))
             schedule.every().day.at(notif.time).do(notif.send)
 
-    def add_minutes(self: Program, data, hh, mm, i, minutes):
+    def add_minutes(self, data, hh, mm, i, minutes):
         return "{0} {1}".format(
             str(timedelta(
                 seconds=int(hh) * 3600 + int(mm) * 60 + minutes
@@ -397,7 +397,7 @@ class Program(ctk.CTk, Questions):
             data[self.labels[i+4]][-2] + data[self.labels[i+4]][-1]
             )
 
-    def add_notifs(self: Program, data):
+    def add_notifs(self, data):
         for i in range(3):
             hh, mm = data[self.labels[i+4]][0:-2].split(":")
             before = False
@@ -424,11 +424,11 @@ class Program(ctk.CTk, Questions):
     def show_register_api_pages(self):
         def create_pages() -> tuple[ctk.CTkEntry, ctk.CTkEntry]:
             return sheets.create_pages(
-            self,
-            font=("DEFAULT", 30),
-            text_color="#FFFFFF" if self.cget("bg")=="gray14" else "#000000",
-            state="disabled",
-            wrap="word"
+                self,
+                font=("DEFAULT", 30),
+                text_color="#FFFFFF" if self.cget("bg")=="gray14" else "#000000",
+                state="disabled",
+                wrap="word"
             )[0]
         
         sheets = InformationPages(self.logger)
