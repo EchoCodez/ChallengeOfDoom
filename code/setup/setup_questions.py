@@ -3,20 +3,22 @@ import customtkinter as ctk
 import re
 from datetime import datetime
 from CTkMessagebox import CTkMessagebox
-
-from utils.parse_json import jsonUtils
+from logging import Logger
+from utils import jsonUtils
 
 
 preferences = "json/preferences.json"
 user_data = "json/user-data.json"
 conditions_list = "json/symptoms.json"
 
+GENERATOR = (str(i) for i in range(1)).__class__
 
 class Questions:
     '''Setup questions for application'''
-    def __init__(self) -> None:
+    def __init__(self, logger: Logger) -> None:
         self.__appearance = tk.StringVar(value="light")
         self._selected_conditions: list = None
+        self.logger = logger
     
     def set_appearance(self) -> None:
         '''Choose dark or light theme for custom tkinter'''
@@ -73,7 +75,7 @@ class Questions:
         
         self.mainloop()
     
-    def __checkboxes(self, fontsize: int = 25, font="Arial") -> dict:
+    def __checkboxes(self, fontsize: int = 25, font="Arial", condition_names: GENERATOR = None) -> dict:
         '''Creates the checkboxes
         
         Returns:
@@ -84,22 +86,24 @@ class Questions:
         
         width, height = self.winfo_screenwidth(), self.winfo_screenheight()
         
-        conditions = {}
+        self.__conditions = {} if self.__conditions is None else self.__conditions
         width_counter = 0
-        condition_names = (d["Name"] for d in jsonUtils.open(conditions_list))
+        self.condition_names = (d["Name"] for d in jsonUtils.open(conditions_list)) if condition_names is None else condition_names
         for j in range(100): # choose arbitrarily large value for columns
             checkboxes = []
             widths = 0
             for i in range(2, (height-300)//37): # calculate amount of rows based off of window height
-                name = next(condition_names, None)
+                name = next(self.condition_names, None)
                 if name is None:
-                    return conditions
+                    self.logger.debug("Ran out of names")
+                    self.end = True
+                    return self.__conditions
                 
-                conditions[name]=tk.BooleanVar(value=False)
+                self.__conditions[name]=tk.BooleanVar(value=False)
                 checkbox = ctk.CTkCheckBox(
                     self, 
                     text=name,
-                    variable=conditions[name],
+                    variable=self.__conditions[name],
                     onvalue=True,
                     offvalue=False,
                     font=(font, fontsize)
@@ -118,27 +122,34 @@ class Questions:
                 
             width_counter+=widths
             if width_counter>width:
-                self.logger.debug(*(box.cget("text") for box in checkboxes))
-                for box in checkboxes:
+                for box in checkboxes: # WARNING: REMOVES SOME OPTIONS
                     box.destroy()
-                return conditions
+                return self.__conditions
             
-        return conditions
+        return self.__conditions
     
-    def _get_previous_medical_conditions(self, font="Default") -> None: # CustomQuestion
+    def _get_previous_medical_conditions(self, font="Default", names: GENERATOR = None, conditions = None) -> None: # CustomQuestion
         """Create checkboxes of previous medical conditions
 
         Parameters:
         -----------
             font (str, optional): font options for title and next button. Font size is immutable. Defaults to "Default".
         """
+        self.clean()
+        self.condition_names = names if names is not None else None
+        self.__conditions = {} if conditions is None else conditions
         
         def continue_button():
-            self.__conditions = {key: value.get() for key, value in self.__conditions.items() if value.get()}
-            self._selected_conditions = list(self.__conditions.keys())
-            self.quit()
+            if self.end:
+                self.__conditions = {key: value.get() for key, value in self.__conditions.items() if value.get()}
+                self._selected_conditions = list(self.__conditions.keys())
+                self.quit()
+            else:
+                self.quit()
+                self._get_previous_medical_conditions(font, self.condition_names, self.__conditions)
 
-             
+        self.end = False
+        
         title = ctk.CTkLabel(
             self,
             text="Are you experiencing any of the above from this list?",
@@ -161,9 +172,10 @@ class Questions:
             sticky=tk.N
             )
         
-        self.__conditions = self.__checkboxes(fontsize=30, font=font)
+        self.__checkboxes(fontsize=30, font=font, condition_names=self.condition_names)
         
         next_button.place(relx=0.82, rely=0.8, anchor=tk.CENTER)
+        next_button.lift()
             
         self.mainloop()       
 

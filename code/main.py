@@ -24,7 +24,7 @@ class Program(ctk.CTk, Questions):
             fg_color=fg
             )
         
-        def quit_app(event):
+        def quit_app(*events):
             self.logger.info("QUITTING")
             os._exit(0)
             
@@ -61,7 +61,8 @@ class Program(ctk.CTk, Questions):
         
         if not jsonUtils.open(preferences).get("setup_finished", False):
             Questions.__init__(
-            self=self
+                self=self,
+                logger=self.logger
             )
             self.setup()
             self.show_register_api_pages()
