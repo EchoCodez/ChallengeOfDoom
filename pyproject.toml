@@ -12,8 +12,8 @@ google = ">=3.0"
 schedule = ">=1.2"
 plyer = ">=2.1"
 apscheduler = ">=3.9"
-google-auth-oauthlib = ">=1.0"
-google-api-python-client = ">=2.89"
+google_auth_oauthlib = ">=1.0"
+google_api_python_client = ">=2.89"
 
 [build-system]
 requires = ['poetry-core~=1.0']
