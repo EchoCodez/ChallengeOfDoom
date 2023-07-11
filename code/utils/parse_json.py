@@ -335,7 +335,11 @@ class jsonUtils:
 
     @staticmethod
     def delete_file(path: str) -> None:
-        os.remove(path)
+        '''Deletes a file. If exception is thrown, catches it silently'''
+        try:
+            os.remove(path)
+        except Exception:
+            pass
 
 
 class open_json:

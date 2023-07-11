@@ -23,12 +23,16 @@ class Program(ctk.CTk, Questions):
             self=self,
             fg_color=fg
             )
+        Questions.__init__(
+                self=self,
+                logger=setup_logging()
+            )
+        
         
         def quit_app(*events):
             self.logger.info("QUITTING")
             os._exit(0)
             
-        self.logger = setup_logging()
         self.title("Congressional App Challenge 2023")
         self.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.bind("<Button-2>", quit_app) # for testing code faster
@@ -60,10 +64,6 @@ class Program(ctk.CTk, Questions):
             self.logger.debug("User has good screen dimensions")"""
         
         if not jsonUtils.open(preferences).get("setup_finished", False):
-            Questions.__init__(
-                self=self,
-                logger=self.logger
-            )
             self.setup()
             self.show_register_api_pages()
             jsonUtils.write({"setup_finished": True}, file=preferences)
@@ -181,7 +181,7 @@ class Program(ctk.CTk, Questions):
             self,
             "Daily Checkup",
             self.logger,
-            CustomQuestion(self._get_previous_medical_conditions)
+            CustomQuestion(super().get_previous_medical_conditions)
         ).begin(
             title_next="Data gathered!",
             continue_text="Diagnose me",
@@ -191,7 +191,7 @@ class Program(ctk.CTk, Questions):
         
         self.quit()
         
-        test_results = self._selected_conditions.copy()
+        test_results = [key for key, val in self._selected_conditions.items() if val.get()]
         user = jsonUtils.get_values()
         
         conditions = user.conditions.copy()

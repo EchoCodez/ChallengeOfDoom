@@ -114,7 +114,7 @@ class MCQbuiler(UseLogger):
             if self.answer is not None:
                 self.results[self._index] = self.answer
                 
-        return [x==q.correct_answer for x, q in zip(self.results, self)] if scored_quiz else self.results
+        return [x==q.correct_answer for x, q in zip(self.results, self) if x is not None] if scored_quiz else self.results
     
     def _create_question(self, question: Question, **kwargs):
         """Creates question if `isinstance(question, Question)`
