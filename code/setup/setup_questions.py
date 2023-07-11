@@ -1,10 +1,9 @@
+import re
 import tkinter as tk
 import customtkinter as ctk
-import re
 from datetime import datetime
 from CTkMessagebox import CTkMessagebox
 from logging import Logger
-from itertools import chain
 from utils import jsonUtils
 
 
@@ -112,6 +111,7 @@ class Questions:
             else:
                 return name
         
+        # make column outer loop so that things with long names get grouped into one column, saving space
         for j in range(columns):
             for i in range(1, rows+1):
                 name = new_name()
@@ -189,8 +189,7 @@ class Questions:
             next_button.grid(row=rows+1, column=columns-1, sticky = tk.W, pady=30)
             next_button.lift()
             
-            self.mainloop()       
-        self.logger.info({k:v for k, v in self._selected_conditions.items() if v.get()})
+            self.mainloop()
 
     def get_year_of_birth(self, font = ("None", 50)): # CustomQuestion
         def verify_and_continue():

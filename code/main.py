@@ -79,7 +79,7 @@ class Program(ctk.CTk, Questions):
         for i in range(len(self.notifications)):
             notif = self.notifications.pop(0)
             self.add_notifs(notif)
-            self.logger.debug(self.notifications[i])
+            self.logger.debug(f"{self.notifications[i] = }")
         self.len = len(self.notifications)
         
         global print
@@ -536,4 +536,4 @@ def main(*, erase_data: bool = False) -> None:
 
 
 if __name__ == "__main__":
-    main(erase_data=False)
+    main(erase_data=True)
