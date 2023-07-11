@@ -83,17 +83,38 @@ class Questions:
     
     def _checkboxes(
             self,
+            gender: str,
             font: tuple[str, int] = ("Arial", 25),
             rows: int = 15,
-            columns: int = 3
+            columns: int = 3,
         ) -> None:
         '''Creates the checkboxes
         '''
         
+        if gender == "male":
+            male = True
+        elif gender == "female":
+            male = False
+        else:
+            raise ValueError("Gender must be provided as either male or female")
         
-        for i in range(1, rows+1):
-            for j in range(columns):
-                name = next(self._conditions, None)
+        def new_name():
+            '''Filter out options of opposite gender'''
+            
+            name = next(self._conditions, None)
+            
+            if name is None:
+                return None
+            elif male and any(word in name for word in ["vagina", "period"]):
+                return new_name()
+            elif not male and any(word in name for word in ["testicle"]):
+                return new_name()
+            else:
+                return name
+        
+        for j in range(columns):
+            for i in range(1, rows+1):
+                name = new_name()
                 
                 if name is None:
                     return
@@ -115,7 +136,7 @@ class Questions:
                     sticky = tk.W
                 )
     
-    def get_previous_medical_conditions(self, font="Default") -> None: # CustomQuestion
+    def get_previous_medical_conditions(self, font="Default") -> None:
         """Create checkboxes of previous medical conditions
 
         Parameters:
@@ -127,6 +148,8 @@ class Questions:
         rows, columns = 15, 3
         
         total_names = len(jsonUtils.open(conditions_list))
+        
+        gender = jsonUtils.read("json/user-data.json").get("gender", "male").lower()
         
         for i in range(_ceil(total_names/(rows*columns))):
             def continue_button():
@@ -156,7 +179,12 @@ class Questions:
                 sticky=tk.N
                 )
             
-            self._checkboxes(font=(font, 30), columns=columns, rows=rows)
+            self._checkboxes(
+                    gender=gender,
+                    font=(font, 30),
+                    columns=columns,
+                    rows=rows
+                )
             
             next_button.grid(row=rows+1, column=columns-1, sticky = tk.W, pady=30)
             next_button.lift()
