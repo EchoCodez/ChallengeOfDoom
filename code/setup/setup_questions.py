@@ -1,22 +1,29 @@
+import re
 import tkinter as tk
 import customtkinter as ctk
-import re
 from datetime import datetime
 from CTkMessagebox import CTkMessagebox
-
-from utils.parse_json import jsonUtils
+from logging import Logger
+from utils import jsonUtils
 
 
 preferences = "json/preferences.json"
 user_data = "json/user-data.json"
 conditions_list = "json/symptoms.json"
 
+GENERATOR = (str(i) for i in range(1)).__class__
+
+def _ceil(n: float) -> int:
+    return int(n) if isinstance(n, int) or n.is_integer() else int(n)+1
 
 class Questions:
     '''Setup questions for application'''
-    def __init__(self) -> None:
+    def __init__(self, logger: Logger) -> None:
         self.__appearance = tk.StringVar(value="light")
-        self._selected_conditions: list = None
+        self._selected_conditions: dict[str, tk.BooleanVar] = {}
+        self.logger = logger
+        self._conditions: GENERATOR = iter(d["Name"] for d in jsonUtils.open(conditions_list))
+        self.total_condition_pages = None
     
     def set_appearance(self) -> None:
         '''Choose dark or light theme for custom tkinter'''
@@ -73,99 +80,116 @@ class Questions:
         
         self.mainloop()
     
-    def __checkboxes(self, fontsize: int = 25, font="Arial") -> dict:
+    def _checkboxes(
+            self,
+            gender: str,
+            font: tuple[str, int] = ("Arial", 25),
+            rows: int = 15,
+            columns: int = 3,
+        ) -> None:
         '''Creates the checkboxes
-        
-        Returns:
-        --------
-            dict: which conditions were checkmarked
         '''
         
+        if gender == "male":
+            male = True
+        elif gender == "female":
+            male = False
+        else:
+            raise ValueError("Gender must be provided as either male or female")
         
-        width, height = self.winfo_screenwidth(), self.winfo_screenheight()
+        def new_name():
+            '''Filter out options of opposite gender'''
+            
+            name = next(self._conditions, None)
+            
+            if name is None:
+                return None
+            elif male and any(word in name for word in ["vagina", "period"]):
+                return new_name()
+            elif not male and any(word in name for word in ["testicle"]):
+                return new_name()
+            else:
+                return name
         
-        conditions = {}
-        width_counter = 0
-        condition_names = (d["Name"] for d in jsonUtils.open(conditions_list))
-        for j in range(100): # choose arbitrarily large value for columns
-            checkboxes = []
-            widths = 0
-            for i in range(2, (height-300)//37): # calculate amount of rows based off of window height
-                name = next(condition_names, None)
-                if name is None:
-                    return conditions
+        # make column outer loop so that things with long names get grouped into one column, saving space
+        for j in range(columns):
+            for i in range(1, rows+1):
+                name = new_name()
                 
-                conditions[name]=tk.BooleanVar(value=False)
+                if name is None:
+                    return
+                
+                self._selected_conditions[name]=tk.BooleanVar(value=False)
                 checkbox = ctk.CTkCheckBox(
-                    self, 
-                    text=name,
-                    variable=conditions[name],
-                    onvalue=True,
-                    offvalue=False,
-                    font=(font, fontsize)
+                        self, 
+                        text = name,
+                        variable = self._selected_conditions[name],
+                        onvalue = True,
+                        offvalue = False,
+                        font = font
                     )
                 checkbox.grid(
-                    row=i, 
-                    column=j, 
-                    pady=5, 
+                    row = i,
+                    column = j,
+                    pady = 10,
                     padx=40,
-                    sticky=tk.W
-                    )
-                
-                checkbox.update_idletasks() # update the widget size
-                widths = max(widths, checkbox.winfo_width()) # height is always 24
-                checkboxes.append(checkbox)
-                
-            width_counter+=widths
-            if width_counter>width:
-                self.logger.debug(*(box.cget("text") for box in checkboxes))
-                for box in checkboxes:
-                    box.destroy()
-                return conditions
-            
-        return conditions
+                    sticky = tk.W
+                )
     
-    def _get_previous_medical_conditions(self, font="Default") -> None: # CustomQuestion
+    def get_previous_medical_conditions(self, font="Default") -> None:
         """Create checkboxes of previous medical conditions
 
         Parameters:
         -----------
             font (str, optional): font options for title and next button. Font size is immutable. Defaults to "Default".
-        """
+        """ 
+        self.clean()
         
-        def continue_button():
-            self.__conditions = {key: value.get() for key, value in self.__conditions.items() if value.get()}
-            self._selected_conditions = list(self.__conditions.keys())
-            self.quit()
-
-             
-        title = ctk.CTkLabel(
-            self,
-            text="Are you experiencing any of the above from this list?",
-            font=(font, 50)
-            )
-        next_button = ctk.CTkButton(
-            self,
-            text="Continue",
-            command=continue_button,
-            width=280,
-            height=56,
-            font=(font, 40)
-            )
+        rows, columns = 15, 3
         
-        title.grid(
-            column=0, 
-            columnspan=10, 
-            padx=5, 
-            pady=20,
-            sticky=tk.N
-            )
+        total_names = len(jsonUtils.open(conditions_list))
         
-        self.__conditions = self.__checkboxes(fontsize=30, font=font)
+        gender = jsonUtils.read("json/user-data.json").get("gender", "male").lower()
         
-        next_button.place(relx=0.82, rely=0.8, anchor=tk.CENTER)
+        for i in range(_ceil(total_names/(rows*columns))):
+            def continue_button():
+                self.clean()
+                self.quit()
+                self.logger.debug(f"Onto page {i+1}")
             
-        self.mainloop()       
+            title = ctk.CTkLabel(
+                self,
+                text="Are you experiencing any of the above from this list?",
+                font=(font, 50)
+                )
+            next_button = ctk.CTkButton(
+                self,
+                text="Continue",
+                command=continue_button,
+                width=280,
+                height=56,
+                font=(font, 40)
+                )
+            
+            title.grid(
+                column=0, 
+                columnspan=10, 
+                padx=5, 
+                pady=20,
+                sticky=tk.N
+                )
+            
+            self._checkboxes(
+                    gender=gender,
+                    font=(font, 30),
+                    columns=columns,
+                    rows=rows
+                )
+            
+            next_button.grid(row=rows+1, column=columns-1, sticky = tk.W, pady=30)
+            next_button.lift()
+            
+            self.mainloop()
 
     def get_year_of_birth(self, font = ("None", 50)): # CustomQuestion
         def verify_and_continue():
