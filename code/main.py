@@ -337,15 +337,21 @@ class Program(ctk.CTk, Questions):
             placement={"relx":0.85, "rely":0.6, "anchor":tk.CENTER}
             )
         
-        def _weather(self):
-            self.quit()
+        def _weather():
             self.clean()
+            frame = ctk.CTkScrollableFrame(
+                self, 
+                width=self.winfo_screenwidth()-100,
+                height=self.winfo_screenheight()-100,
+            )
+            frame = self
+            _weather(frame, self.logger)
             ctk.CTkLabel(self, text="Weather").pack()
 
         HomepageSection( # bottom
             self,
             text="Weather",
-            command=self._weather,
+            command=_weather,
             fg_color="#ADD8E6",
             height=self.winfo_screenheight()*0.55,
             width=self.winfo_screenwidth()*0.2,
@@ -554,4 +560,4 @@ def main(*, erase_data: bool = False) -> None:
 
 
 if __name__ == "__main__":
-    main(erase_data=True)
+    main(erase_data=False)
