@@ -337,6 +337,24 @@ class Program(ctk.CTk, Questions):
             placement={"relx":0.85, "rely":0.6, "anchor":tk.CENTER}
             )
         
+        def _weather(self):
+            self.quit()
+            self.clean()
+            ctk.CTkLabel(self, text="Weather").pack()
+
+        HomepageSection( # bottom
+            self,
+            text="Weather",
+            command=self._weather,
+            fg_color="#ADD8E6",
+            height=self.winfo_screenheight()*0.55,
+            width=self.winfo_screenwidth()*0.2,
+            text_color="#000000",
+            font=("Times New Roman", 30),
+            corner_radius=40,
+            placement={"relx":0.5, "rely":0.5, "anchor":tk.CENTER}
+            )
+        
         def create_settings():
             frame = ctk.CTkScrollableFrame(
                 self,
