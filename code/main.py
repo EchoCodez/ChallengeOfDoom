@@ -35,7 +35,9 @@ class Program(ctk.CTk, Questions):
             
         self.title("Congressional App Challenge 2023")
         self.protocol("WM_DELETE_WINDOW", self.on_closing)
+        self.bind("<KeyPress-`>", quit_app) # for testing code faster
         self.bind("<Button-2>", quit_app) # for testing code faster
+
         self.geometry(f"1920x1080+0+0")
         self.focus_force()
         self.labels = {
