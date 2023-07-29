@@ -350,6 +350,36 @@ class Program(ctk.CTk, Questions):
             _weather(frame, self.logger)
             ctk.CTkLabel(self, text="Weather").pack()
 
+            def _pollen():
+                print("button pressed")
+
+                pollen = ctk.CTkLabel(
+                    self,
+                    text="pollen",
+                    width=120,
+                    height=32,
+                    border_width=0,
+                    corner_radius=8,
+                    pady=500
+                    )
+                
+                pollen.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+                pollen.pack()
+
+            pollenButton = ctk.CTkButton(
+                self,
+                text="pollen",
+                width=300,
+                height=400,
+                border_width=1,
+                corner_radius=8,
+                pady=700
+                )
+            pollenButton.pack()
+            _pollen(pollenButton, self.logger)
+
+            self.mainloop()
+
         HomepageSection( # bottom
             self,
             text="Weather",
