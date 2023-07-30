@@ -16,9 +16,12 @@ GENERATOR = (str(i) for i in range(1)).__class__
 def _ceil(n: float) -> int:
     return int(n) if isinstance(n, int) or n.is_integer() else int(n)+1
 
-class Questions:
+class Questions(ctk.CTk):
     '''Setup questions for application'''
-    def __init__(self, logger: Logger) -> None:
+    def __init__(self, logger: Logger, fg: str = None) -> None:
+        
+        super().__init__(fg_color=fg)
+        
         self.__appearance = tk.StringVar(value="light")
         self._selected_conditions: dict[str, tk.BooleanVar] = {}
         self.logger = logger
@@ -296,3 +299,26 @@ class Questions:
         typer.pack(pady=20)
         next_button.pack(pady=20)
         self.mainloop()
+        
+    def get_location(self) -> str:
+        self.quit()
+        self.clean()
+        
+        ctk.CTkLabel(
+            self,
+            text="Enter your location for specialists near you"
+        ).pack(pady=100)
+        
+        texts: list[ctk.CTkEntry] = []
+        for text in ("City", "State", "Country"):
+            texts.append(ctk.CTkEntry(
+                self,
+                placeholder_text=text,
+                width=280,
+                height=56
+            ))
+            texts[-1].pack(pady=20)
+        
+        self.mainloop()
+        return " ".join(t.get() for t in texts)
+    

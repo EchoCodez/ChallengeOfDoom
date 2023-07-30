@@ -78,7 +78,7 @@ def coords_to_address(latitude: float, longitude: float, logger: Logger, *, no_z
 
 
 def main():
-    l = get_location("Ashburn Virginia", Logger(__name__))
+    l = get_location("Ashburn Virginia United States of America", Logger(__name__))
     print(l)
     lat, long = l.latitude, l.longitude
     print(coords_to_address(lat, long, Logger(__name__), no_zip=True))

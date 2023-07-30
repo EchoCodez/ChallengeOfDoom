@@ -6,7 +6,7 @@ preferences = "json/preferences.json"
 user_data = "json/user-data.json"
 conditions_list = "json/symptoms.json"
 
-class Program(ctk.CTk, Questions):
+class Program(Questions):
     """The main program that runs the application
 
     Parameters:
@@ -14,22 +14,18 @@ class Program(ctk.CTk, Questions):
         ctk (str): window background color, tuple: (light_color, dark_color) or single color
     """    
     
-    def __init__(self, fg = None) -> None:
+    def __init__(self) -> None:
         '''
         Initilize self and set up program, if not already set up
         '''
         
-        ctk.CTk.__init__(
-            self=self,
-            fg_color=fg
-            )
         Questions.__init__(
                 self=self,
                 logger=setup_logging()
             )
         
         
-        def quit_app(*events):
+        def quit_app(*events: object):
             self.logger.info("QUITTING")
             os._exit(0)
             
@@ -129,6 +125,7 @@ class Program(ctk.CTk, Questions):
             Question("What is your gender?", ["Male", "Female"]),
             CustomQuestion(self.get_year_of_birth),
             CustomQuestion(self.get_contact),
+            CustomQuestion(self.get_location),
             include_end=False
         )
         answers = prequiz.begin()
