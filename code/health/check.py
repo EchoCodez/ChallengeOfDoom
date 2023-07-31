@@ -1,11 +1,13 @@
 import requests
 import json
+from logging import Logger
 
 class Algorithm:
-    def __init__(self, food: str) -> None:
+    def __init__(self, food: str, logger: Logger) -> None:
         self.food = food
+        self.logger = logger
     
-    def get_nutrition_info(self, food: str, api_key):
+    def get_nutrition_info(self, food: str, api_key: str):
         base_url = "https://api.nal.usda.gov/fdc/v1/"
         search_url = base_url + "foods/search"
         details_url = base_url + "food/{}/"
@@ -41,7 +43,7 @@ class Algorithm:
             print("Nutrition Information:")
             for info in nutrition_info:
                 try:
-                    print(f"{info['nutrient']['name']} : {info['amount']} {info['nutrient']['unitName']}")
+                    self.logger.debug(f"{info['nutrient']['name']} : {info['amount']} {info['nutrient']['unitName']}")
                 except:
                     pass
     
