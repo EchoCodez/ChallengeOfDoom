@@ -2,16 +2,16 @@ import requests
 import json
 
 class Algorithm:
-    def __init__(self, food) -> None:
+    def __init__(self, food: str) -> None:
         self.food = food
     
-    def get_nutrition_info(self, food_name, api_key):
+    def get_nutrition_info(self, food: str, api_key):
         base_url = "https://api.nal.usda.gov/fdc/v1/"
         search_url = base_url + "foods/search"
         details_url = base_url + "food/{}/"
 
         params = {
-            "query": food_name,
+            "query": food,
             "api_key": api_key,
         }
 

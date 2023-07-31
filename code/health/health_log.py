@@ -2,6 +2,7 @@ import customtkinter as ctk
 from datetime import datetime
 from calendar import monthrange
 from logging import Logger
+from health.check import Algorithm
 
 class Calendar:
     def __init__(self, master: ctk.CTk) -> None:
@@ -105,6 +106,8 @@ class Log(ctk.CTkToplevel):
     
     def submit(self, elements: list[ctk.CTkEntry]) -> None:
         self.logger.debug([element.get() for element in elements])
+        algorithm = Algorithm(elements[0].get())
+        algorithm.run()
         
 
 

@@ -1,0 +1,342 @@
+{
+    "discontinuedDate": "",
+    "foodComponents": [],
+    "foodAttributes": [],
+    "foodPortions": [],
+    "fdcId": 482194,
+    "description": "PIZZA",
+    "publicationDate": "4/1/2019",
+    "foodNutrients": [
+        {
+            "type": "FoodNutrient",
+            "nutrient": {
+                "id": 1089,
+                "number": "303",
+                "name": "Iron, Fe",
+                "rank": 5400,
+                "unitName": "mg"
+            },
+            "foodNutrientDerivation": {
+                "id": 75,
+                "code": "LCCD",
+                "description": "Calculated from a daily value percentage per serving size measure"
+            },
+            "id": 3332696,
+            "amount": 2.19
+        },
+        {
+            "type": "FoodNutrient",
+            "nutrient": {
+                "id": 1162,
+                "number": "401",
+                "name": "Vitamin C, total ascorbic acid",
+                "rank": 6300,
+                "unitName": "mg"
+            },
+            "foodNutrientDerivation": {
+                "id": 75,
+                "code": "LCCD",
+                "description": "Calculated from a daily value percentage per serving size measure"
+            },
+            "id": 3332698,
+            "amount": 0.4
+        },
+        {
+            "type": "FoodNutrient",
+            "nutrient": {
+                "id": 1104,
+                "number": "318",
+                "name": "Vitamin A, IU",
+                "rank": 7500,
+                "unitName": "IU"
+            },
+            "foodNutrientDerivation": {
+                "id": 75,
+                "code": "LCCD",
+                "description": "Calculated from a daily value percentage per serving size measure"
+            },
+            "id": 3332697,
+            "amount": 679.0
+        },
+        {
+            "type": "FoodNutrient",
+            "nutrient": {
+                "id": 1087,
+                "number": "301",
+                "name": "Calcium, Ca",
+                "rank": 5300,
+                "unitName": "mg"
+            },
+            "foodNutrientDerivation": {
+                "id": 75,
+                "code": "LCCD",
+                "description": "Calculated from a daily value percentage per serving size measure"
+            },
+            "id": 3332695,
+            "amount": 43.0
+        },
+        {
+            "type": "FoodNutrient",
+            "nutrient": {
+                "id": 1257,
+                "number": "605",
+                "name": "Fatty acids, total trans",
+                "rank": 15400,
+                "unitName": "g"
+            },
+            "foodNutrientDerivation": {
+                "id": 70,
+                "code": "LCCS",
+                "description": "Calculated from value per serving size measure"
+            },
+            "id": 4867934,
+            "amount": 0.0
+        },
+        {
+            "type": "FoodNutrient",
+            "nutrient": {
+                "id": 2000,
+                "number": "269",
+                "name": "Sugars, total including NLEA",
+                "rank": 1510,
+                "unitName": "g"
+            },
+            "foodNutrientDerivation": {
+                "id": 70,
+                "code": "LCCS",
+                "description": "Calculated from value per serving size measure"
+            },
+            "id": 4867929,
+            "amount": 2.86
+        },
+        {
+            "type": "FoodNutrient",
+            "nutrient": {
+                "id": 1093,
+                "number": "307",
+                "name": "Sodium, Na",
+                "rank": 5800,
+                "unitName": "mg"
+            },
+            "foodNutrientDerivation": {
+                "id": 70,
+                "code": "LCCS",
+                "description": "Calculated from value per serving size measure"
+            },
+            "id": 4867932,
+            "amount": 407.0
+        },
+        {
+            "type": "FoodNutrient",
+            "nutrient": {
+                "id": 1003,
+                "number": "203",
+                "name": "Protein",
+                "rank": 600,
+                "unitName": "g"
+            },
+            "foodNutrientDerivation": {
+                "id": 70,
+                "code": "LCCS",
+                "description": "Calculated from value per serving size measure"
+            },
+            "id": 4867925,
+            "amount": 10.71
+        },
+        {
+            "type": "FoodNutrient",
+            "nutrient": {
+                "id": 1258,
+                "number": "606",
+                "name": "Fatty acids, total saturated",
+                "rank": 9700,
+                "unitName": "g"
+            },
+            "foodNutrientDerivation": {
+                "id": 70,
+                "code": "LCCS",
+                "description": "Calculated from value per serving size measure"
+            },
+            "id": 4867935,
+            "amount": 3.57
+        },
+        {
+            "type": "FoodNutrient",
+            "nutrient": {
+                "id": 1092,
+                "number": "306",
+                "name": "Potassium, K",
+                "rank": 5700,
+                "unitName": "mg"
+            },
+            "foodNutrientDerivation": {
+                "id": 70,
+                "code": "LCCS",
+                "description": "Calculated from value per serving size measure"
+            },
+            "id": 4867931,
+            "amount": 79.0
+        },
+        {
+            "type": "FoodNutrient",
+            "nutrient": {
+                "id": 1004,
+                "number": "204",
+                "name": "Total lipid (fat)",
+                "rank": 800,
+                "unitName": "g"
+            },
+            "foodNutrientDerivation": {
+                "id": 70,
+                "code": "LCCS",
+                "description": "Calculated from value per serving size measure"
+            },
+            "id": 4867926,
+            "amount": 10.0
+        },
+        {
+            "type": "FoodNutrient",
+            "nutrient": {
+                "id": 1079,
+                "number": "291",
+                "name": "Fiber, total dietary",
+                "rank": 1200,
+                "unitName": "g"
+            },
+            "foodNutrientDerivation": {
+                "id": 70,
+                "code": "LCCS",
+                "description": "Calculated from value per serving size measure"
+            },
+            "id": 4867930,
+            "amount": 1.4
+        },
+        {
+            "type": "FoodNutrient",
+            "nutrient": {
+                "id": 1008,
+                "number": "208",
+                "name": "Energy",
+                "rank": 300,
+                "unitName": "kcal"
+            },
+            "foodNutrientDerivation": {
+                "id": 70,
+                "code": "LCCS",
+                "description": "Calculated from value per serving size measure"
+            },
+            "id": 4867928,
+            "amount": 250.0
+        },
+        {
+            "type": "FoodNutrient",
+            "nutrient": {
+                "id": 1253,
+                "number": "601",
+                "name": "Cholesterol",
+                "rank": 15700,
+                "unitName": "mg"
+            },
+            "foodNutrientDerivation": {
+                "id": 70,
+                "code": "LCCS",
+                "description": "Calculated from value per serving size measure"
+            },
+            "id": 4867933,
+            "amount": 21.0
+        },
+        {
+            "type": "FoodNutrient",
+            "nutrient": {
+                "id": 1005,
+                "number": "205",
+                "name": "Carbohydrate, by difference",
+                "rank": 1110,
+                "unitName": "g"
+            },
+            "foodNutrientDerivation": {
+                "id": 70,
+                "code": "LCCS",
+                "description": "Calculated from value per serving size measure"
+            },
+            "id": 4867927,
+            "amount": 27.86
+        }
+    ],
+    "dataType": "Branded",
+    "foodClass": "Branded",
+    "modifiedDate": "7/14/2017",
+    "availableDate": "7/14/2017",
+    "brandOwner": "MANDIA",
+    "dataSource": "LI",
+    "brandedFoodCategory": "Pizza",
+    "gtinUpc": "8033462320036",
+    "householdServingFullText": "0.333 PIZZA",
+    "ingredients": "WHEAT FLOUR, WATER, PEELED TOMATOES, MOZZARELLA CHEESE (MILK, SALT, RENNET), ASIAGO CHEESE (MILK, SALT, RENNET), FONTAL CHEESE (MILK, SALT, RENNET), EMMENTHAL CHEESE (MILK, SALT, RENNET), SALT, EXTRA VIRGIN OLIVE OIL, YEAST.",
+    "marketCountry": "United States",
+    "servingSize": 140.0,
+    "servingSizeUnit": "g",
+    "foodUpdateLog": [
+        {
+            "discontinuedDate": "",
+            "foodAttributes": [],
+            "fdcId": 482194,
+            "description": "PIZZA",
+            "publicationDate": "4/1/2019",
+            "dataType": "Branded",
+            "foodClass": "Branded",
+            "modifiedDate": "7/14/2017",
+            "availableDate": "7/14/2017",
+            "brandOwner": "MANDIA",
+            "dataSource": "LI",
+            "brandedFoodCategory": "Pizza",
+            "gtinUpc": "8033462320036",
+            "householdServingFullText": "0.333 PIZZA",
+            "ingredients": "WHEAT FLOUR, WATER, PEELED TOMATOES, MOZZARELLA CHEESE (MILK, SALT, RENNET), ASIAGO CHEESE (MILK, SALT, RENNET), FONTAL CHEESE (MILK, SALT, RENNET), EMMENTHAL CHEESE (MILK, SALT, RENNET), SALT, EXTRA VIRGIN OLIVE OIL, YEAST.",
+            "marketCountry": "United States",
+            "servingSize": 140.0,
+            "servingSizeUnit": "g"
+        }
+    ],
+    "labelNutrients": {
+        "fat": {
+            "value": 14.0
+        },
+        "saturatedFat": {
+            "value": 5.0
+        },
+        "transFat": {
+            "value": 0.0
+        },
+        "cholesterol": {
+            "value": 29.4
+        },
+        "sodium": {
+            "value": 570
+        },
+        "carbohydrates": {
+            "value": 39.0
+        },
+        "fiber": {
+            "value": 1.96
+        },
+        "sugars": {
+            "value": 4.0
+        },
+        "protein": {
+            "value": 15.0
+        },
+        "calcium": {
+            "value": 60.2
+        },
+        "iron": {
+            "value": 3.07
+        },
+        "potassium": {
+            "value": 111
+        },
+        "calories": {
+            "value": 350
+        }
+    }
+}
