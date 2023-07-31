@@ -6,7 +6,7 @@ preferences = "json/preferences.json"
 user_data = "json/user-data.json"
 conditions_list = "json/symptoms.json"
 
-class Program(Questions):
+class Program(Questions, ApiParent):
     """The main program that runs the application
 
     Parameters:
@@ -19,8 +19,7 @@ class Program(Questions):
         Initilize self and set up program, if not already set up
         '''
         
-        Questions.__init__(
-                self=self,
+        super().__init__(
                 logger=setup_logging()
             )
         
@@ -46,20 +45,6 @@ class Program(Questions):
             6: "Dinner Time",
             7: "Before/After Meal",
         }
-        """if (self.winfo_screenwidth(), self.winfo_screenheight()) != (1920, 1080):
-            self.logger.debug(f"Screen dimensions {self.winfo_screenwidth()}x{self.winfo_screenheight()} are not recommended")
-            answer = self.raise_exception(
-                title="Screen Dimensions",
-                message=f"Your screen dimensions are not of the recommended 1980x1080 pixels. This may cause some errors.\
-                    \nCurrent dimensions: {self.winfo_screenwidth()}x{self.winfo_screenheight()}",
-                icon="warning",
-                option_1="Quit",
-                option_2="Understood",
-            )
-            if answer.get() == "Quit":
-                self.on_closing()
-        else:
-            self.logger.debug("User has good screen dimensions")"""
         
         if not jsonUtils.open(preferences).get("setup_finished", False):
             self.setup()
@@ -82,150 +67,6 @@ class Program(Questions):
         
         global print
         print = self.logger.debug
-    
-    def _diagnose(self) -> None:
-        def call_api(user):
-            results = Diagnosis(
-                user=user,
-                logger=self.logger,
-                testing=False
-                ).make_call()
-            
-            if results == "":
-                self.raise_exception(
-                    title="API Token Error",
-                    message="An error occured while fetching diagnosis results.\nPlease check username and password",
-                    icon="cancel"
-                )
-                self.logger.debug("Raised API Token Error")
-                self.quit()
-                self.home()
-            
-            self.logger.debug("User made daily diagnosis call.")
-            
-            file = f"json/health/{date.today().strftime('%d_%m_%y')}.json"
-            jsonUtils.overwrite(
-                data = results,
-                file = file
-                )
-            self.logger.info(f"Writing to log file '{file}' completed successfully")
-            
-            # writes it to list of logs
-            logs: list[str] = jsonUtils.open("json/logs.json")["logs_list"]
-            logs+=[file] if file not in logs else []
-            logs.sort(key=lambda d: datetime.strptime(d.replace("json/health/", "")[:-5], "%d_%m_%y"))
-            jsonUtils.write(
-                data={"logs_list": list(logs)},
-                file="json/logs.json"
-            )
-            
-            self.logger.info("Added log file name to logs.json")
-        
-        self.clean()
-        
-        MCQbuiler(
-            self,
-            "Daily Checkup",
-            self.logger,
-            CustomQuestion(super().get_previous_medical_conditions)
-        ).begin(
-            title_next="Data gathered!",
-            continue_text="Diagnose me",
-            next_button_width=300,
-            next_button_height=70
-            )
-        
-        self.quit()
-        
-        test_results = [key for key, val in self._selected_conditions.items() if val.get()]
-        user = jsonUtils.get_values()
-        
-        conditions = user.conditions.copy()
-        
-        for condition in test_results:
-            conditions+= [jsonUtils.search(
-                conditions_list,
-                sentinal=condition,
-                search_for="Name",
-                _return="ID"
-                )]
-            
-        edited_user = UserInfo(
-            conditions,
-            user.preferences,
-            user.gender,
-            user.birthyear,
-            user.api_username,
-            user.api_password
-        )
-        
-        call_api(user=edited_user)
-        self.logger.debug("Finished gathering data")
-        
-        self._show_diagnosis_results()
-        self.home()
-     
-    def _show_diagnosis_results(self, font: str | tuple[str, int] = ("Times New Roman", 35)) -> None:
-        self.clean()
-        ctk.CTkLabel(
-            self,
-            text="Diagnosis results",
-            font=(font[0], font[1]+5) if isinstance(font, (tuple, list)) else (font, 40)
-        ).pack(pady=20)
-        tabview = ctk.CTkTabview(
-            self,
-            width=600,
-            height=500
-        )
-        tabview.pack(padx=20, pady=20)
-        
-        
-        diseases = jsonUtils.read(date.today().strftime("json/health/%d_%m_%y.json"))
-        self.get_diagnosis_info(diseases, tabview, font)
-        self.mainloop()
-        
-    def get_diagnosis_info(self, diseases: str|list[dict], tabview: ctk.CTkTabview, font = ("Times New Roman", 35), loop=False) -> None:
-        if isinstance(diseases, str):
-            self.logger.error(f"Unable to get diagnosis results: {diseases}")
-            
-            ctk.CTkLabel(
-                tabview,
-                text=f"Unable to get diagnosis results: {diseases}"
-            ).grid(pady=20)
-            ctk.CTkButton(
-                self,
-                text="Back to Homepage",
-                command=self.quit
-            ).pack(pady=20)
-            self.mainloop()
-            return
-        
-        for disease in diseases:
-            issue, specialization = disease["Issue"], disease["Specialisation"]
-            name, accuracy = issue["Name"], issue["Accuracy"]
-            
-            tab = tabview.add(name)
-            label = ctk.CTkLabel(
-                tab,
-                text=f"Name:\n{name}\n\nAccuracy rating:\n{round(accuracy, 2)}%\n\nSee doctors specialized in:\n{', '.join(x['Name'] for x in specialization)}",
-                font=font
-            )
-            label.pack()
-        
-            ctk.CTkButton(
-                tab,
-                text="What is this?",
-                command=lambda name=name: webbrowser.open_new_tab(f"https://www.google.com/search?q={name.replace(' ', '%20')}")
-            ).pack(pady=50)
-        
-        ctk.CTkButton(
-            self,
-            text="Back to homepage",
-            command=self.quit
-        ).pack()
-        
-        if loop:
-            self.mainloop()
     
     def health_log(self) -> None:    
         self.clean()
@@ -421,90 +262,6 @@ class Program(Questions):
                         self.add_minutes(data, hh, mm, i, minutes),
                         self.logger
                         ))
-
-    def show_register_api_pages(self):
-        def create_pages() -> tuple[ctk.CTkEntry, ctk.CTkEntry]:
-            return sheets.create_pages(
-                self,
-                font=("DEFAULT", 30),
-                text_color="#FFFFFF" if self.cget("bg")=="gray14" else "#000000",
-                state="disabled",
-                wrap="word"
-            )[0]
-        
-        sheets = InformationPages(self.logger)
-        
-        for d in get_information_texts():
-            buttons, commands = d.pop("buttons", ()), d.pop("commands", ())
-            
-            if len(buttons) != len(commands):
-                raise TypeError("Must be same amount of buttons as commands")
-            
-            total_buttons = [ActionButton(button, command) for button, command in zip(buttons, commands)]
-            sheets+=InformationSheet(
-                buttons=total_buttons,
-                **d
-            )
-        sheets+=CustomQuestion(self.enter_api_username_password)
-        sheets: InformationPages
-        
-        self.clean()
-        username, password = create_pages()
-        
-        while True:
-            if not username.get() or not password.get():
-                self.logger.debug("Null username or null password")
-                self.raise_exception(
-                    title="No Username/Password Inputted",
-                    message="Username/Password cannot be null. Please note if you put an incorrect username/password, we will be unable to get diagnosis results.",
-                    icon="warning"
-                )
-                self.logger.debug("User entered invalid username/password (null value)")
-                self.clean()
-                username, password = create_pages()
-            elif re.sub("[a-zA-Z0-9]", "", username.get()) or re.sub("[a-zA-Z0-9]", "", password.get()):
-                self.raise_exception(
-                    title="Invalid Characters",
-                    message="Username/Password must only contain latin characters",
-                    icon="warning"
-                )
-                self.logger.debug("User entered invalid username/password (non-latin)")
-                self.clean()
-                username, password = create_pages()
-            else:
-                break
-        
-        jsonUtils.add({
-            "api_username": username.get(),
-            "api_password": password.get()
-        })
-        self.logger.debug(f"Added Username {username.get()} and password {password.get()}")
-
-    def enter_api_username_password(self):
-        self.clean()
-        
-        ctk.CTkLabel(
-            self,
-            text="Enter your api username and password"
-        ).pack(pady=100)
-        
-        username = ctk.CTkEntry(
-            self,
-            placeholder_text="Live Username",
-            width=280,
-            height=56
-        )
-        username.pack(pady=20)
-        
-        password = ctk.CTkEntry(
-            self,
-            placeholder_text="Live Password",
-            width=280,
-            height=56
-        )
-        password.pack(pady=20)
-        
-        return username, password
 
     def execute(self) -> None:    
         try:

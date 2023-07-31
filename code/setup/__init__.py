@@ -8,7 +8,6 @@ import tkinter as tk
 import customtkinter as ctk
 import re
 import sys, os
-import webbrowser
 import time, schedule
 
 # folder imports
@@ -18,6 +17,6 @@ from health import *
 from medicine import *
 
 # setup file imports
+from setup.setup_questions import Questions, ApiParent
 from setup.special import Settings, InformationPages
-from setup.setup_questions import Questions
 from setup.setup import setup_logging, get_information_texts
