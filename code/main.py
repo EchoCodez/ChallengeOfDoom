@@ -82,59 +82,6 @@ class Program(Questions):
         
         global print
         print = self.logger.debug
-        
-    def raise_exception(self, mainloop: bool = False, **kwargs) -> CTkMessagebox:
-        return CTkMessagebox(self, **kwargs) if not mainloop else CTkMessagebox(self, **kwargs).mainloop()
-    
-    def on_closing(self) -> None:
-        '''Confirm if user wanted to end application'''
-        
-        self.logger.info("User clicked X button")
-        
-        answer = self.raise_exception(
-            title="Quit?",
-            icon="question",
-            message="Do you want to close the application?",
-            option_1="Cancel",
-            option_2="Yes"
-            )
-        if answer.get() == "Yes":
-            self.logger.debug("Exited program")
-            self.withdraw()
-            return
-        else:
-            self.logger.info("Canceled exiting program")
-    
-    def clean(self) -> None:
-        '''
-        Clean the tkinter window of widgets
-        '''
-        
-        for widget in self.winfo_children():
-            widget.destroy()
-        
-    def setup(self) -> None:
-        """Sets up the multiple choice quiz and appearance theme
-        """        
-        
-        prequiz = MCQbuiler(
-            self,
-            "Let's set up the program!", # title
-            self.logger,
-            CustomQuestion(self.set_appearance if not set_theme() else lambda: None),
-            Question("What is your gender?", ["Male", "Female"]),
-            CustomQuestion(self.get_year_of_birth),
-            CustomQuestion(self.get_contact),
-            CustomQuestion(self.get_location),
-            include_end=False
-        )
-        answers = prequiz.begin()
-        
-        jsonUtils.write({
-                "gender": answers[1],
-            })
-        
-        self.clean()
     
     def _diagnose(self) -> None:
         def call_api(user):

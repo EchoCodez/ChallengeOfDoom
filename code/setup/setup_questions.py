@@ -4,7 +4,8 @@ import customtkinter as ctk
 from datetime import datetime
 from CTkMessagebox import CTkMessagebox
 from logging import Logger
-from utils import jsonUtils
+from utils import jsonUtils, MCQbuiler, CustomQuestion, Question, set_theme
+from api.location import get_location
 
 
 preferences = "json/preferences.json"
@@ -27,6 +28,62 @@ class Questions(ctk.CTk):
         self.logger = logger
         self._conditions: GENERATOR = iter(d["Name"] for d in jsonUtils.open(conditions_list))
         self.total_condition_pages = None
+    
+    def raise_exception(self, mainloop: bool = False, **kwargs) -> CTkMessagebox:
+        return CTkMessagebox(self, **kwargs) if not mainloop else CTkMessagebox(self, **kwargs).mainloop()
+    
+    def on_closing(self) -> None:
+        '''Confirm if user wanted to end application'''
+        
+        self.logger.info("User clicked X button")
+        
+        answer = self.raise_exception(
+            title="Quit?",
+            icon="question",
+            message="Do you want to close the application?",
+            option_1="Cancel",
+            option_2="Yes"
+            )
+        if answer.get() == "Yes":
+            self.logger.debug("Exited program")
+            self.withdraw()
+            return
+        else:
+            self.logger.info("Canceled exiting program")
+    
+    def clean(self) -> None:
+        '''
+        Clean the tkinter window of widgets
+        '''
+        
+        for widget in self.winfo_children():
+            widget.destroy()
+        
+    def setup(self) -> None:
+        """Sets up the multiple choice quiz and appearance theme
+        """        
+        
+        prequiz = MCQbuiler(
+            self,
+            "Let's set up the program!", # title
+            self.logger,
+            CustomQuestion(self.set_appearance if not set_theme() else lambda: None),
+            Question("What is your gender?", ["Male", "Female"]),
+            CustomQuestion(self.get_year_of_birth),
+            CustomQuestion(self.get_contact),
+            CustomQuestion(self.get_location),
+            include_end=False
+        )
+        answers = prequiz.begin()
+        
+        l = get_location(answers[4], self.logger)
+        lat, long = l.latitude, l.longitude
+        jsonUtils.write({
+                "gender": answers[1],
+                "location": {"latitude": lat, "longitude": long}
+            })
+        
+        self.clean()
     
     def set_appearance(self) -> None:
         '''Choose dark or light theme for custom tkinter'''
@@ -306,8 +363,15 @@ class Questions(ctk.CTk):
         
         ctk.CTkLabel(
             self,
-            text="Enter your location for specialists near you"
+            text="Enter your location",
+            font=("DEFAULT", 50)
         ).pack(pady=100)
+        
+        ctk.CTkLabel(
+            self,
+            text="This is used to find doctors near you",
+            font=("DEFAULT", 30)
+        ).pack(pady=50)
         
         texts: list[ctk.CTkEntry] = []
         for text in ("City", "State", "Country"):
@@ -318,7 +382,14 @@ class Questions(ctk.CTk):
                 height=56
             ))
             texts[-1].pack(pady=20)
+            
+        ctk.CTkButton(
+            self,
+            width=280,
+            height=56,
+            command=self.quit,
+            text="Continue"
+        ).pack(pady=20)
         
         self.mainloop()
         return " ".join(t.get() for t in texts)
-    
