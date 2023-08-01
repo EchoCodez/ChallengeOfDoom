@@ -2,6 +2,7 @@ import customtkinter as ctk
 from datetime import datetime
 from calendar import monthrange
 from logging import Logger
+from health.check import Algorithm
 
 class Calendar:
     def __init__(self, master: ctk.CTk) -> None:
@@ -56,20 +57,58 @@ class Day(ctk.CTkButton):
         self.calendar = calendar
 
     def open_log(self):
-        for day in self.calendar.days:
-            if day != self and day.win:
-                day.win.destroy()
-        self.win = Log(self.master, self.fulldate)
+        if self.win:
+            if not self.win.winfo_exists():
+                for day in self.calendar.days:
+                    if day != self and day.win:
+                        day.win.destroy()
+                self.win = Log(self.master, self.fulldate)
+            else:
+                self.win.focus()
+        else:
+            for day in self.calendar.days:
+                if day != self and day.win:
+                    day.win.destroy()
+            self.win = Log(self.master, self.fulldate)
     
 class Log(ctk.CTkToplevel):
     def __init__(self, master: ctk.CTk, title: str) -> None:
         super().__init__(master)
         self.geometry("400x300")
+        self.logger = master.logger
         super(Log, self).title(title)
-        self.label = ctk.CTkLabel(self, text=f"")
+        self.label = ctk.CTkLabel(self, text=f"Hello?")
         self.label.pack(padx=20, pady=20)
 
+        elements = []
+        self.entry = ctk.CTkEntry(
+                self,
+                placeholder_text=f"Enter name of food"
+        )
+        self.entry.pack()
+        elements.append(self.entry)
+        self.entry2 = ctk.CTkEntry(
+                self,
+                placeholder_text=f"Enter quantity"
+        )
+        self.entry2.pack()
+        elements.append(self.entry2)
+
+        button = ctk.CTkButton(
+            self, 
+            text="Submit",
+            command=lambda: self.submit(elements)
+        )
+        button.pack()
+
         self.transient(self.master)
+        
+    
+    def submit(self, elements: list[ctk.CTkEntry]) -> None:
+        self.logger.debug([element.get() for element in elements])
+        algorithm = Algorithm(elements[0].get(), self.logger)
+        algorithm.run()
+        
 
 
 if __name__ == "__main__":

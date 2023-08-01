@@ -1,6 +1,6 @@
 import customtkinter as ctk
 from logging import Logger
-from medicine.notifications import Notification
+from utils.notifications import Notification
 import json
 
 class Medicine:
@@ -18,8 +18,7 @@ class Medicine:
             7: "Before/After Meal",
         }
     
-    def submit(self, elements) -> None:
-        
+    def submit(self, elements: list) -> None:
         try:
             for i in range(1, 4):
                 int(elements[i].get())

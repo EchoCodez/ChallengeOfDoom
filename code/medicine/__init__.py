@@ -1,2 +1,2 @@
 from medicine.medicine import Medicine
-from medicine.notifications import Notification
+from utils.notifications import Notification

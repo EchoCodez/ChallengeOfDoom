@@ -103,3 +103,16 @@ class SettingsAttr:
 
     def __iter__(self):
         return (self.name, self.command, self.kwargs).__iter__()
+
+
+@dataclasses.dataclass
+class WeatherInfo:
+    """Class storing weather and pollen info
+    """    
+    grass_pollen: int
+    tree_pollen: int
+    weed_pollen: int
+    grass_pollen_risk: float
+    tree_pollen_risk: float
+    weed_pollen_risk: float
+    

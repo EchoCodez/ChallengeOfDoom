@@ -78,7 +78,7 @@ class MCQbuiler(UseLogger):
         next_button.place(relx=0.5, rely=0.6, anchor=tk.CENTER)
         self.root.mainloop()
     
-    def _start_questions(self, scored_quiz = False, **kwargs) -> list[bool] | list[str]:
+    def _start_questions(self, **kwargs) -> list[bool] | list[str]:
         """Wrapper for iterating through and creating questions
 
         Parameters:
@@ -94,14 +94,14 @@ class MCQbuiler(UseLogger):
             `list[bool] | list[str]`: list of correct and incorrect answers | list of user results as strings
         """
         
-        self.results = [None] * len(self)
+        self.results = []
         self._index = 0
         while self._index < len(self):
             
             question = self[self._index]
             
             if isinstance(question, Question):
-                self._create_question(question)
+                self.answer = self._create_question(question)
             elif isinstance(question, CustomQuestion):
                 self.answer = question.question(*question.args, **question.kwargs)
             elif question() is not None:
@@ -111,10 +111,13 @@ class MCQbuiler(UseLogger):
             self._index+=1
             
             self.logger.debug(f"Answer to this question was {self.answer}")
-            if self.answer is not None:
+            
+            if self._index < len(self.results):
                 self.results[self._index] = self.answer
+            else:
+                self.results.append(self.answer)
                 
-        return [x==q.correct_answer for x, q in zip(self.results, self)] if scored_quiz else self.results
+        return self.results
     
     def _create_question(self, question: Question, **kwargs):
         """Creates question if `isinstance(question, Question)`
@@ -147,7 +150,6 @@ class MCQbuiler(UseLogger):
         
         def leave():
             self.logger.debug(f"User choose option {option.get()}")
-            self.answer = option.get()
             self.root.quit()
         
         def back():
@@ -173,6 +175,8 @@ class MCQbuiler(UseLogger):
 
         self.root.mainloop()
         
+        self.logger.warning(f"{option.get() = }")
+        return option.get()
         
     def _end(
         self,
