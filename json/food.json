@@ -1,46 +1,50 @@
 {
     "Protein": [
-        8.77,
+        10.6,
         "g"
     ],
-    "Fiber": [
-        1.8,
+    "Fat": [
+        1.32,
+        "g"
+    ],
+    "Carbs": [
+        52.4,
         "g"
     ],
     "Calories": [
-        228.0,
+        264.0,
         "kcal"
     ],
+    "Sugar": [
+        8.43,
+        "g"
+    ],
+    "Fiber": [
+        1.6,
+        "g"
+    ],
+    "Calcium": [
+        105.0,
+        "mg"
+    ],
     "Iron": [
-        3.51,
+        3.57,
+        "mg"
+    ],
+    "Potassium": [
+        107.0,
+        "mg"
+    ],
+    "Sodium": [
+        422.0,
+        "mg"
+    ],
+    "Vitamin C": [
+        0.0,
         "mg"
     ],
     "Cholesterol": [
         0.0,
         "mg"
-    ],
-    "Carbs": [
-        49.12,
-        "g"
-    ],
-    "Sodium": [
-        509.0,
-        "mg"
-    ],
-    "Calcium": [
-        14.0,
-        "mg"
-    ],
-    "Potassium": [
-        75.0,
-        "mg"
-    ],
-    "Sugar": [
-        1.75,
-        "g"
-    ],
-    "Fat": [
-        0.88,
-        "g"
     ]
 }

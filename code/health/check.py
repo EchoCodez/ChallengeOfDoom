@@ -58,7 +58,7 @@ class Algorithm:
                 nutrients["Vitamin C"] = [float(detail["amount"]), detail["nutrient"]["unitName"]]
             if detail["nutrient"]["name"] == "Vitamin A, IU":
                 nutrients["Vitamin D"] = [float(detail["amount"]), detail["nutrient"]["unitName"]]
-            if detail["nutrient"]["name"] == "Vitamin D, IU":
+            if detail["nutrient"]["name"] == "Vitamin D (D2 + D3), International Units":
                 nutrients["Vitamin D"] = [float(detail["amount"]), detail["nutrient"]["unitName"]]
 
         with open("json/food.json", "w") as f:
