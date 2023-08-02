@@ -46,7 +46,7 @@ class Program(Questions, ApiParent):
             7: "Before/After Meal",
         }
         
-        if not jsonUtils.open(preferences).get("setup_finished", False):
+        if not jsonUtils.read(preferences).get("setup_finished", False):
             self.setup()
             self.show_register_api_pages()
             jsonUtils.write({"setup_finished": True}, file=preferences)

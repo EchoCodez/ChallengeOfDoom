@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from logging import Logger
-from utils.parse_json import jsonUtils
+import utils.parse_json as jsonUtils
 from logging import Logger
 import customtkinter as ctk
 from datetime import date, datetime
@@ -42,7 +42,7 @@ class FileHandler(UseLogger):
             logs (`list[str]`, optional): logs to delete. Defaults to those in `json/logs.json`
         '''
         import os
-        logs = jsonUtils.open("json/logs.json")["logs_list"] if logs is None else logs
+        logs = jsonUtils.read("json/logs.json")["logs_list"] if logs is None else logs
         self.logger.info("Deleting {0}".format(logs))
         for log in logs:
             try:
@@ -83,7 +83,7 @@ class FileHandler(UseLogger):
         print(f"Attempted to access json/health/{path}.json")
         
         try:
-            return jsonUtils.open(path)
+            return jsonUtils.read(path)
         except FileNotFoundError as e:
             print(
                 txt=e,

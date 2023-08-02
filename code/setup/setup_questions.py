@@ -39,7 +39,7 @@ class Questions(ctk.CTk):
         self.__appearance = tk.StringVar(value="light")
         self._selected_conditions: dict[str, tk.BooleanVar] = {}
         self.logger = logger
-        self._conditions: GENERATOR = iter(d["Name"] for d in jsonUtils.open(conditions_list))
+        self._conditions: GENERATOR = iter(d["Name"] for d in jsonUtils.read(conditions_list))
         self.total_condition_pages = None
     
     def raise_exception(self, mainloop: bool = False, **kwargs) -> CTkMessagebox:
@@ -220,7 +220,7 @@ class Questions(ctk.CTk):
         
         rows, columns = 15, 3
         
-        total_names = len(jsonUtils.open(conditions_list))
+        total_names = len(jsonUtils._open(conditions_list))
         
         gender = jsonUtils.read("json/user-data.json").get("gender", "male").lower()
         
@@ -525,7 +525,7 @@ class ApiParent:
             self.logger.info(f"Writing to log file '{file}' completed successfully")
             
             # writes it to list of logs
-            logs: list[str] = jsonUtils.open("json/logs.json")["logs_list"]
+            logs: list[str] = jsonUtils._open("json/logs.json")["logs_list"]
             logs+=[file] if file not in logs else []
             logs.sort(key=lambda d: datetime.strptime(d.replace("json/health/", "")[:-5], "%d_%m_%y"))
             jsonUtils.write(

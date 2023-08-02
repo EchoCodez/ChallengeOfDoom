@@ -1,8 +1,7 @@
-from utils.parse_json import jsonUtils
-from utils.data_classes import UserInfo
 import requests
 from logging import Logger
 from datetime import date
+from utils import jsonUtils, UserInfo
 
 
 class Diagnosis:
