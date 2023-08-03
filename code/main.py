@@ -347,7 +347,8 @@ class Program(ctk.CTk, Questions):
                 height=self.winfo_screenheight()-100,
             )
             frame = self
-            _weather(frame, self.logger)
+           # _weather(frame, self.logger)
+            #_weather()
             ctk.CTkLabel(self, text="Weather").pack()
 
             def _pollen():
@@ -366,8 +367,12 @@ class Program(ctk.CTk, Questions):
                 pollen.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
                 pollen.pack()
 
-            pollenButton = ctk.CTkButton(
+            pollenButton = ctk.CTkButton
+
+            pollenButton(
                 self,
+                fg_color="#ADD8E6",
+                command=_pollen,
                 text="pollen",
                 width=300,
                 height=400,
@@ -376,7 +381,7 @@ class Program(ctk.CTk, Questions):
                 pady=700
                 )
             pollenButton.pack()
-            _pollen(pollenButton, self.logger)
+           # _pollen(pollenButton, self.logger)
 
             self.mainloop()
 
