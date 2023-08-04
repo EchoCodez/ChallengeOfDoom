@@ -126,12 +126,6 @@ class Program(Questions, ApiParent):
         
         def _weather():
             self.clean()
-            frame = ctk.CTkScrollableFrame(
-                self, 
-                width=self.winfo_screenwidth()-100,
-                height=self.winfo_screenheight()-100,
-            )
-            frame = self
            # _weather(frame, self.logger)
             #_weather()
             ctk.CTkLabel(self, text="Weather").pack()
@@ -146,15 +140,13 @@ class Program(Questions, ApiParent):
                     height=32,
                     border_width=0,
                     corner_radius=8,
-                    pady=500
+                    # pady=500
                     )
                 
                 pollen.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-                pollen.pack()
-
-            pollenButton = ctk.CTkButton
-
-            pollenButton(
+                # pollen.pack()
+                
+            pollenButton = ctk.CTkButton(
                 self,
                 fg_color="#ADD8E6",
                 command=_pollen,
@@ -163,9 +155,9 @@ class Program(Questions, ApiParent):
                 height=400,
                 border_width=1,
                 corner_radius=8,
-                pady=700
+                text_color="#000000"
                 )
-            pollenButton.pack()
+            pollenButton.pack(pady=200)
            # _pollen(pollenButton, self.logger)
 
             self.mainloop()
