@@ -1,0 +1,50 @@
+{
+    "Protein": [
+        10.6,
+        "g"
+    ],
+    "Fat": [
+        1.32,
+        "g"
+    ],
+    "Carbs": [
+        52.4,
+        "g"
+    ],
+    "Calories": [
+        264.0,
+        "kcal"
+    ],
+    "Sugar": [
+        8.43,
+        "g"
+    ],
+    "Fiber": [
+        1.6,
+        "g"
+    ],
+    "Calcium": [
+        105.0,
+        "mg"
+    ],
+    "Iron": [
+        3.57,
+        "mg"
+    ],
+    "Potassium": [
+        107.0,
+        "mg"
+    ],
+    "Sodium": [
+        422.0,
+        "mg"
+    ],
+    "Vitamin C": [
+        0.0,
+        "mg"
+    ],
+    "Cholesterol": [
+        0.0,
+        "mg"
+    ]
+}

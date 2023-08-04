@@ -1,17 +1,19 @@
 import requests
 import json
+from logging import Logger
 
 class Algorithm:
-    def __init__(self, food) -> None:
+    def __init__(self, food: str, logger: Logger) -> None:
         self.food = food
+        self.logger = logger
     
-    def get_nutrition_info(self, food_name, api_key):
+    def get_nutrition_info(self, food: str, api_key: str):
         base_url = "https://api.nal.usda.gov/fdc/v1/"
         search_url = base_url + "foods/search"
         details_url = base_url + "food/{}/"
 
         params = {
-            "query": food_name,
+            "query": food,
             "api_key": api_key,
         }
 
@@ -26,12 +28,43 @@ class Algorithm:
         food_id = response_data["foods"][0]["fdcId"]
 
         response = requests.get(details_url.format(food_id), params={"api_key": api_key})
-        food_details = response.json()
+        raw_data = response.json()
+        food_details = raw_data["foodNutrients"]
+        nutrients = {}
+        for detail in food_details:
+            if detail["nutrient"]["name"] == "Energy":
+                nutrients["Calories"] = [float(detail["amount"]), detail["nutrient"]["unitName"]]
+            if detail["nutrient"]["name"] == "Protein":
+                nutrients["Protein"] = [float(detail["amount"]), detail["nutrient"]["unitName"]]
+            if detail["nutrient"]["name"] == "Sugars, total including NLEA":
+                nutrients["Sugar"] = [float(detail["amount"]), detail["nutrient"]["unitName"]]
+            if detail["nutrient"]["name"] == "Calcium, Ca":
+                nutrients["Calcium"] = [float(detail["amount"]), detail["nutrient"]["unitName"]]
+            if detail["nutrient"]["name"] == "Iron, Fe":
+                nutrients["Iron"] = [float(detail["amount"]), detail["nutrient"]["unitName"]]
+            if detail["nutrient"]["name"] == "Fiber, total dietary":
+                nutrients["Fiber"] = [float(detail["amount"]), detail["nutrient"]["unitName"]]
+            if detail["nutrient"]["name"] == "Cholesterol":
+                nutrients["Cholesterol"] = [float(detail["amount"]), detail["nutrient"]["unitName"]]
+            if detail["nutrient"]["name"] == "Carbohydrate, by difference":
+                nutrients["Carbs"] = [float(detail["amount"]), detail["nutrient"]["unitName"]]
+            if detail["nutrient"]["name"] == "Potassium, K":
+                nutrients["Potassium"] = [float(detail["amount"]), detail["nutrient"]["unitName"]]
+            if detail["nutrient"]["name"] == "Total lipid (fat)":
+                nutrients["Fat"] = [float(detail["amount"]), detail["nutrient"]["unitName"]]
+            if detail["nutrient"]["name"] == "Sodium, Na":
+                nutrients["Sodium"] = [float(detail["amount"]), detail["nutrient"]["unitName"]]
+            if detail["nutrient"]["name"] == "Vitamin C, total ascorbic acid":
+                nutrients["Vitamin C"] = [float(detail["amount"]), detail["nutrient"]["unitName"]]
+            if detail["nutrient"]["name"] == "Vitamin A, IU":
+                nutrients["Vitamin D"] = [float(detail["amount"]), detail["nutrient"]["unitName"]]
+            if detail["nutrient"]["name"] == "Vitamin D (D2 + D3), International Units":
+                nutrients["Vitamin D"] = [float(detail["amount"]), detail["nutrient"]["unitName"]]
 
         with open("json/food.json", "w") as f:
-            json.dump(food_details, f, indent=4)
+            json.dump(nutrients, f, indent=4)
 
-        return food_details["foodNutrients"]
+        return raw_data["foodNutrients"]
 
     def run(self):
         api_key = "4aoCShlfHPImyLqzhxPHpSGnFVadB92vgwX5cE56"
@@ -41,7 +74,7 @@ class Algorithm:
             print("Nutrition Information:")
             for info in nutrition_info:
                 try:
-                    print(f"{info['nutrient']['name']} : {info['amount']} {info['nutrient']['unitName']}")
+                    self.logger.debug(f"{info['nutrient']['name']} : {info['amount']} {info['nutrient']['unitName']}")
                 except:
                     pass
     

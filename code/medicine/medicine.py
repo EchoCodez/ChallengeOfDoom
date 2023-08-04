@@ -18,8 +18,7 @@ class Medicine:
             7: "Before/After Meal",
         }
     
-    def submit(self, elements) -> None:
-        
+    def submit(self, elements: list) -> None:
         try:
             for i in range(1, 4):
                 int(elements[i].get())
