@@ -7,22 +7,22 @@ from logging import Logger
 
 INFORMATION_PAGES = list[InformationSheet | CustomQuestion]
 
-class Settings:
-    def __init__(self, master: ctk.CTk, logger: Logger) -> None:
-        self.master = master
+class Settings(ctk.CTkScrollableFrame):
+    def __init__(self, master: ctk.CTk | ctk.CTkScrollableFrame, logger: Logger, **kwargs) -> None:
+        super().__init__(master, **kwargs)
         self.logger = logger
-        self.screen = master.master if not isinstance(master, ctk.CTk) else master
         self.logger.debug("Settings Clicked")
         self.row = 0
         self.show_settings()
         self.logger.debug("Done")
     
     def clean(self):
-        for w in self.screen.winfo_children():
+        for w in (i for i in self.master.winfo_children() if i is not self):
             w.destroy()
     
-    def show_settings(self, mainloop=True, font=("", 50)) -> dict | None:
+    def show_settings(self, mainloop=False, font=("", 50)) -> dict | None:
         from utils import FileHandler
+        self.master.quit()
         self.clean()
         self.setting_vars = {}
         
@@ -80,7 +80,8 @@ class Settings:
                 )
         
         if mainloop:
-            self.master.mainloop()
+            self.pack()
+            self.mainloop()
         else:
             return self.setting_vars
     
@@ -109,7 +110,7 @@ class Settings:
         var = kwargs.pop("var", tk.StringVar)()
         
         switch_kwargs = {
-            "column":6,
+            "column":5,
             "row":self.row,
             "sticky": tk.E,
             "pady": 50,
@@ -133,7 +134,7 @@ class Settings:
             raise TypeError("Invalid kwargs {0}".format(kwargs))
         
         l = ctk.CTkLabel(
-            self.master,
+            self,
             text=name,
             font=font,
             **label_creation_kwargs
@@ -148,7 +149,7 @@ class Settings:
             )
         
         ctk.CTkSwitch(
-            self.master,
+            self,
             onvalue=on,
             offvalue=off,
             variable=var,
@@ -185,7 +186,7 @@ class Settings:
         font = kwargs.pop("font", None)
         
         button_kwargs = {
-            "column":6,
+            "column":5,
             "row":self.row,
             "pady": 50,
             "sticky": tk.E
@@ -210,7 +211,7 @@ class Settings:
         
         
         ctk.CTkLabel(
-            self.master,
+            self,
             text=name,
             font=font,
             **label_creation_kwargs
@@ -227,7 +228,7 @@ class Settings:
             )
         
         ctk.CTkButton(
-            self.master,
+            self,
             command=command,
             width=width,
             height=height,
@@ -244,13 +245,13 @@ class Settings:
             height:int
         ) -> None:
         
-        TRANSPARENT = self.screen.cget("bg")
+        TRANSPARENT = self.master.cget("bg")
         
         for col in range(start, end):
             temp_placements["column"] = col
             
             ctk.CTkButton(
-                self.master,
+                self,
                 width=width,
                 height=height,
                 text="",

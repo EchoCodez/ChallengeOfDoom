@@ -176,13 +176,13 @@ class Program(Questions, ApiParent):
             )
         
         def create_settings():
-            frame = ctk.CTkScrollableFrame(
-                self,
-                width=self.winfo_screenwidth()-100,
-                height=self.winfo_screenheight()-100
-            ) # not working
-            frame = self
-            Settings(frame, self.logger)
+            Settings(
+                    self,
+                    self.logger,
+                    width=self.winfo_screenwidth()-100,
+                    height=self.winfo_screenheight()-100
+                ).pack()
+            self.mainloop()
         
         HomepageSection( # bottom left
             self,
