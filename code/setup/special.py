@@ -82,8 +82,6 @@ class Settings(ctk.CTkScrollableFrame):
         if mainloop:
             self.pack()
             self.mainloop()
-        else:
-            return self.setting_vars
     
     def _create_switch_setting(self, name: str, **kwargs) -> tk.Variable:
         """Create a setting button controlled by a switch
