@@ -72,7 +72,7 @@ class Settings(ctk.CTkScrollableFrame):
                 )
         
         for setting in button_settings:
-            self.setting_vars[setting.name] = self._create_button_setting(
+            self._create_button_setting(
                     setting.name,
                     font=font,
                     command=setting.command,
