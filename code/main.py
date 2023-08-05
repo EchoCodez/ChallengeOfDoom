@@ -46,7 +46,7 @@ class Program(Questions, ApiParent):
             7: "Before/After Meal",
         }
         
-        if not jsonUtils.open(preferences).get("setup_finished", False):
+        if not jsonUtils.read(preferences).get("setup_finished", False):
             self.setup()
             self.show_register_api_pages()
             jsonUtils.write({"setup_finished": True}, file=preferences)
@@ -126,13 +126,8 @@ class Program(Questions, ApiParent):
         
         def _weather():
             self.clean()
-            frame = ctk.CTkScrollableFrame(
-                self, 
-                width=self.winfo_screenwidth()-100,
-                height=self.winfo_screenheight()-100,
-            )
-            frame = self
-            _weather(frame, self.logger)
+           # _weather(frame, self.logger)
+            #_weather()
             ctk.CTkLabel(self, text="Weather").pack()
 
             def _pollen():
@@ -145,23 +140,25 @@ class Program(Questions, ApiParent):
                     height=32,
                     border_width=0,
                     corner_radius=8,
-                    pady=500
+                    # pady=500
                     )
                 
                 pollen.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-                pollen.pack()
-
+                # pollen.pack()
+                
             pollenButton = ctk.CTkButton(
                 self,
+                fg_color="#ADD8E6",
+                command=_pollen,
                 text="pollen",
                 width=300,
                 height=400,
                 border_width=1,
                 corner_radius=8,
-                pady=700
+                text_color="#000000"
                 )
-            pollenButton.pack()
-            _pollen(pollenButton, self.logger)
+            pollenButton.pack(pady=200)
+           # _pollen(pollenButton, self.logger)
 
             self.mainloop()
 
@@ -179,13 +176,13 @@ class Program(Questions, ApiParent):
             )
         
         def create_settings():
-            frame = ctk.CTkScrollableFrame(
-                self,
-                width=self.winfo_screenwidth()-100,
-                height=self.winfo_screenheight()-100
-            ) # not working
-            frame = self
-            Settings(frame, self.logger)
+            Settings(
+                    self,
+                    self.logger,
+                    width=self.winfo_screenwidth()-100,
+                    height=self.winfo_screenheight()-100
+                ).pack()
+            self.mainloop()
         
         HomepageSection( # bottom left
             self,

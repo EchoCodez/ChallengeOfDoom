@@ -6,7 +6,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from email.mime.text import MIMEText
-from utils.parse_json import jsonUtils
+import utils.parse_json as jsonUtils
 from logging import Logger
 
 class Notification:

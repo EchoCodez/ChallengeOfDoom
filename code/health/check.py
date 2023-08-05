@@ -28,12 +28,43 @@ class Algorithm:
         food_id = response_data["foods"][0]["fdcId"]
 
         response = requests.get(details_url.format(food_id), params={"api_key": api_key})
-        food_details = response.json()
+        raw_data = response.json()
+        food_details = raw_data["foodNutrients"]
+        nutrients = {}
+        for detail in food_details:
+            if detail["nutrient"]["name"] == "Energy":
+                nutrients["Calories"] = [float(detail["amount"]), detail["nutrient"]["unitName"]]
+            if detail["nutrient"]["name"] == "Protein":
+                nutrients["Protein"] = [float(detail["amount"]), detail["nutrient"]["unitName"]]
+            if detail["nutrient"]["name"] == "Sugars, total including NLEA":
+                nutrients["Sugar"] = [float(detail["amount"]), detail["nutrient"]["unitName"]]
+            if detail["nutrient"]["name"] == "Calcium, Ca":
+                nutrients["Calcium"] = [float(detail["amount"]), detail["nutrient"]["unitName"]]
+            if detail["nutrient"]["name"] == "Iron, Fe":
+                nutrients["Iron"] = [float(detail["amount"]), detail["nutrient"]["unitName"]]
+            if detail["nutrient"]["name"] == "Fiber, total dietary":
+                nutrients["Fiber"] = [float(detail["amount"]), detail["nutrient"]["unitName"]]
+            if detail["nutrient"]["name"] == "Cholesterol":
+                nutrients["Cholesterol"] = [float(detail["amount"]), detail["nutrient"]["unitName"]]
+            if detail["nutrient"]["name"] == "Carbohydrate, by difference":
+                nutrients["Carbs"] = [float(detail["amount"]), detail["nutrient"]["unitName"]]
+            if detail["nutrient"]["name"] == "Potassium, K":
+                nutrients["Potassium"] = [float(detail["amount"]), detail["nutrient"]["unitName"]]
+            if detail["nutrient"]["name"] == "Total lipid (fat)":
+                nutrients["Fat"] = [float(detail["amount"]), detail["nutrient"]["unitName"]]
+            if detail["nutrient"]["name"] == "Sodium, Na":
+                nutrients["Sodium"] = [float(detail["amount"]), detail["nutrient"]["unitName"]]
+            if detail["nutrient"]["name"] == "Vitamin C, total ascorbic acid":
+                nutrients["Vitamin C"] = [float(detail["amount"]), detail["nutrient"]["unitName"]]
+            if detail["nutrient"]["name"] == "Vitamin A, IU":
+                nutrients["Vitamin D"] = [float(detail["amount"]), detail["nutrient"]["unitName"]]
+            if detail["nutrient"]["name"] == "Vitamin D (D2 + D3), International Units":
+                nutrients["Vitamin D"] = [float(detail["amount"]), detail["nutrient"]["unitName"]]
 
         with open("json/food.json", "w") as f:
-            json.dump(food_details, f, indent=4)
+            json.dump(nutrients, f, indent=4)
 
-        return food_details["foodNutrients"]
+        return raw_data["foodNutrients"]
 
     def run(self):
         api_key = "4aoCShlfHPImyLqzhxPHpSGnFVadB92vgwX5cE56"
