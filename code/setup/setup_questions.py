@@ -71,11 +71,18 @@ class Questions(ctk.CTk):
         answers = prequiz.begin()
         
         l = get_location(answers[4], self.logger)
-        lat, long = l.latitude, l.longitude
-        jsonUtils.write({
-                "gender": answers[1],
-                "location": {"latitude": lat, "longitude": long}
-            })
+        try:
+            lat, long = l.latitude, l.longitude
+        except Exception:
+            self.logger.warning("Failed to get location")
+        else:
+            jsonUtils.write({
+                    "location": {"latitude": lat, "longitude": long}
+                })
+        finally:
+            jsonUtils.write({
+                    "gender": answers[1],
+                })
         
         self.clean()
     

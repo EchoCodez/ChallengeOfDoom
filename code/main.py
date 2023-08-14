@@ -143,15 +143,21 @@ class Program(Questions, ApiParent):
 
             def _weatherinfo():
                 print("FFFFFFFFFFFFFFFFFFFFFFFF")
+                def to_farenheit(cel: float) -> float:
+                    return 32+9*cel/5
+                
+                location = jsonUtils.read(constants.USER_DATA).get("location", False)
+                # TODO: use location to check if use_celsius should be true or false
+                use_celsius = False
+                weather =  f"{weather_data['temp']:.1f}\u2103" if use_celsius else f"{to_farenheit(weather_data['temp']):.0f}\u2109"
                 ctk.CTkLabel(
                     self,
-                    text=f"""Current Weather: {weather_data['temp']} degrees Celsius.
-Humidity: {weather_data['humidity']}%""",
+                    text=f"Current Weather: {weather}.\nHumidity: {weather_data['humidity']}%",
                     width=120,
                     height=32,
                     text_color="#FFFFFF",
                     font=("Times New Roman", 30)
-                    ).place(relx=0.7, rely=0.3, anchor=tk.CENTER)
+                ).place(relx=0.7, rely=0.3, anchor=tk.CENTER)
             recommendation = ''
 
             if weather_data['temp'] <= -4:
