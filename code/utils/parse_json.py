@@ -1,20 +1,16 @@
 import json
 import os
-from typing import Callable
+from typing import Callable, Any, Iterable
 from io import StringIO
 from utils.data_classes import UserInfo
+from utils.constants import *
 
-# to import do:
-# from utils import jsonUtils
-# or
-# import utils.parse_json as jsonUtils
 
 preferences = ("appearance_theme", "save_data")
-files = ("json/preferences.json", "json/user-data.json")
+files = (PREFERENCES, USER_DATA)
 
 
-
-def add(data: dict, file: str = "json/user-data.json", indent=4) -> None:
+def add(data: dict, file: Path = USER_DATA, indent: int = 4) -> None:
     '''
     Adds data to a file
     
@@ -22,7 +18,7 @@ def add(data: dict, file: str = "json/user-data.json", indent=4) -> None:
     ----------
     data (dict): The data to be added
     
-    file (str, optional): "user-data.json"
+    file (Path, optional): "user-data.json"
         Which file to add data to.
     '''
 
@@ -30,7 +26,7 @@ def add(data: dict, file: str = "json/user-data.json", indent=4) -> None:
     with open(file, "w", encoding="utf-8") as f:
         f.write(json.dumps(new_data, indent=indent))
 
-def write(data: dict, file: str = "json/user-data.json", indent=4) -> None:
+def write(data: dict, file: Path = USER_DATA, indent=4) -> None:
     '''
     Adds data to a file
     
@@ -38,7 +34,7 @@ def write(data: dict, file: str = "json/user-data.json", indent=4) -> None:
     ----------
     data (dict | list): The data to be added
     
-    file (str, optional): "user-data.json"
+    file (Path, optional): "user-data.json"
         Which file to add data to.
     '''
     
@@ -64,50 +60,49 @@ def write(data: dict, file: str = "json/user-data.json", indent=4) -> None:
     with open(file, "w", encoding="utf-8") as f:
         f.write(json.dumps(modified_data, indent=indent))
         
-def clearfile(file: str = "json/user-data.json") -> None:
+def clearfile(file_path: Path = USER_DATA) -> None:
     """Resets json files
 
     Paramters:
     ----------
-        file (str, optional): file path and file. Defaults to "user-data.json".
+        file (Path, optional): file path and file. Defaults to "user-data.json".
 
     Raises:
     -------
         TypeError: file must be a .json file
     """
     
-    if file[-5:] != ".json":
-        raise TypeError(f"Invalid file\nExpected file to end in .json. Instead it ended with \"{file[-5:]}\"")
-    with open(file, "w", encoding="utf-8") as f:
+    if file_path.suffix != ".json":
+        raise TypeError(f"Invalid file path\nExpected file to end in .json, not \"{file_path.suffix}\"")
+    with open(file_path, "w", encoding="utf-8") as f:
         f.write("{}")
 
-def clearfiles(files: tuple[str]=files, clearlogs = False) -> None:
+def clearfiles(files: tuple[Path] = files, clearlogs = False) -> None:
     """wrapper for doing:
     ```
     for file in files:
         clearfile(file=file)
         
     if clearlogs:
-        for log in read("json/logs.json")["logs_list"]:
+        for log in read(LOGS)["logs_list"]:
             delete_file(log)
-        overwrite({"logs_list": []}, file="json/logs.json")
+        overwrite({"logs_list": []}, file=LOGS)
     ```
 
     Parameters:
     ----------
-        files (tuple[str], optional): an iterable of file names to clear. Defaults to ("preferences.json", "user-data.json").\n
+        files (tuple[Path], optional): an iterable of file names to clear. Defaults to ("preferences.json", "user-data.json").\n
         clearlogs (bool, optional): clear old health diagnosis logs. Defaults to False.
     """
         
     for file in files:
-        clearfile(file=file)
+        clearfile(file)
         
     if clearlogs:
-        for log in read("json/logs.json")["logs_list"]:
+        for log in HEALTH_LOGS.iterdir():
             delete_file(log)
-        overwrite({"logs_list": []}, file="json/logs.json")
 
-def get(file: StringIO, sentinal: str|int, *, func: Callable = lambda x: None) -> bool:
+def get(file: StringIO, sentinal: str|int, *, func: Callable[[Any], None] = lambda _: None) -> bool:
     """
     Search a json file for a string or int as a key. If found, call func() and return True. Otherwise, return False.
 
@@ -130,9 +125,12 @@ def get(file: StringIO, sentinal: str|int, *, func: Callable = lambda x: None) -
     """
     
     data: dict = json.load(file)
-    if data.get(sentinal, False):
-        func(data.get(sentinal))
-        return True
+    if isinstance(data, dict):
+        if data.get(sentinal, False):
+            func(data.get(sentinal))
+            return True
+    else:
+        raise ValueError(f"data in file must be a dictionary: got {type(data).__name__} instead")
     return False
 
 def get_values() -> UserInfo:
@@ -152,23 +150,23 @@ def get_values() -> UserInfo:
     ```
     """
     
-    prefs, data = read("json/preferences.json"), read("json/user-data.json")
+    prefs, data = read(PREFERENCES), read(USER_DATA)
     
     return UserInfo(
-        conditions=data.get("conditions", []),
-        preferences={preference: prefs.get(preference) for preference in preferences},
-        gender=data.get("gender"),
-        birthyear=data.get("birth_year"),
-        api_username=data.get("api_username", ""),
-        api_password=data.get("api_password", "")
+            conditions=data.get("conditions", []),
+            preferences={preference: prefs.get(preference) for preference in preferences},
+            gender=data.get("gender"),
+            birthyear=data.get("birth_year"),
+            api_username=data.get("api_username", ""),
+            api_password=data.get("api_password", "")
         )
 
-def read(file: str) -> list[dict] | dict:
+def read(file: Path) -> list[dict] | dict:
     """returns the json loaded file of a file path
 
     Parameters:
     -----------
-        file (str): file path
+        file (Path): file path
     
     Returns:
     --------
@@ -185,7 +183,7 @@ def read(file: str) -> list[dict] | dict:
     with open(file, encoding="utf-8") as f:
         return json.load(f)
     
-def search(file: str, sentinal: int, **kwargs) -> str | dict:
+def search(file: Path, sentinal: int, **kwargs) -> str | dict:
     '''
     Search for a given string in a json file
     
@@ -273,25 +271,25 @@ def search(file: str, sentinal: int, **kwargs) -> str | dict:
         if symptom.get(search_for) == sentinal:
             return symptom if return_dict else symptom[_return]
 
-def overwrite(data, file: str, *, dumps = True) -> None:
+def overwrite(data: dict | list, file: Path, *, dumps = True) -> None:
     """Overwrite data in a file
 
     Parameters:
     ----------
         data (dict | dumps): the data to overwrite the file with
         
-        file (str): the file path
+        file (Path): the file path
         
         dumps (bool, optional): whether to write `json.dumps(data)`. Defaults to True.
     """
         
     with open(file, "w", encoding="utf-8") as f:
         if dumps:
-            f.write(json.dumps(data, indent=4))
+            f.write(json.dumps(data, indent = 4))
         else:
             f.write(data)
 
-def open_json(path: str, action: str = "r") -> None:
+def open_json(path: Path, action: str = "r", **kwargs) -> None:
     """Context manager for opening json files. 
     Instead of returning a file object, the object returned is a json.load(file) object. 
     This should mainly be used for readability
@@ -308,25 +306,29 @@ def open_json(path: str, action: str = "r") -> None:
     --------
         `Any | tuple[Any, fp]`: json loaded version of file, or tuple of json loaded version of file and file object (only if `action != r`)
     """        
-    return open_json(path, action)
+    return OPEN_JSON(path, action, kwargs)
 
-def delete_file(path: str) -> None:
+def delete_file(path: Path) -> None:
     '''Deletes a file. If exception is thrown, catches it silently'''
-    try:
-        os.remove(path)
-    except Exception:
-        pass
+    if not isinstance(path, Path):
+        raise TypeError(
+            f"path must be an instance of {type(Path).__name__}"
+            f"Try passing in Path({path}) instead" if isinstance(path, str) else ''
+            )
+    path.unlink()
 
 
-class open_json:
-    def __init__(self, path: str, action: str = "r") -> None:
+class OPEN_JSON:
+    '''Context manager for opening json files'''
+    def __init__(self, path: str, action: str = "r", kwargs: dict[str, Any] = None) -> None:
         self.path = path
         self.action = action
-        self.return_file = (self.action != "r")
+        self.return_file = ("r" not in self.action)
+        self.kwargs = kwargs
     
     def __enter__(self):
         if self.return_file:
-            self.file = open(self.path, self.action)
+            self.file = open(self.path, self.action, encoding="utf-8", **self.kwargs)
             return (json.load(self.file), self.file)
         
         with open(self.path, self.action, encoding="utf-8") as f:

@@ -1,7 +1,8 @@
 import logging as lg
 from webbrowser import open_new_tab
+from pathlib import Path
 
-def setup_logging(log_file: str = "logs/runlog.log", logger_name = __name__) -> lg.Logger:
+def setup_logging(log_file: Path = Path("logs/runlog.log"), logger_name = "CongressionalAppChallenge") -> lg.Logger:
     with open(log_file, "w"): # create file if it doesn't exist. Otherwise, clear file
         pass
     

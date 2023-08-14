@@ -1,28 +1,33 @@
 from __future__ import annotations
 
-from utils import jsonUtils, InformationSheet, UseLogger, CustomQuestion, SettingsAttr
+from utils import (
+    jsonUtils,
+    InformationSheet,
+    UseLogger,
+    CustomQuestion,
+    SettingsAttr,
+    Logger,
+    FileHandler
+)
 import customtkinter as ctk
 import tkinter as tk
-from logging import Logger
 
 INFORMATION_PAGES = list[InformationSheet | CustomQuestion]
 
 class Settings(ctk.CTkScrollableFrame):
-    def __init__(self, master: ctk.CTk | ctk.CTkScrollableFrame, logger: Logger, **kwargs) -> None:
+    def __init__(self, master: ctk.CTk, logger: Logger, **kwargs) -> None:
         super().__init__(master, **kwargs)
+        
         self.logger = logger
         self.logger.debug("Settings Clicked")
         self.row = 0
         self.show_settings()
-        self.logger.debug("Done")
     
     def clean(self):
         for w in (i for i in self.master.winfo_children() if i is not self):
             w.destroy()
     
-    def show_settings(self, mainloop=False, font=("", 50)) -> dict | None:
-        from utils import FileHandler
-        self.master.quit()
+    def show_settings(self, font=("", 50)) -> None:
         self.clean()
         self.setting_vars = {}
         
@@ -78,10 +83,6 @@ class Settings(ctk.CTkScrollableFrame):
                     command=setting.command,
                     **setting.kwargs
                 )
-        
-        if mainloop:
-            self.pack()
-            self.mainloop()
     
     def _create_switch_setting(self, name: str, **kwargs) -> tk.Variable:
         """Create a setting button controlled by a switch

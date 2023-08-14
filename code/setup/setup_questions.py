@@ -1,34 +1,15 @@
 import re
+import webbrowser
 import tkinter as tk
 import customtkinter as ctk
-import webbrowser
 from datetime import datetime, date
 from CTkMessagebox import CTkMessagebox
-from logging import Logger
-from utils import (
-    jsonUtils,
-    MCQbuiler,
-    CustomQuestion,
-    Question,
-    set_theme,
-    InformationSheet,
-    ActionButton,
-    UserInfo
-)
-from api.diagnosis import Diagnosis
+
+from api import Diagnosis, get_location
 from setup.special import InformationPages
 from setup.setup import get_information_texts
-from api.location import get_location
+from utils import *
 
-
-preferences = "json/preferences.json"
-user_data = "json/user-data.json"
-conditions_list = "json/symptoms.json"
-
-GENERATOR = (str(i) for i in range(1)).__class__
-
-def _ceil(n: float) -> int:
-    return int(n) if isinstance(n, int) or n.is_integer() else int(n)+1
 
 class Questions(ctk.CTk):
     '''Setup questions for application'''
@@ -39,7 +20,7 @@ class Questions(ctk.CTk):
         self.__appearance = tk.StringVar(value="light")
         self._selected_conditions: dict[str, tk.BooleanVar] = {}
         self.logger = logger
-        self._conditions: GENERATOR = iter(d["Name"] for d in jsonUtils.read(conditions_list))
+        self._conditions = iter(d["Name"] for d in jsonUtils.read(constants.CONDITIONS_LIST))
         self.total_condition_pages = None
     
     def raise_exception(self, mainloop: bool = False, **kwargs) -> CTkMessagebox:
@@ -110,7 +91,7 @@ class Questions(ctk.CTk):
                 ctk.set_appearance_mode("light")
         
         def cont():
-            jsonUtils.write({"appearance_theme":self.__appearance.get()}, file=preferences)
+            jsonUtils.write({"appearance_theme":self.__appearance.get()}, file=constants.PREFERENCES)
             self.logger.debug(f"Successfully wrote appearance theme {self.__appearance.get()} to file")
             self.quit()
         
@@ -220,11 +201,11 @@ class Questions(ctk.CTk):
         
         rows, columns = 15, 3
         
-        total_names = len(jsonUtils._open(conditions_list))
+        total_names = len(jsonUtils.read(constants.CONDITIONS_LIST))
         
         gender = jsonUtils.read("json/user-data.json").get("gender", "male").lower()
         
-        for i in range(_ceil(total_names/(rows*columns))):
+        for i in range(ceil(total_names/(rows*columns))):
             def continue_button():
                 self.clean()
                 self.quit()
@@ -503,7 +484,7 @@ class ApiParent:
                 user=user,
                 logger=self.logger,
                 testing=False
-                ).make_call()
+            ).make_call()
             
             if results == "":
                 self.raise_exception(
@@ -517,23 +498,12 @@ class ApiParent:
             
             self.logger.debug("User made daily diagnosis call.")
             
-            file = f"json/health/{date.today().strftime('%d_%m_%y')}.json"
+            f = Path(f"json/health/{date.today().strftime('%d_%m_%y')}.json")
             jsonUtils.overwrite(
                 data = results,
-                file = file
+                file = f
                 )
-            self.logger.info(f"Writing to log file '{file}' completed successfully")
-            
-            # writes it to list of logs
-            logs: list[str] = jsonUtils._open("json/logs.json")["logs_list"]
-            logs+=[file] if file not in logs else []
-            logs.sort(key=lambda d: datetime.strptime(d.replace("json/health/", "")[:-5], "%d_%m_%y"))
-            jsonUtils.write(
-                data={"logs_list": list(logs)},
-                file="json/logs.json"
-            )
-            
-            self.logger.info("Added log file name to logs.json")
+            self.logger.info(f"Writing to log file {f} completed successfully")
         
         self.clean()
         
@@ -558,7 +528,7 @@ class ApiParent:
         
         for condition in test_results:
             conditions+= [jsonUtils.search(
-                conditions_list,
+                constants.CONDITIONS_LIST,
                 sentinal=condition,
                 search_for="Name",
                 _return="ID"

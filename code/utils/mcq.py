@@ -14,7 +14,7 @@ class MCQbuiler(UseLogger):
         *questions: Question | CustomQuestion,
         include_start: bool = True,
         include_end: bool = True,
-        ) -> None:
+    ) -> None:
         """Initialize Multiple Choice Quiz
 
         Parameters:

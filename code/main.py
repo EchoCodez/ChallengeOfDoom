@@ -1,11 +1,6 @@
 from __future__ import annotations
 from setup import *
 
-
-preferences = "json/preferences.json"
-user_data = "json/user-data.json"
-conditions_list = "json/symptoms.json"
-
 class Program(Questions, ApiParent):
     """The main program that runs the application
 
@@ -19,9 +14,7 @@ class Program(Questions, ApiParent):
         Initilize self and set up program, if not already set up
         '''
         
-        super().__init__(
-                logger=setup_logging()
-            )
+        super().__init__(logger=setup_logging())
         
         
         def quit_app(*events: object):
@@ -46,16 +39,16 @@ class Program(Questions, ApiParent):
             7: "Before/After Meal",
         }
         
-        if not jsonUtils.read(preferences).get("setup_finished", False):
+        if not jsonUtils.read(constants.PREFERENCES).get("setup_finished", False):
             self.setup()
             self.show_register_api_pages()
-            jsonUtils.write({"setup_finished": True}, file=preferences)
+            jsonUtils.write({"setup_finished": True}, file=constants.PREFERENCES)
             self.logger.debug(jsonUtils.get_values())
 
         set_theme()
             
         
-        medicines = jsonUtils.read("json/medicines.json")
+        medicines = jsonUtils.read(constants.MEDICINES)
         
         self.notifications = medicines
         self.logger.info("Loading medicine notifications into memory")
@@ -68,7 +61,8 @@ class Program(Questions, ApiParent):
         global print
         print = self.logger.debug
     
-    def health_log(self) -> None:    
+    def health_log(self) -> None:
+        self.quit()   
         self.clean()
         self.logger.debug("Health Log Accessed")
         calendar = Calendar(self)
@@ -97,6 +91,7 @@ class Program(Questions, ApiParent):
         '''Main function that executes the program'''
         self.logger.debug("Reached Home Screen")
         self.clean()
+        self.quit()
         
         HomepageSection( # top left
             self,
@@ -138,13 +133,12 @@ class Program(Questions, ApiParent):
                     text="pollen",
                     width=120,
                     height=32,
-                    border_width=0,
+                    # border_width=0,
                     corner_radius=8,
                     # pady=500
                     )
                 
                 pollen.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-                # pollen.pack()
                 
             pollenButton = ctk.CTkButton(
                 self,
@@ -158,9 +152,6 @@ class Program(Questions, ApiParent):
                 text_color="#000000"
                 )
             pollenButton.pack(pady=200)
-           # _pollen(pollenButton, self.logger)
-
-            self.mainloop()
 
         HomepageSection( # bottom
             self,
@@ -176,13 +167,24 @@ class Program(Questions, ApiParent):
             )
         
         def create_settings():
+            self.clean()
+            
+            def leave():
+                self.quit()
+                self.home()
+
+            ctk.CTkButton(
+                self,
+                text="Back to Homepage",
+                command=leave
+            ).pack(pady=20)
             Settings(
-                    self,
-                    self.logger,
-                    width=self.winfo_screenwidth()-100,
-                    height=self.winfo_screenheight()-100
-                ).pack()
-            self.mainloop()
+                self,
+                self.logger,
+                width=self.winfo_screenwidth()-100,
+                height=self.winfo_screenheight()-140 # TODO: calculate this based on button size
+            ).pack()
+            # home already mainloops: don't do it manually
         
         HomepageSection( # bottom left
             self,
@@ -277,7 +279,7 @@ def main(*, erase_data: bool = False) -> None:
     Parameters
     ----------
     erase_data: bool
-        Debugging parameter to erase all data in preferences.json and user-data.json
+        Debugging parameter to erase all data in constants.PREFERENCES.json and user-data.json
     '''
 
     if erase_data: # only for testing purposes; delete in final push
