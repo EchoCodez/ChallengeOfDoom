@@ -132,13 +132,12 @@ class Program(Questions, ApiParent):
             #_weather(frame, self.logger)
 
 
-            weather_data = jsonUtils.read(constants.WEATHER_DATA)
-            print(weather_data["main"])
+            weather_data = jsonUtils.read(constants.WEATHER_DATA)["main"]
+            print(weather_data)
            
 
 
-           # _weather(frame, self.logger)
-            #_weather()
+            # TODO: Take into account humidity and wind when giving recommendations
             ctk.CTkLabel(self, text="Weather").pack()
 
 
@@ -146,8 +145,8 @@ class Program(Questions, ApiParent):
                 print("FFFFFFFFFFFFFFFFFFFFFFFF")
                 ctk.CTkLabel(
                     self,
-                    text=f"""Current Weather: {weather_data['main']['temp']} degrees Celsius.
-Humidity: {weather_data['main']['humidity']}%""",
+                    text=f"""Current Weather: {weather_data['temp']} degrees Celsius.
+Humidity: {weather_data['humidity']}%""",
                     width=120,
                     height=32,
                     text_color="#FFFFFF",
@@ -155,15 +154,15 @@ Humidity: {weather_data['main']['humidity']}%""",
                     ).place(relx=0.7, rely=0.3, anchor=tk.CENTER)
             recommendation = ''
 
-            if weather_data['main']['temp'] <= -4:
+            if weather_data['temp'] <= -4:
                 recommendation = "Wear a winter jacket. It is VERY cold outside."
-            elif weather_data['main']['temp'] > -4 and weather_data['main']['temp'] <= 7:
+            elif weather_data['temp'] > -4 and weather_data['temp'] <= 7:
                 recommendation = 'Wear a light or medium coat. It is quite cold outside.'
-            elif weather_data['main']['temp'] > 7 and weather_data['main']['temp'] <= 18:
+            elif weather_data['temp'] > 7 and weather_data['temp'] <= 18:
                 recommendation = 'Wear a fleece jacket. It is a bit chilly outside.'
-            elif weather_data['main']['temp'] > 18 and weather_data['main']['temp'] <= 32:
+            elif weather_data['temp'] > 18 and weather_data['temp'] <= 32:
                 recommendation = 'Wear a short sleeved shirt. It is quite hot outside.'
-            elif weather_data['main']['temp'] > 32:
+            elif weather_data['temp'] > 32:
                 recommendation = 'It is recommended that you don\'t go outside today. It is very hot outside.'
 
             def _recommendations():
@@ -175,7 +174,7 @@ Humidity: {weather_data['main']['humidity']}%""",
                     height=32,
                     text_color="#FFFFFF",
                     font=("Times New Roman", 30)
-                    ).place(relx=0.7, rely=0.7, anchor=tk.CENTER)
+                ).place(relx=0.7, rely=0.7, anchor=tk.CENTER)
 
 
             
