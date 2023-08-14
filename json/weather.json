@@ -1,0 +1,46 @@
+{
+    "coord": {
+        "lon": -78.66,
+        "lat": 37.43
+    },
+    "weather": [
+        {
+            "id": 803,
+            "main": "Clouds",
+            "description": "broken clouds",
+            "icon": "04d"
+        }
+    ],
+    "base": "stations",
+    "main": {
+        "temp": 30.39,
+        "feels_like": 30.84,
+        "temp_min": 27.88,
+        "temp_max": 31.84,
+        "pressure": 1013,
+        "humidity": 45,
+        "sea_level": 1013,
+        "grnd_level": 992
+    },
+    "visibility": 10000,
+    "wind": {
+        "speed": 3.82,
+        "deg": 214,
+        "gust": 6.1
+    },
+    "clouds": {
+        "all": 70
+    },
+    "dt": 1692033694,
+    "sys": {
+        "type": 1,
+        "id": 4157,
+        "country": "US",
+        "sunrise": 1692008985,
+        "sunset": 1692058151
+    },
+    "timezone": -14400,
+    "id": 4749652,
+    "name": "Buckingham",
+    "cod": 200
+}
