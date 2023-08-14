@@ -62,7 +62,7 @@ class Program(Questions, ApiParent):
         print = self.logger.debug
     
     def health_log(self) -> None:
-        self.quit()   
+        self.quit()
         self.clean()
         self.logger.debug("Health Log Accessed")
         calendar = Calendar(self)
@@ -121,37 +121,103 @@ class Program(Questions, ApiParent):
         
         def _weather():
             self.clean()
+
+
+            frame = ctk.CTkScrollableFrame(
+                self,
+                width=self.winfo_screenwidth()-100,
+                height=self.winfo_screenheight()-100,
+            )
+            frame = self
+            #_weather(frame, self.logger)
+
+
+            weather_data = jsonUtils.read(constants.WEATHER_DATA)
+            print(weather_data["main"])
+           
+
+
            # _weather(frame, self.logger)
             #_weather()
             ctk.CTkLabel(self, text="Weather").pack()
 
-            def _pollen():
-                print("button pressed")
 
-                pollen = ctk.CTkLabel(
+            def _weatherinfo():
+                print("FFFFFFFFFFFFFFFFFFFFFFFF")
+                ctk.CTkLabel(
                     self,
-                    text="pollen",
+                    text=f"""Current Weather: {weather_data['main']['temp']} degrees Celsius.
+Humidity: {weather_data['main']['humidity']}%""",
                     width=120,
                     height=32,
-                    # border_width=0,
-                    corner_radius=8,
-                    # pady=500
-                    )
-                
-                pollen.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-                
-            pollenButton = ctk.CTkButton(
+                    text_color="#FFFFFF",
+                    font=("Times New Roman", 30)
+                    ).place(relx=0.7, rely=0.3, anchor=tk.CENTER)
+            recommendation = ''
+
+            if weather_data['main']['temp'] <= -4:
+                recommendation = "Wear a winter jacket. It is VERY cold outside."
+            elif weather_data['main']['temp'] > -4 and weather_data['main']['temp'] <= 7:
+                recommendation = 'Wear a light or medium coat. It is quite cold outside.'
+            elif weather_data['main']['temp'] > 7 and weather_data['main']['temp'] <= 18:
+                recommendation = 'Wear a fleece jacket. It is a bit chilly outside.'
+            elif weather_data['main']['temp'] > 18 and weather_data['main']['temp'] <= 32:
+                recommendation = 'Wear a short sleeved shirt. It is quite hot outside.'
+            elif weather_data['main']['temp'] > 32:
+                recommendation = 'It is recommended that you don\'t go outside today. It is very hot outside.'
+
+            def _recommendations():
+                print('GGGGGGGGGGG')
+                ctk.CTkLabel(
+                    self,
+                    text=recommendation,
+                    width=120,
+                    height=32,
+                    text_color="#FFFFFF",
+                    font=("Times New Roman", 30)
+                    ).place(relx=0.7, rely=0.7, anchor=tk.CENTER)
+
+
+            
+               
+            ctk.CTkButton( # shows humidity and temp
                 self,
                 fg_color="#ADD8E6",
-                command=_pollen,
-                text="pollen",
+                command=_weatherinfo,
+                text="Weather",
                 width=300,
-                height=400,
+                height=350,
                 border_width=1,
-                corner_radius=8,
-                text_color="#000000"
-                )
-            pollenButton.pack(pady=200)
+                corner_radius=40,
+                text_color='#000000',
+                font=("Times New Roman", 30)
+                ).place(relx=0.2, rely=0.3, anchor=tk.CENTER)
+            
+            ctk.CTkButton( # shows recommendations
+                self,
+                fg_color="#ADD8E6",
+                command=_recommendations,
+                text="Recommendations",
+                width=200,
+                height=300,
+                border_width=1,
+                corner_radius=40,
+                text_color='#000000',
+                font=("Times New Roman", 30)
+                ).place(relx=0.2, rely=0.7, anchor=tk.CENTER)
+
+            ctk.CTkButton(
+                self,
+                text="Back to Homepage",
+                command=self.home,
+                fg_color="#3396FF",
+                height=50,
+                width=300,
+                text_color='#FFFFFF',
+                corner_radius=40
+            ).place(relx=0.1, rely=0.95, anchor=tk.CENTER)
+            self.mainloop()
+
 
         HomepageSection( # bottom
             self,
