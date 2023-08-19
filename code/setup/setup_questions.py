@@ -481,9 +481,12 @@ class Questions(ctk.CTk):
 
 class ApiParent:
     '''Class to put UI diagnosis code for APImedic'''
-    def __init__(self) -> None:
-        super().__init__()
-    
+    # TODO: Add disclaimer
+    # improve API quiz by sorting through symptoms list
+    # A) Ask how they're feeling on 1-10 scale. 7+ means we tell them to go to doctor right away (don't deal with that case)
+    # B) Add data for each condition about part of body it's from (digestive, respiratory, etc.)
+    # C) Ask user where pain is coming from (checkboxes)
+    # D) Filter symptoms list by part (C) to make it shorter.
     def _diagnose(self) -> None:
         '''Gather diagnosis data and use it to call API'''
         def call_api(user):
