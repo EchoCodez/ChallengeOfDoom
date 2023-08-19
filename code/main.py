@@ -132,47 +132,62 @@ class Program(Questions, ApiParent):
             #_weather(frame, self.logger)
 
 
-            weather_data = jsonUtils.read(constants.WEATHER_DATA)["main"]
+            weather_data = jsonUtils.read(constants.WEATHER_DATA)
             print(weather_data)
+
+            airquality_data = jsonUtils.read(constants.AIR_QUALITY)
+            print(airquality_data)
            
 
 
-            # TODO: Take into account humidity and wind when giving recommendations
+           # TODO: Take into account humidity and wind when giving recommendations
             ctk.CTkLabel(self, text="Weather").pack()
 
 
             def _weatherinfo():
-                print("FFFFFFFFFFFFFFFFFFFFFFFF")
+                print("Clicked weather info button")
                 def to_farenheit(cel: float) -> float:
                     return 32+9*cel/5
                 
                 location = jsonUtils.read(constants.USER_DATA).get("location", False)
                 # TODO: use location to check if use_celsius should be true or false
                 use_celsius = False
-                weather =  f"{weather_data['temp']:.1f}\u2103" if use_celsius else f"{to_farenheit(weather_data['temp']):.0f}\u2109"
+                weather =  f"{weather_data['main']['temp']:.1f}\u2103" if use_celsius else f"{to_farenheit(weather_data['main']['temp']):.0f}\u2109"
                 ctk.CTkLabel(
                     self,
-                    text=f"Current Weather: {weather}.\nHumidity: {weather_data['humidity']}%",
+                    text=f"Current Weather: {weather}.\nHumidity: {weather_data['main']['humidity']}%",
                     width=120,
                     height=32,
                     text_color="#FFFFFF",
                     font=("Times New Roman", 30)
                 ).place(relx=0.7, rely=0.3, anchor=tk.CENTER)
+            
+            def _airquality():
+                print("Clicked air quality button")
+                ctk.CTkLabel(
+                    self,
+                    text=f"""Current air quality index: {airquality_data['main']['aqi']}""",
+                    width=120,
+                    height=32,
+                    text_color="#FFFFFF",
+                    font=("Times New Roman", 30)
+                ).place(relx=0.5, rely=0.2, anchor=tk.CENTER)
+
             recommendation = ''
 
-            if weather_data['temp'] <= -4:
+            if weather_data['main']['temp'] <= -4:
                 recommendation = "Wear a winter jacket. It is VERY cold outside."
-            elif weather_data['temp'] > -4 and weather_data['temp'] <= 7:
+            elif weather_data['main']['temp'] > -4 and weather_data['main']['temp'] <= 7:
                 recommendation = 'Wear a light or medium coat. It is quite cold outside.'
-            elif weather_data['temp'] > 7 and weather_data['temp'] <= 18:
+            elif weather_data['main']['temp'] > 7 and weather_data['main']['temp'] <= 18:
                 recommendation = 'Wear a fleece jacket. It is a bit chilly outside.'
-            elif weather_data['temp'] > 18 and weather_data['temp'] <= 32:
+            elif weather_data['main']['temp'] > 18 and weather_data['main']['temp'] <= 32:
                 recommendation = 'Wear a short sleeved shirt. It is quite hot outside.'
-            elif weather_data['temp'] > 32:
+            elif weather_data['main']['temp'] > 32:
                 recommendation = 'It is recommended that you don\'t go outside today. It is very hot outside.'
 
             def _recommendations():
-                print('GGGGGGGGGGG')
+                print('Clicked reccomendations')
                 ctk.CTkLabel(
                     self,
                     text=recommendation,
@@ -180,7 +195,7 @@ class Program(Questions, ApiParent):
                     height=32,
                     text_color="#FFFFFF",
                     font=("Times New Roman", 30)
-                ).place(relx=0.7, rely=0.7, anchor=tk.CENTER)
+                ).place(relx=0.7, rely=0.5, anchor=tk.CENTER)
 
 
             
@@ -191,25 +206,38 @@ class Program(Questions, ApiParent):
                 command=_weatherinfo,
                 text="Weather",
                 width=300,
-                height=350,
+                height=250,
                 border_width=1,
                 corner_radius=40,
                 text_color='#000000',
                 font=("Times New Roman", 30)
-                ).place(relx=0.2, rely=0.3, anchor=tk.CENTER)
+                ).place(relx=0.15, rely=0.2, anchor=tk.CENTER)
             
             ctk.CTkButton( # shows recommendations
                 self,
                 fg_color="#ADD8E6",
                 command=_recommendations,
                 text="Recommendations",
-                width=200,
-                height=300,
+                width=300,
+                height=250,
                 border_width=1,
                 corner_radius=40,
                 text_color='#000000',
                 font=("Times New Roman", 30)
-                ).place(relx=0.2, rely=0.7, anchor=tk.CENTER)
+                ).place(relx=0.15, rely=0.5, anchor=tk.CENTER)
+            
+            ctk.CTkButton( # shows air quality index
+                self,
+                fg_color="#ADD8E6",
+                command=_airquality,
+                text="Air Quality",
+                width=300,
+                height=200,
+                border_width=1,
+                corner_radius=40,
+                text_color='#000000',
+                font=("Times New Roman", 30)
+            ).place(relx=0.15, rely=0.77, anchor=tk.CENTER)
 
             ctk.CTkButton(
                 self,
