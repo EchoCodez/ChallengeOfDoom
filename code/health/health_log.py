@@ -89,7 +89,7 @@ class Log(ctk.CTkToplevel):
         elements.append(self.entry)
         self.entry2 = ctk.CTkEntry(
                 self,
-                placeholder_text=f"Enter quantity"
+                placeholder_text=f"Enter quantity IN GRAMS"
         )
         self.entry2.pack()
         elements.append(self.entry2)
