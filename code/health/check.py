@@ -3,17 +3,18 @@ import json
 from logging import Logger
 
 class Algorithm:
-    def __init__(self, food: str, logger: Logger) -> None:
+    def __init__(self, food: str, quantity: str, logger: Logger) -> None:
         self.food = food
+        self.quantity = quantity
         self.logger = logger
     
-    def get_nutrition_info(self, food: str, api_key: str):
+    def get_nutrition_info(self, api_key: str):
         base_url = "https://api.nal.usda.gov/fdc/v1/"
         search_url = base_url + "foods/search"
         details_url = base_url + "food/{}/"
 
         params = {
-            "query": food,
+            "query": self.food,
             "api_key": api_key,
         }
 
@@ -63,13 +64,12 @@ class Algorithm:
 
         with open("json/food.json", "w") as f:
             json.dump(nutrients, f, indent=4)
-
         return raw_data["foodNutrients"]
 
     def run(self):
         api_key = "4aoCShlfHPImyLqzhxPHpSGnFVadB92vgwX5cE56"
 
-        nutrition_info = self.get_nutrition_info(self.food, api_key)
+        nutrition_info = self.get_nutrition_info(api_key)
         if nutrition_info:
             print("Nutrition Information:")
             for info in nutrition_info:
