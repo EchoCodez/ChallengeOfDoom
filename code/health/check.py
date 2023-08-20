@@ -9,16 +9,12 @@ class Algorithm:
         self.logger = logger
     
     def get_nutrition_info(self, api_key: str):
-        base_url = "https://api.nal.usda.gov/fdc/v1/"
-        search_url = base_url + "foods/search"
-        details_url = base_url + "food/{}/"
-
         params = {
             "query": self.food,
             "api_key": api_key,
         }
 
-        response = requests.get(search_url, params=params)
+        response = requests.get("https://api.nal.usda.gov/fdc/v1/foods/search", params=params)
         response_data = response.json()
 
 
@@ -28,7 +24,7 @@ class Algorithm:
 
         food_id = response_data["foods"][0]["fdcId"]
 
-        response = requests.get(details_url.format(food_id), params={"api_key": api_key})
+        response = requests.get(f"https://api.nal.usda.gov/fdc/v1/food/{food_id}", params={"api_key": api_key})
         raw_data = response.json()
         food_details = raw_data["foodNutrients"]
         nutrients = {}
