@@ -148,14 +148,22 @@ class Program(Questions, ApiParent):
                 print("Clicked weather info button")
                 def to_farenheit(cel: float) -> float:
                     return 32+9*cel/5
+                def to_mph(mps: float) -> float:
+                    return mps*2.2369
                 
                 location = jsonUtils.read(constants.USER_DATA).get("location", False)
-                # TODO: use location to check if use_celsius should be true or false
-                use_celsius = False
-                weather =  f"{weather_data['main']['temp']:.1f}\u2103" if use_celsius else f"{to_farenheit(weather_data['main']['temp']):.0f}\u2109"
+                # TODO: use location to check if use_metric should be true or false
+                use_metric = False
+                if use_metric:
+                    weather =  f"{weather_data['main']['temp']:.1f}\u2103"
+                    wind_speed = f"{weather_data['wind']['speed']}"
+                else:
+                    weather = f"{to_farenheit(weather_data['main']['temp']):.0f}\u2109"
+                    wind_speed = f"{to_mph(weather_data['wind']['speed']):.0f}"
+                
                 ctk.CTkLabel(
                     self,
-                    text=f"Current Weather: {weather}.\nHumidity: {weather_data['main']['humidity']}%",
+                    text=f"Current Weather: {weather}.\nHumidity: {weather_data['main']['humidity']}% \nWind Speed: {wind_speed} mph",
                     width=120,
                     height=32,
                     text_color="#FFFFFF",
@@ -166,7 +174,7 @@ class Program(Questions, ApiParent):
                 print("Clicked air quality button")
                 ctk.CTkLabel(
                     self,
-                    text=f"""Current air quality index: {airquality_data['main']['aqi']}""",
+                    text=f"Current air quality index: {airquality_data['main']['aqi']}",
                     width=120,
                     height=32,
                     text_color="#FFFFFF",
@@ -177,14 +185,21 @@ class Program(Questions, ApiParent):
 
             if weather_data['main']['temp'] <= -4:
                 recommendation = "Wear a winter jacket. It is VERY cold outside."
-            elif weather_data['main']['temp'] > -4 and weather_data['main']['temp'] <= 7:
+            if weather_data['main']['temp'] > -4 and weather_data['main']['temp'] <= 7:
                 recommendation = 'Wear a light or medium coat. It is quite cold outside.'
-            elif weather_data['main']['temp'] > 7 and weather_data['main']['temp'] <= 18:
+            if weather_data['main']['temp'] > 7 and weather_data['main']['temp'] <= 18:
                 recommendation = 'Wear a fleece jacket. It is a bit chilly outside.'
-            elif weather_data['main']['temp'] > 18 and weather_data['main']['temp'] <= 32:
+            if weather_data['main']['temp'] > 18 and weather_data['main']['temp'] <= 32:
                 recommendation = 'Wear a short sleeved shirt. It is quite hot outside.'
-            elif weather_data['main']['temp'] > 32:
+            if weather_data['main']['temp'] > 32:
                 recommendation = 'It is recommended that you don\'t go outside today. It is very hot outside.'
+            if weather_data['main']['humidity'] >= 60:
+                recommendation = """It is very humid outside today, meaning the air may be very 
+    thick and dense. Don\'t be outside for too long."""
+            if weather_data['wind']['speed'] > 25 and weather_data['wind']['speed'] <= 58:
+                recommendation = 'The wind is quite heavy today. It is still safe to go outside.'
+            if weather_data['wind']['speed'] > 58:
+                recommendation = 'Stay inside today. Your area is experiencing high speed and damaging winds.'
 
             def _recommendations():
                 print('Clicked reccomendations')
