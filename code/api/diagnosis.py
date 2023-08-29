@@ -1,13 +1,13 @@
 import requests
 from logging import Logger
 from datetime import date
-from utils import jsonUtils, UserInfo, Path
+from utils import jsonUtils, UserInfo, Path, constants
 
 
 class Diagnosis:
-    def __init__(self, user: UserInfo, logger: Logger, testing = True) -> None:
+    def __init__(self, user: UserInfo, testing = True) -> None:
         self.user = user
-        self.logger = logger
+        self.logger = constants.LOGGER
         self.testing = testing
 
     def _get_token(self) -> str:
@@ -44,7 +44,7 @@ class Diagnosis:
 
     def make_call(self, file: Path = None):
         token = self._get_token()
-        file = Path(file) if file is not None else Path(date.today().strftime("json/health/%d_%m_%y.json"))
+        file = Path(file) if file is not None else constants.TODAY_DATE_FILE
         
         if token == "":
             return ""

@@ -7,7 +7,8 @@ from utils import (
     CustomQuestion,
     SettingsAttr,
     Logger,
-    FileHandler
+    FileHandler,
+    constants
 )
 import customtkinter as ctk
 import tkinter as tk
@@ -15,10 +16,9 @@ import tkinter as tk
 INFORMATION_PAGES = list[InformationSheet | CustomQuestion]
 
 class Settings(ctk.CTkScrollableFrame):
-    def __init__(self, master: ctk.CTk, logger: Logger, **kwargs) -> None:
+    def __init__(self, master: ctk.CTk, **kwargs) -> None:
         super().__init__(master, **kwargs)
-        
-        self.logger = logger
+        self.logger = constants.LOGGER
         self.logger.debug("Settings Clicked")
         self.row = 0
         self.show_settings()
@@ -44,7 +44,7 @@ class Settings(ctk.CTkScrollableFrame):
         )
         
         # TODO: create bar for button colors
-        files = FileHandler(self.logger)
+        files = FileHandler()
         button_settings: tuple[SettingsAttr] = (
             SettingsAttr(
                 "Reset API Username",
@@ -364,7 +364,7 @@ class InformationPages(UseLogger):
         return self.__copy__()
     
     def __copy__(self) -> InformationPages:
-        return InformationPages(*self.logger).add_pages(*self.pages)
+        return InformationPages().add_pages(*self.pages)
             
     def __iadd__(self, __o: InformationSheet, /) -> InformationSheet:
         self.pages += [ __o ]

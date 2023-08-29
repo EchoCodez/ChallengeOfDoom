@@ -10,7 +10,6 @@ class MCQbuiler(UseLogger):
         self,
         root: ctk.CTk,
         name: str,
-        logger: Logger,
         *questions: Question | CustomQuestion,
         include_start: bool = True,
         include_end: bool = True,
@@ -34,7 +33,7 @@ class MCQbuiler(UseLogger):
         if not all(isinstance(q, (Question, CustomQuestion)) for q in questions):
             raise TypeError("All questions must be instances of Question or CustomQuestion")
         
-        super().__init__(logger)
+        super().__init__()
         self.questions = questions
         self.iterator = (i for i in self.questions)
         self.root = root

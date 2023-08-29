@@ -1,6 +1,5 @@
 import requests
 import json
-import math
 from logging import Logger
 
 class Algorithm:

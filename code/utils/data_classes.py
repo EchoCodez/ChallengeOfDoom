@@ -1,5 +1,6 @@
 import dataclasses
 import typing
+from logging import Logger
 
 __all__ = (
     "Question",
@@ -8,7 +9,8 @@ __all__ = (
     "ActionButton",
     "InformationSheet",
     "SettingsAttr",
-    "WeatherInfo"
+    "WeatherInfo",
+    "BodyPart"
 )
 
 @dataclasses.dataclass(frozen=True, slots=True)
@@ -126,3 +128,28 @@ class WeatherInfo:
     tree_pollen_risk: float
     weed_pollen_risk: float
     
+class BodyPart:
+    allowed_parts = {
+        "Upper Body",
+        "Lower Body",
+        "Respiratory"
+    }
+    def __init__(self, logger: Logger, *parts) -> None:
+        _parts = []
+        for part in (p.lower() for p in parts):
+            if part in self.allowed_parts:
+                _parts.append(part)
+            else:
+                logger.warning(f"{part} not in {self.allowed_parts}")
+                
+        # use set for O(1) lookup
+        # order is not important
+        self.parts = set(_parts)
+        
+    def __iter__(self) -> typing.Iterator[str]:
+        return iter(self.parts)
+    
+    # implement for efficiency
+    def __contains__(self, arg: typing.Any) -> bool:
+        return arg in self.parts
+                

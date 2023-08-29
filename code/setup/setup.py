@@ -1,8 +1,17 @@
 import logging as lg
 from webbrowser import open_new_tab
 from pathlib import Path
+from utils import constants
 
-def setup_logging(log_file: Path = Path("logs/runlog.log"), logger_name = "CongressionalAppChallenge") -> lg.Logger:
+def setup_logging(
+    level: int = lg.DEBUG
+) -> lg.Logger:
+    
+    log_file = constants.RUNLOG,
+    
+    if not log_file.parent.exists(): # check if logs/ exists
+        log_file.mkdir()
+        
     with open(log_file, "w"): # create file if it doesn't exist. Otherwise, clear file
         pass
     
@@ -17,11 +26,11 @@ def setup_logging(log_file: Path = Path("logs/runlog.log"), logger_name = "Congr
         )
     
     file_handler.setFormatter(formatter)
-    logger = lg.getLogger(logger_name)
+    logger = constants.LOGGER
     
     logger.handlers.clear()
     logger.addHandler(file_handler)
-    logger.setLevel(lg.DEBUG)
+    logger.setLevel(level)
         
     return logger
 

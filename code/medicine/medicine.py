@@ -3,9 +3,9 @@ from utils import Notification, constants, Logger
 import json
 
 class Medicine:
-    def __init__(self, master: ctk.CTk, logger: Logger) -> None:
+    def __init__(self, master: ctk.CTk) -> None:
         self.master = master
-        self.logger = logger
+        self.logger = constants.LOGGER
         self.labels = {
             0: "Medicine Name",
             1: "Morning", 

@@ -13,8 +13,8 @@ class Program(Questions, ApiParent):
         '''
         Initilize self and set up program, if not already set up
         '''
-        
-        super().__init__(logger=setup_logging())
+        setup_logging()
+        super().__init__()
         
         
         def quit_app(*events: object):
@@ -81,7 +81,7 @@ class Program(Questions, ApiParent):
     def medicine(self) -> None:
         self.clean()
         self.logger.debug("Medicine Log Accessed")
-        medicine = Medicine(self, self.logger)
+        medicine = Medicine(self)
         medicine.run()
         self.mainloop()
         self.clean()
@@ -195,7 +195,7 @@ class Program(Questions, ApiParent):
                 recommendation = 'It is recommended that you don\'t go outside today. It is very hot outside.'
             if weather_data['main']['humidity'] >= 60:
                 recommendation = """It is very humid outside today, meaning the air may be very 
-    thick and dense. Don\'t be outside for too long."""
+            thick and dense. Don\'t be outside for too long."""
             if weather_data['wind']['speed'] > 25 and weather_data['wind']['speed'] <= 58:
                 recommendation = 'The wind is quite heavy today. It is still safe to go outside.'
             if weather_data['wind']['speed'] > 58:
@@ -294,7 +294,6 @@ class Program(Questions, ApiParent):
             ).pack(pady=20)
             Settings(
                 self,
-                self.logger,
                 width=self.winfo_screenwidth()-100,
                 height=self.winfo_screenheight()-140 # TODO: calculate this based on button size
             ).pack()
@@ -373,7 +372,6 @@ class Program(Questions, ApiParent):
                         "Medication Reminder",
                         f"Take {data[self.labels[i+1]]} dose of {data['Medicine Name']} {data[self.labels[7]].lower()} {self.labels[i+4].lower()}",
                         self.add_minutes(data, hh, mm, i, minutes),
-                        self.logger
                         ))
 
     def execute(self) -> None:    

@@ -9,12 +9,12 @@ from email.mime.text import MIMEText
 from logging import Logger
 
 import utils.parse_json as jsonUtils
-from utils.constants import CREDENTIALS, TOKEN_FILE
+from utils.constants import CREDENTIALS, TOKEN_FILE, LOGGER
 
 class Notification:
-    def __init__(self, title: str, message: str, time: str, logger: Logger, increment: int =1440):
+    def __init__(self, title: str, message: str, time: str, increment: int =1440):
         self.title = title
-        self.logger = logger
+        self.logger = LOGGER
         self.message = message
         if len(time) != 8:
             self.time = "0" + time

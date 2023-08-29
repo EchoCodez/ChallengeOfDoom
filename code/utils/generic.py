@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import customtkinter as ctk
 import utils.parse_json as jsonUtils
-from utils.constants import HEALTH_LOGS
+import utils.constants as constants
 from logging import Logger
 from datetime import date, datetime
 
@@ -31,22 +31,21 @@ def set_theme() -> bool:
 
 class UseLogger:
     '''Defines empty logger init method and print method'''
-    def __init__(self, logger: Logger) -> None:
-        self._logger = logger
-        
-    @property
-    def logger(self):
-        return self._logger
+    def __init__(self) -> None:
+        self.logger = constants.LOGGER
     
-    def print(self, __s: str, /, *, level: str = "info"):
-        getattr(self.logger, level.lower())(__s)
+    def print(self, __s: str, /, level: str | int = "info", **kwargs):
+        if isinstance(level, str):
+            getattr(self.logger, level.lower())(__s)
+        elif self.logger.isEnabledFor(level):
+            self.logger._log(level, __s)
 
 class FileHandler(UseLogger):       
     def delete_logs(self):
         '''Delete logs'''
         
         self.logger.info("Deleting all health logs")
-        for log in HEALTH_LOGS.iterdir():
+        for log in constants.HEALTH_LOGS.iterdir():
             log.unlink()
         self.logger.debug("Finished")
     
@@ -75,7 +74,7 @@ class FileHandler(UseLogger):
         if isinstance(_date, (str, Path)):
             path = Path(_date)
         elif isinstance(_date, date):
-            path = Path(f"json/health/{_date.strftime('%d_%m_%y')}.json")
+            path = constants.HEALTH_LOGS / Path(_date.strftime('%d_%m_%y')).with_suffix(".json")
         else:
             raise TypeError("Date for get_log must be a properly formatted path or datetime/date object")
         
@@ -163,6 +162,9 @@ class FileHandler(UseLogger):
         username = FileHandler.get_entry(master, **kwargs)
         jsonUtils.add({"api_username": username.get()})
         
+    @staticmethod
+    def today_file_path() -> Path:
+        return 
 class HomepageSection(ctk.CTkButton):
     def __init__(self, *args, **kwargs):
         placement = kwargs.pop("placement")

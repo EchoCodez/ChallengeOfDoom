@@ -13,13 +13,12 @@ from utils import *
 
 class Questions(ctk.CTk):
     '''Setup questions for application'''
-    def __init__(self, logger: Logger, fg: str = None) -> None:
-        
+    def __init__(self, fg: str = None) -> None:
         super().__init__(fg_color=fg)
         
         self.__appearance = tk.StringVar(value="light")
         self._selected_conditions: dict[str, tk.BooleanVar] = {}
-        self.logger = logger
+        self.logger = constants.LOGGER
         self._conditions = iter(d["Name"] for d in jsonUtils.read(constants.CONDITIONS_LIST))
         self.total_condition_pages = None
     
@@ -405,7 +404,7 @@ class Questions(ctk.CTk):
                 wrap="word"
             )[0]
         
-        sheets = InformationPages(self.logger)
+        sheets = InformationPages()
         
         for d in get_information_texts():
             buttons, commands = d.pop("buttons", ()), d.pop("commands", ())
@@ -480,19 +479,46 @@ class Questions(ctk.CTk):
         return username, password
 
 class ApiParent:
-    '''Class to put UI diagnosis code for APImedic'''
+    '''Parent class to put UI diagnosis code for APImedic'''
     # TODO: Add disclaimer
     # improve API quiz by sorting through symptoms list
     # A) Ask how they're feeling on 1-10 scale. 7+ means we tell them to go to doctor right away (don't deal with that case)
     # B) Add data for each condition about part of body it's from (digestive, respiratory, etc.)
     # C) Ask user where pain is coming from (checkboxes)
     # D) Filter symptoms list by part (C) to make it shorter.
+    def diagnosis_quiz(self: ctk.CTk) -> None:
+        rating = self.scale_question()
+        self.mainloop()
+        
+        parts = self.body_parts()
+        self.mainloop()
+        
+        
+    
+    def scale_question(self: ctk.CTK) -> None:
+        """How are you on a scale of 1 to 10?"""
+        pass
+    
+    
+    def _stop_if_dangerous(self: ctk.CTk, rating: int) -> None:
+        '''Stops if user rated more than a 7'''
+        if rating >= 7:
+            constants.LOGGER.warning("Please go see a doctor")
+    
+    def body_parts(self: ctk.CTK) -> BodyPart:
+        pass
+    
+    @staticmethod
+    def get_filtered_conditions(parts: BodyPart) -> None:
+        conditions = [x for x in jsonUtils.read(constants.CONDITIONS_LIST) if x["body_part"] in parts]
+        return conditions
+        
+    
     def _diagnose(self) -> None:
         '''Gather diagnosis data and use it to call API'''
         def call_api(user):
             results = Diagnosis(
                 user=user,
-                logger=self.logger,
                 testing=False
             ).make_call()
             
@@ -508,7 +534,7 @@ class ApiParent:
             
             self.logger.debug("User made daily diagnosis call.")
             
-            f = Path(f"json/health/{date.today().strftime('%d_%m_%y')}.json")
+            f = constants.TODAY_DATE_FILE
             jsonUtils.overwrite(
                 data = results,
                 file = f
@@ -520,7 +546,6 @@ class ApiParent:
         MCQbuiler(
             self,
             "Daily Checkup",
-            self.logger,
             CustomQuestion(self.get_previous_medical_conditions)
         ).begin(
             title_next="Data gathered!",
@@ -574,7 +599,7 @@ class ApiParent:
         tabview.pack(padx=20, pady=20)
         
         
-        diseases = jsonUtils.read(date.today().strftime("json/health/%d_%m_%y.json"))
+        diseases = jsonUtils.read(constants.TODAY_DATE_FILE)
         self.get_diagnosis_info(diseases, tabview, font)
         self.mainloop()
         
