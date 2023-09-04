@@ -226,7 +226,7 @@ class MCQbuiler(UseLogger):
         next_button.place(relx=0.5, rely=0.6, anchor=tk.CENTER)
         self.root.mainloop()
     
-    def begin(self, **kwargs):
+    def begin(self, **kwargs) -> list:
         """Wrapper for creating start screen, going through questions, and creating end screen
         """        
         if self.include_start:

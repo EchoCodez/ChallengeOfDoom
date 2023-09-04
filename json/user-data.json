@@ -4,5 +4,6 @@
     "api_username": "x4LZp_LCPS_ORG_AUT",
     "api_password": "n2L4Roj7J5Szt8Q3K",
     "contact": "youremail@example.com",
-    "provider": "Email"
+    "provider": "Email",
+    "disclaimer_read": true
 }

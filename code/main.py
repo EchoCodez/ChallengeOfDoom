@@ -109,7 +109,7 @@ class Program(Questions, ApiParent):
         HomepageSection( # bottom right
             self,
             text="Daily Diagnosis",
-            command=self._diagnose,
+            command=self.diagnosis_quiz,
             fg_color="#ADD8E6",
             height=self.winfo_screenheight()*0.55,
             width=self.winfo_screenwidth()*0.2,

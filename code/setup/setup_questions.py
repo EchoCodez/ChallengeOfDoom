@@ -4,10 +4,10 @@ import tkinter as tk
 import customtkinter as ctk
 from datetime import datetime, date
 from CTkMessagebox import CTkMessagebox
+from typing import Callable
 
 from api import Diagnosis, get_location
 from setup.special import InformationPages
-from setup.setup import get_information_texts
 from utils import *
 
 
@@ -19,7 +19,6 @@ class Questions(ctk.CTk):
         self.__appearance = tk.StringVar(value="light")
         self._selected_conditions: dict[str, tk.BooleanVar] = {}
         self.logger = constants.LOGGER
-        self._conditions = iter(d["Name"] for d in jsonUtils.read(constants.CONDITIONS_LIST))
         self.total_condition_pages = None
     
     def raise_exception(self, mainloop: bool = False, **kwargs) -> CTkMessagebox:
@@ -140,117 +139,6 @@ class Questions(ctk.CTk):
         
         self.mainloop()
     
-    def _checkboxes(
-            self,
-            gender: str,
-            font: tuple[str, int] = ("Arial", 25),
-            rows: int = 15,
-            columns: int = 3,
-        ) -> None:
-        '''Creates the checkboxes
-        '''
-        
-        if gender == "male":
-            male = True
-        elif gender == "female":
-            male = False
-        else:
-            raise ValueError("Gender must be provided as either male or female")
-        
-        def new_name():
-            '''Filter out options of opposite gender'''
-            
-            name = next(self._conditions, None)
-            
-            if name is None:
-                return None
-            elif male and any(word in name for word in ["vagina", "period"]):
-                return new_name()
-            elif not male and any(word in name for word in ["testicle"]):
-                return new_name()
-            else:
-                return name
-        
-        # make column outer loop so that things with long names get grouped into one column, saving space
-        for j in range(columns):
-            for i in range(1, rows+1):
-                name = new_name()
-                
-                if name is None:
-                    return
-                
-                self._selected_conditions[name]=tk.BooleanVar(value=False)
-                checkbox = ctk.CTkCheckBox(
-                        self, 
-                        text = name,
-                        variable = self._selected_conditions[name],
-                        onvalue = True,
-                        offvalue = False,
-                        font = font
-                    )
-                checkbox.grid(
-                    row = i,
-                    column = j,
-                    pady = 10,
-                    padx=40,
-                    sticky = tk.W
-                )
-    
-    def get_previous_medical_conditions(self, font="Default") -> None:
-        """Create checkboxes of previous medical conditions
-
-        Parameters:
-        -----------
-            font (str, optional): font options for title and next button. Font size is immutable. Defaults to "Default".
-        """ 
-        self.clean()
-        
-        rows, columns = 15, 3
-        
-        total_names = len(jsonUtils.read(constants.CONDITIONS_LIST))
-        
-        gender = jsonUtils.read("json/user-data.json").get("gender", "male").lower()
-        
-        for i in range(ceil(total_names/(rows*columns))):
-            def continue_button():
-                self.clean()
-                self.quit()
-                self.logger.debug(f"Onto page {i+1}")
-            
-            title = ctk.CTkLabel(
-                self,
-                text="Are you experiencing any of the above from this list?",
-                font=(font, 50)
-                )
-            next_button = ctk.CTkButton(
-                self,
-                text="Continue",
-                command=continue_button,
-                width=280,
-                height=56,
-                font=(font, 40)
-                )
-            
-            title.grid(
-                column=0, 
-                columnspan=10, 
-                padx=5, 
-                pady=20,
-                sticky=tk.N
-                )
-            
-            self._checkboxes(
-                    gender=gender,
-                    font=(font, 30),
-                    columns=columns,
-                    rows=rows
-                )
-            
-            next_button.grid(row=rows+1, column=columns-1, sticky = tk.W, pady=30)
-            next_button.lift()
-            
-            self.mainloop()
-
     def get_year_of_birth(self, font = ("None", 50)): # CustomQuestion
         def verify_and_continue():
             typed = typer.get().strip()
@@ -406,7 +294,7 @@ class Questions(ctk.CTk):
         
         sheets = InformationPages()
         
-        for d in get_information_texts():
+        for d in apimedic_txt_config:
             buttons, commands = d.pop("buttons", ()), d.pop("commands", ())
             
             if len(buttons) != len(commands):
@@ -480,41 +368,108 @@ class Questions(ctk.CTk):
 
 class ApiParent:
     '''Parent class to put UI diagnosis code for APImedic'''
+    logger: Logger
     # TODO: Add disclaimer
     # improve API quiz by sorting through symptoms list
     # A) Ask how they're feeling on 1-10 scale. 7+ means we tell them to go to doctor right away (don't deal with that case)
     # B) Add data for each condition about part of body it's from (digestive, respiratory, etc.)
     # C) Ask user where pain is coming from (checkboxes)
     # D) Filter symptoms list by part (C) to make it shorter.
-    def diagnosis_quiz(self: ctk.CTk) -> None:
+    def _diagnose(self: ctk.CTk) -> None:
+        if not jsonUtils.read(constants.USER_DATA).get("disclaimer_read", False):
+            self.disclaimer()
+            self.clean()
+        
         rating = self.scale_question()
+        self.clean()
+        self._stop_if_dangerous(rating)
+        self.clean()
+        
+        filter_by_parts = self.body_parts()
+        self.clean()
+        conditions = self.get_filtered_conditions(filter_by_parts)
+        
+        self._get_filtered_medical_conditions(conditions, filter_by_parts)
+        self.clean()
+    
+    def disclaimer(self: ctk.CTk) -> None:
+        ctk.CTkLabel(self, text="DISCLAIMER", font=("", 50)).pack(pady=20)
+        ctk.CTkLabel(
+            self,
+            text=disclaimer,
+            wraplength=self.winfo_width()//2,
+            font=("", 25),
+            anchor=tk.W
+        ).pack(pady=20)
+        
+        ctk.CTkButton(
+            self,
+            text="I accept",
+            command=self.quit
+        ).pack(pady=20)
+        
         self.mainloop()
+        jsonUtils.add({"disclaimer_read": True})
+    
+    def scale_question(self: ctk.CTk) -> None:
+        ctk.CTkLabel(self, text="How are you feeling on a scale of 1-10?", font=(None, 40)).pack(pady=20)
+        scale = ctk.CTkSlider(
+            self,
+            from_=1,
+            to=10,
+            number_of_steps=9,
+            width=self.winfo_width()//2,
+            command=lambda v: l.configure(text=int(v))
+        )
+        scale.set(1)
+        scale.pack(pady=80)
         
-        parts = self.body_parts()
+        l = ctk.CTkLabel(self, text=int(scale.get()), font=(None, 20))
+        l.pack(pady=80)
+        
+        ctk.CTkButton(self, text="Continue", font=(None, 30), command=self.quit).pack(pady=40)
+        
         self.mainloop()
-        
-        
-    
-    def scale_question(self: ctk.CTK) -> None:
-        """How are you on a scale of 1 to 10?"""
-        pass
+        return scale.get()
     
     
-    def _stop_if_dangerous(self: ctk.CTk, rating: int) -> None:
+    def _stop_if_dangerous(self: ctk.CTk, rating: int) -> int:
         '''Stops if user rated more than a 7'''
         if rating >= 7:
-            constants.LOGGER.warning("Please go see a doctor")
+            ctk.CTkLabel(self, text="Please consult a Medical Professional", font=(None, 40)).pack(pady=self.winfo_height()//5)
+            
+            ctk.CTkButton(self, text="Quit", command=self.quit).pack(pady=50)
+            self.mainloop()
+            exit(0)
+            
     
-    def body_parts(self: ctk.CTK) -> BodyPart:
-        pass
+    def body_parts(self: ctk.CTk) -> BodyParts:
+        ctk.CTkLabel(self, text="Where are you feeling pain from?", font=(None, 40)).pack(pady=40)
+        
+        # set up checkboxes
+        selected = {}
+        for part in BodyParts.allowed_parts:
+            selected[part] = tk.BooleanVar(value=False)
+            ctk.CTkCheckBox(
+                self,
+                text=part,
+                variable=selected[part],
+                onvalue=True,
+                offvalue=False
+            ).pack(pady=20)
+        
+        ctk.CTkButton(self, text="Continue", command=self.quit).pack(pady=40)
+        
+        self.mainloop()
+        return BodyParts(*(k for k, v in selected.items() if v.get()))
     
     @staticmethod
-    def get_filtered_conditions(parts: BodyPart) -> None:
-        conditions = [x for x in jsonUtils.read(constants.CONDITIONS_LIST) if x["body_part"] in parts]
+    def get_filtered_conditions(parts: BodyParts) -> None:
+        conditions = tuple(x for x in jsonUtils.read(constants.CONDITIONS_LIST) if x["body_part"] in parts)
         return conditions
         
     
-    def _diagnose(self) -> None:
+    def diagnosis_quiz(self) -> None:
         '''Gather diagnosis data and use it to call API'''
         def call_api(user):
             results = Diagnosis(
@@ -543,26 +498,34 @@ class ApiParent:
         
         self.clean()
         
-        MCQbuiler(
+        x = MCQbuiler(
             self,
             "Daily Checkup",
-            CustomQuestion(self.get_previous_medical_conditions)
+            CustomQuestion(self._diagnose)
         ).begin(
             title_next="Data gathered!",
             continue_text="Diagnose me",
             next_button_width=300,
             next_button_height=70
-            )
+        )
         
         self.quit()
         
+        # user reported a 7+ pain level
+        if x[0] == -1:
+            self.clean()
+            self.home()
+            return
+        
+        # get keys user clicked on
         test_results = [key for key, val in self._selected_conditions.items() if val.get()]
         user = jsonUtils.get_values()
         
         conditions = user.conditions.copy()
         
         for condition in test_results:
-            conditions+= [jsonUtils.search(
+            # search for ID of condition
+            conditions += [jsonUtils.search(
                 constants.CONDITIONS_LIST,
                 sentinal=condition,
                 search_for="Name",
@@ -646,3 +609,120 @@ class ApiParent:
         
         if loop:
             self.mainloop()
+        
+    def _get_filtered_medical_conditions(self, conditions: tuple[str], parts: BodyParts):
+        self.clean()
+        
+        rows, columns = 15, 3
+        
+        total_names = len(conditions)
+        
+        gender = jsonUtils.read("json/user-data.json").get("gender", "male").lower()
+        
+        for i in range(ceil(total_names/(rows*columns))):
+            def continue_button():
+                self.clean()
+                self.quit()
+                self.logger.debug(f"Onto page {i+1}")
+            
+            title = ctk.CTkLabel(
+                self,
+                text="Are you experiencing any of the above from this list?",
+                font=(None, 50)
+                )
+            next_button = ctk.CTkButton(
+                self,
+                text="Continue",
+                command=continue_button,
+                width=280,
+                height=56,
+                font=(None, 40)
+                )
+            
+            title.grid(
+                column=0, 
+                columnspan=10, 
+                padx=5, 
+                pady=20,
+                sticky=tk.N
+                )
+            
+            self._checkboxes(
+                gender=gender,
+                font=(None, 30),
+                columns=columns,
+                rows=rows,
+                conditions=conditions,
+                condition_func=lambda n: n["body_part"] in parts
+            )
+            
+            next_button.grid(row=rows+1, column=columns-1, sticky = tk.W, pady=30)
+            next_button.lift()
+            
+            self.mainloop()
+            print()
+
+    def _checkboxes(
+            self,
+            gender: str,
+            conditions: tuple[str],
+            condition_func: Callable[[str], bool],
+            font: tuple[str, int] = ("Arial", 25),
+            rows: int = 15,
+            columns: int = 3
+        ) -> None:
+        '''Creates the checkboxes'''
+        conditions = iter(conditions)
+        
+        if gender == "male":
+            male = True
+        elif gender == "female":
+            male = False
+        else:
+            raise ValueError("Gender must be provided as either male or female")
+        
+        def new_name():
+            '''Find a name that satisfies `condition_func`'''
+            
+            def gender_filter(name: str):
+                if male and any(word in name for word in ("vagina", "period")):
+                    return False
+                elif not male and any(word in name for word in ("penis", "testicle")):
+                    return False
+                return True
+            
+            func = lambda n: condition_func(n) and gender_filter(n["Name"])
+            
+            _condition = next(conditions, None)
+            
+            if _condition is None:
+                return None
+            
+            while _condition is not None and not func(_condition):
+                _condition = next(conditions, None)
+            return _condition["Name"]
+        
+        # make column outer loop so that things with long names get grouped into one column, saving space
+        for j in range(columns):
+            for i in range(1, rows+1):
+                name = new_name()
+                
+                if name is None:
+                    return
+                
+                self._selected_conditions[name]=tk.BooleanVar(value=False)
+                checkbox = ctk.CTkCheckBox(
+                    self, 
+                    text = name,
+                    variable = self._selected_conditions[name],
+                    onvalue = True,
+                    offvalue = False,
+                    font = font
+                )
+                checkbox.grid(
+                    row = i,
+                    column = j,
+                    pady = 10,
+                    padx=40,
+                    sticky = tk.W
+                )

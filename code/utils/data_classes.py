@@ -1,6 +1,7 @@
 import dataclasses
 import typing
 from logging import Logger
+from utils.constants import LOGGER
 
 __all__ = (
     "Question",
@@ -10,7 +11,7 @@ __all__ = (
     "InformationSheet",
     "SettingsAttr",
     "WeatherInfo",
-    "BodyPart"
+    "BodyParts"
 )
 
 @dataclasses.dataclass(frozen=True, slots=True)
@@ -128,23 +129,20 @@ class WeatherInfo:
     tree_pollen_risk: float
     weed_pollen_risk: float
     
-class BodyPart:
-    allowed_parts = {
+class BodyParts:
+    allowed_parts = [
         "Upper Body",
         "Lower Body",
-        "Respiratory"
-    }
-    def __init__(self, logger: Logger, *parts) -> None:
-        _parts = []
+        "Respiratory",
+        "Other"
+    ]
+    def __init__(self, *parts: str) -> None:
+        self.parts = set() # sets for O(1) lookup
         for part in (p.lower() for p in parts):
-            if part in self.allowed_parts:
-                _parts.append(part)
+            if part.title() in self.allowed_parts:
+                self.parts.add(part.title())
             else:
-                logger.warning(f"{part} not in {self.allowed_parts}")
-                
-        # use set for O(1) lookup
-        # order is not important
-        self.parts = set(_parts)
+                LOGGER.warning(f"{part.title()} not in {self.allowed_parts}")
         
     def __iter__(self) -> typing.Iterator[str]:
         return iter(self.parts)

@@ -19,4 +19,4 @@ from medicine import *
 # setup file imports
 from setup.setup_questions import Questions, ApiParent
 from setup.special import Settings, InformationPages
-from setup.setup import setup_logging, get_information_texts
+from setup.setup_logging import setup_logging
