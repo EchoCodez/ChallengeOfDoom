@@ -1,6 +1,7 @@
+from __future__ import annotations
+
 import json
-import os
-from typing import Callable, Any, Iterable
+from typing import Callable, Any
 from io import StringIO
 from utils.data_classes import UserInfo
 from utils.constants import *
@@ -21,8 +22,10 @@ def add(data: dict, file: Path = USER_DATA, indent: int = 4) -> None:
     file (Path, optional): "user-data.json"
         Which file to add data to.
     '''
-
-    new_data = read(file) | data
+    new_data = read(file)
+    if isinstance(new_data, list):
+        raise TypeError(f"data in {file} must be a dictionary: try using ")
+    new_data = new_data | data
     with open(file, "w", encoding="utf-8") as f:
         f.write(json.dumps(new_data, indent=indent))
 
@@ -287,9 +290,9 @@ def overwrite(data: dict | list, file: Path, *, dumps = True) -> None:
         if dumps:
             f.write(json.dumps(data, indent = 4))
         else:
-            f.write(data)
+            f.write(str(data))
 
-def open_json(path: Path, action: str = "r", **kwargs) -> None:
+def open_json(path: Path, action: str = "r", **kwargs) -> OPEN_JSON:
     """Context manager for opening json files. 
     Instead of returning a file object, the object returned is a json.load(file) object. 
     This should mainly be used for readability

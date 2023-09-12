@@ -2,22 +2,17 @@ from __future__ import annotations
 from setup import *
 
 class Program(Questions, ApiParent):
-    """The main program that runs the application
-
-    Parameters:
-    -----------
-        ctk (str): window background color, tuple: (light_color, dark_color) or single color
-    """    
+    """The main program that runs the application"""    
     
     def __init__(self) -> None:
         '''
-        Initilize self and set up program, if not already set up
+        Initilize self and set up program
         '''
         setup_logging()
         super().__init__()
         
         
-        def quit_app(*events: object):
+        def quit_app(*_: object):
             self.logger.info("QUITTING")
             os._exit(0)
             
@@ -121,16 +116,6 @@ class Program(Questions, ApiParent):
         
         def _weather():
             self.clean()
-
-
-            frame = ctk.CTkScrollableFrame(
-                self,
-                width=self.winfo_screenwidth()-100,
-                height=self.winfo_screenheight()-100,
-            )
-            frame = self
-            #_weather(frame, self.logger)
-
 
             weather_data = jsonUtils.read(constants.WEATHER_DATA)
             print(weather_data)
