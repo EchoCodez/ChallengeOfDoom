@@ -1,12 +1,11 @@
 import customtkinter as ctk
-from logging import Logger
-from utils.notifications import Notification
+from utils import Notification, constants, Logger
 import json
 
 class Medicine:
-    def __init__(self, master: ctk.CTk, logger: Logger) -> None:
+    def __init__(self, master: ctk.CTk) -> None:
         self.master = master
-        self.logger = logger
+        self.logger = constants.LOGGER
         self.labels = {
             0: "Medicine Name",
             1: "Morning", 
@@ -52,10 +51,10 @@ class Medicine:
             for i in range(8):
                 data[self.labels[i]] = elements[i].get() 
             print(data)
-            with open("json/medicines.json", 'r', encoding="utf-8") as f:
+            with open(constants.MEDICINE, 'r', encoding="utf-8") as f:
                 feeds = json.load(f)
             feeds.extend([data])
-            with open("json/medicines.json", 'w', encoding="utf-8") as f:
+            with open(constants.MEDICINE, 'w', encoding="utf-8") as f:
                 json.dump(feeds, f, indent=4)
             self.master.add_notifs(data)
             self.master.home()

@@ -1,18 +1,20 @@
-from plyer import notification
 import os
 import base64
+from plyer import notification
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from email.mime.text import MIMEText
-import utils.parse_json as jsonUtils
 from logging import Logger
 
+import utils.parse_json as jsonUtils
+from utils.constants import CREDENTIALS, TOKEN_FILE, LOGGER
+
 class Notification:
-    def __init__(self, title: str, message: str, time: str, logger: Logger, increment: int =1440):
+    def __init__(self, title: str, message: str, time: str, increment: int =1440):
         self.title = title
-        self.logger = logger
+        self.logger = LOGGER
         self.message = message
         if len(time) != 8:
             self.time = "0" + time
@@ -24,15 +26,16 @@ class Notification:
             self.time = self.time[0:5]+":00"
         self.increment = increment
 
-        self.credentials_file = 'json/credentials.json'
-        self.token_file = 'json/token.json'
+        self.credentials_file = CREDENTIALS
+        self.token_file = TOKEN_FILE
         self.scopes = ['https://www.googleapis.com/auth/gmail.send']
         
         self.sender_email = 'healthapp317@gmail.com'
         self.recipient_email = jsonUtils.read("json/user-data.json")["contact"]
-        self.we_good = True
         if "@" not in self.recipient_email or "." not in self.recipient_email:
             self.we_good = False
+        else:
+            self.we_good = True
 
 
     def send(self):

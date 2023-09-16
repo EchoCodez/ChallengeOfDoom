@@ -1,30 +1,18 @@
 from __future__ import annotations
 from setup import *
 
-
-preferences = "json/preferences.json"
-user_data = "json/user-data.json"
-conditions_list = "json/symptoms.json"
-
 class Program(Questions, ApiParent):
-    """The main program that runs the application
-
-    Parameters:
-    -----------
-        ctk (str): window background color, tuple: (light_color, dark_color) or single color
-    """    
+    """The main program that runs the application"""    
     
     def __init__(self) -> None:
         '''
-        Initilize self and set up program, if not already set up
+        Initilize self and set up program
         '''
-        
-        super().__init__(
-                logger=setup_logging()
-            )
+        setup_logging()
+        super().__init__()
         
         
-        def quit_app(*events: object):
+        def quit_app(*_: object):
             self.logger.info("QUITTING")
             os._exit(0)
             
@@ -46,16 +34,16 @@ class Program(Questions, ApiParent):
             7: "Before/After Meal",
         }
         
-        if not jsonUtils.read(preferences).get("setup_finished", False):
+        if not jsonUtils.read(constants.PREFERENCES).get("setup_finished", False):
             self.setup()
             self.show_register_api_pages()
-            jsonUtils.write({"setup_finished": True}, file=preferences)
+            jsonUtils.write({"setup_finished": True}, file=constants.PREFERENCES)
             self.logger.debug(jsonUtils.get_values())
 
         set_theme()
             
         
-        medicines = jsonUtils.read("json/medicines.json")
+        medicines = jsonUtils.read(constants.MEDICINES)
         
         self.notifications = medicines
         self.logger.info("Loading medicine notifications into memory")
@@ -68,7 +56,8 @@ class Program(Questions, ApiParent):
         global print
         print = self.logger.debug
     
-    def health_log(self) -> None:    
+    def health_log(self) -> None:
+        self.quit()
         self.clean()
         self.logger.debug("Health Log Accessed")
         calendar = Calendar(self)
@@ -87,7 +76,7 @@ class Program(Questions, ApiParent):
     def medicine(self) -> None:
         self.clean()
         self.logger.debug("Medicine Log Accessed")
-        medicine = Medicine(self, self.logger)
+        medicine = Medicine(self)
         medicine.run()
         self.mainloop()
         self.clean()
@@ -97,6 +86,7 @@ class Program(Questions, ApiParent):
         '''Main function that executes the program'''
         self.logger.debug("Reached Home Screen")
         self.clean()
+        self.quit()
         
         HomepageSection( # top left
             self,
@@ -114,7 +104,7 @@ class Program(Questions, ApiParent):
         HomepageSection( # bottom right
             self,
             text="Daily Diagnosis",
-            command=self._diagnose,
+            command=self.diagnosis_quiz,
             fg_color="#ADD8E6",
             height=self.winfo_screenheight()*0.55,
             width=self.winfo_screenwidth()*0.2,
@@ -126,41 +116,141 @@ class Program(Questions, ApiParent):
         
         def _weather():
             self.clean()
-           # _weather(frame, self.logger)
-            #_weather()
+
+            weather_data = jsonUtils.read(constants.WEATHER_DATA)
+            print(weather_data)
+
+            airquality_data = jsonUtils.read(constants.AIR_QUALITY)
+            print(airquality_data)
+           
+
+
+           # TODO: Take into account humidity and wind when giving recommendations
             ctk.CTkLabel(self, text="Weather").pack()
 
-            def _pollen():
-                print("button pressed")
 
-                pollen = ctk.CTkLabel(
+            def _weatherinfo():
+                print("Clicked weather info button")
+                def to_farenheit(cel: float) -> float:
+                    return 32+9*cel/5
+                def to_mph(mps: float) -> float:
+                    return mps*2.2369
+                
+                location = jsonUtils.read(constants.USER_DATA).get("location", False)
+                # TODO: use location to check if use_metric should be true or false
+                use_metric = False
+                if use_metric:
+                    weather =  f"{weather_data['main']['temp']:.1f}\u2103"
+                    wind_speed = f"{weather_data['wind']['speed']}"
+                else:
+                    weather = f"{to_farenheit(weather_data['main']['temp']):.0f}\u2109"
+                    wind_speed = f"{to_mph(weather_data['wind']['speed']):.0f}"
+                
+                ctk.CTkLabel(
                     self,
-                    text="pollen",
+                    text=f"Current Weather: {weather}.\nHumidity: {weather_data['main']['humidity']}% \nWind Speed: {wind_speed} mph",
                     width=120,
                     height=32,
-                    border_width=0,
-                    corner_radius=8,
-                    # pady=500
-                    )
-                
-                pollen.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-                # pollen.pack()
-                
-            pollenButton = ctk.CTkButton(
+                    text_color="#FFFFFF",
+                    font=("Times New Roman", 30)
+                ).place(relx=0.7, rely=0.3, anchor=tk.CENTER)
+            
+            def _airquality():
+                print("Clicked air quality button")
+                ctk.CTkLabel(
+                    self,
+                    text=f"Current air quality index: {airquality_data['main']['aqi']}",
+                    width=120,
+                    height=32,
+                    text_color="#FFFFFF",
+                    font=("Times New Roman", 30)
+                ).place(relx=0.5, rely=0.2, anchor=tk.CENTER)
+
+            recommendation = ''
+
+            if weather_data['main']['temp'] <= -4:
+                recommendation = "Wear a winter jacket. It is VERY cold outside."
+            if weather_data['main']['temp'] > -4 and weather_data['main']['temp'] <= 7:
+                recommendation = 'Wear a light or medium coat. It is quite cold outside.'
+            if weather_data['main']['temp'] > 7 and weather_data['main']['temp'] <= 18:
+                recommendation = 'Wear a fleece jacket. It is a bit chilly outside.'
+            if weather_data['main']['temp'] > 18 and weather_data['main']['temp'] <= 32:
+                recommendation = 'Wear a short sleeved shirt. It is quite hot outside.'
+            if weather_data['main']['temp'] > 32:
+                recommendation = 'It is recommended that you don\'t go outside today. It is very hot outside.'
+            if weather_data['main']['humidity'] >= 60:
+                recommendation = """It is very humid outside today, meaning the air may be very 
+            thick and dense. Don\'t be outside for too long."""
+            if weather_data['wind']['speed'] > 25 and weather_data['wind']['speed'] <= 58:
+                recommendation = 'The wind is quite heavy today. It is still safe to go outside.'
+            if weather_data['wind']['speed'] > 58:
+                recommendation = 'Stay inside today. Your area is experiencing high speed and damaging winds.'
+
+            def _recommendations():
+                print('Clicked reccomendations')
+                ctk.CTkLabel(
+                    self,
+                    text=recommendation,
+                    width=120,
+                    height=32,
+                    text_color="#FFFFFF",
+                    font=("Times New Roman", 30)
+                ).place(relx=0.7, rely=0.5, anchor=tk.CENTER)
+
+
+            
+               
+            ctk.CTkButton( # shows humidity and temp
                 self,
                 fg_color="#ADD8E6",
-                command=_pollen,
-                text="pollen",
+                command=_weatherinfo,
+                text="Weather",
                 width=300,
-                height=400,
+                height=250,
                 border_width=1,
-                corner_radius=8,
-                text_color="#000000"
-                )
-            pollenButton.pack(pady=200)
-           # _pollen(pollenButton, self.logger)
+                corner_radius=40,
+                text_color='#000000',
+                font=("Times New Roman", 30)
+                ).place(relx=0.15, rely=0.2, anchor=tk.CENTER)
+            
+            ctk.CTkButton( # shows recommendations
+                self,
+                fg_color="#ADD8E6",
+                command=_recommendations,
+                text="Recommendations",
+                width=300,
+                height=250,
+                border_width=1,
+                corner_radius=40,
+                text_color='#000000',
+                font=("Times New Roman", 30)
+                ).place(relx=0.15, rely=0.5, anchor=tk.CENTER)
+            
+            ctk.CTkButton( # shows air quality index
+                self,
+                fg_color="#ADD8E6",
+                command=_airquality,
+                text="Air Quality",
+                width=300,
+                height=200,
+                border_width=1,
+                corner_radius=40,
+                text_color='#000000',
+                font=("Times New Roman", 30)
+            ).place(relx=0.15, rely=0.77, anchor=tk.CENTER)
 
+            ctk.CTkButton(
+                self,
+                text="Back to Homepage",
+                command=self.home,
+                fg_color="#3396FF",
+                height=50,
+                width=300,
+                text_color='#FFFFFF',
+                corner_radius=40
+            ).place(relx=0.1, rely=0.95, anchor=tk.CENTER)
             self.mainloop()
+
 
         HomepageSection( # bottom
             self,
@@ -176,13 +266,23 @@ class Program(Questions, ApiParent):
             )
         
         def create_settings():
+            self.clean()
+            
+            def leave():
+                self.quit()
+                self.home()
+
+            ctk.CTkButton(
+                self,
+                text="Back to Homepage",
+                command=leave
+            ).pack(pady=20)
             Settings(
-                    self,
-                    self.logger,
-                    width=self.winfo_screenwidth()-100,
-                    height=self.winfo_screenheight()-100
-                ).pack()
-            self.mainloop()
+                self,
+                width=self.winfo_screenwidth()-100,
+                height=self.winfo_screenheight()-140 # TODO: calculate this based on button size
+            ).pack()
+            # home already mainloops: don't do it manually
         
         HomepageSection( # bottom left
             self,
@@ -257,7 +357,6 @@ class Program(Questions, ApiParent):
                         "Medication Reminder",
                         f"Take {data[self.labels[i+1]]} dose of {data['Medicine Name']} {data[self.labels[7]].lower()} {self.labels[i+4].lower()}",
                         self.add_minutes(data, hh, mm, i, minutes),
-                        self.logger
                         ))
 
     def execute(self) -> None:    
@@ -277,7 +376,7 @@ def main(*, erase_data: bool = False) -> None:
     Parameters
     ----------
     erase_data: bool
-        Debugging parameter to erase all data in preferences.json and user-data.json
+        Debugging parameter to erase all data in constants.PREFERENCES.json and user-data.json
     '''
 
     if erase_data: # only for testing purposes; delete in final push

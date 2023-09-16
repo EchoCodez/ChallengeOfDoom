@@ -1,26 +1,22 @@
 from __future__ import annotations
 
-from logging import Logger
-import utils.parse_json as jsonUtils
-from logging import Logger
 import customtkinter as ctk
+import utils.parse_json as jsonUtils
+import utils.constants as constants
+from logging import Logger
 from datetime import date, datetime
 
-# aliases
-DATE = date | datetime | str
-DATES = date | datetime
+__all__ = (
+    "UseLogger",
+    "ceil",
+    "set_theme",
+    "FileHandler",
+    "HomepageSection"
+)
 
-class UseLogger:
-    '''Defines empty logger init method'''
-    def __init__(self, logger: Logger) -> None:
-        self._logger = logger
-        
-    @property
-    def logger(self):
-        return self._logger
-    
-    def print(self, __s: str, /, *, level: str = "info"):
-        exec(f"self.logger.{level.lower()}(\"{__s}\")")
+def ceil(n: float) -> int:
+    '''Return ceil(n)'''
+    return int(n) if isinstance(n, int) or n.is_integer() else int(n)+1
 
 def set_theme() -> bool:
     '''Check if theme preference in file already.
@@ -33,22 +29,24 @@ def set_theme() -> bool:
     with open("json/preferences.json") as f:
         return jsonUtils.get(f, "appearance_theme", func = ctk.set_appearance_mode)
 
+class UseLogger:
+    '''Defines empty logger init method and print method'''
+    def __init__(self) -> None:
+        self.logger = constants.LOGGER
+    
+    def print(self, __s: str, /, level: str | int = "info", **kwargs):
+        if isinstance(level, str):
+            getattr(self.logger, level.lower())(__s)
+        elif self.logger.isEnabledFor(level):
+            self.logger._log(level, __s)
+
 class FileHandler(UseLogger):       
-    def delete_logs(self, logs: list[str] = None):
-        '''Delete info
+    def delete_logs(self):
+        '''Delete logs'''
         
-        Parameters:
-        -----------
-            logs (`list[str]`, optional): logs to delete. Defaults to those in `json/logs.json`
-        '''
-        import os
-        logs = jsonUtils.read("json/logs.json")["logs_list"] if logs is None else logs
-        self.logger.info("Deleting {0}".format(logs))
-        for log in logs:
-            try:
-                os.remove(path=log)
-            except FileNotFoundError:
-                continue
+        self.logger.info("Deleting all health logs")
+        for log in constants.HEALTH_LOGS.iterdir():
+            log.unlink()
         self.logger.debug("Finished")
     
     @staticmethod
@@ -71,24 +69,21 @@ class FileHandler(UseLogger):
         
         def print(txt: str, level="info",  **kwargs):
             if logger is not None:
-                exec(f"logger.{level}(\"{txt}\")", **kwargs)
+                getattr(logger, level.lower())(txt, **kwargs)
         
-        if isinstance(_date, str):
-            path = _date
-        elif isinstance(_date, DATES):
-            path = str(_date.strftime("%d_%m_%y"))
+        if isinstance(_date, (str, Path)):
+            path = Path(_date)
+        elif isinstance(_date, date):
+            path = constants.HEALTH_LOGS / Path(_date.strftime('%d_%m_%y')).with_suffix(".json")
         else:
-            raise TypeError("Date for get_log must be a properly formatted string or datetime/date object")
+            raise TypeError("Date for get_log must be a properly formatted path or datetime/date object")
         
-        print(f"Attempted to access json/health/{path}.json")
+        print(f"Attempting to access {path}")
         
         try:
             return jsonUtils.read(path)
         except FileNotFoundError as e:
-            print(
-                txt=e,
-                level="exception"
-            )
+            print(e, level="exception")
             return f"Diagnosis Results for {path} not found"
     
     @staticmethod
@@ -167,6 +162,9 @@ class FileHandler(UseLogger):
         username = FileHandler.get_entry(master, **kwargs)
         jsonUtils.add({"api_username": username.get()})
         
+    @staticmethod
+    def today_file_path() -> Path:
+        return 
 class HomepageSection(ctk.CTkButton):
     def __init__(self, *args, **kwargs):
         placement = kwargs.pop("placement")

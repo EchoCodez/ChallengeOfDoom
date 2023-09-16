@@ -89,7 +89,7 @@ class Log(ctk.CTkToplevel):
         elements.append(self.entry)
         self.entry2 = ctk.CTkEntry(
                 self,
-                placeholder_text=f"Enter quantity"
+                placeholder_text=f"Enter quantity IN GRAMS"
         )
         self.entry2.pack()
         elements.append(self.entry2)
@@ -106,7 +106,7 @@ class Log(ctk.CTkToplevel):
     
     def submit(self, elements: list[ctk.CTkEntry]) -> None:
         self.logger.debug([element.get() for element in elements])
-        algorithm = Algorithm(elements[0].get(), self.logger)
+        algorithm = Algorithm(elements[0].get(), int(elements[1].get()), self.logger)
         algorithm.run()
         
 

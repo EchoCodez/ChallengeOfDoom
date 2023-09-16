@@ -10,11 +10,10 @@ class MCQbuiler(UseLogger):
         self,
         root: ctk.CTk,
         name: str,
-        logger: Logger,
         *questions: Question | CustomQuestion,
         include_start: bool = True,
         include_end: bool = True,
-        ) -> None:
+    ) -> None:
         """Initialize Multiple Choice Quiz
 
         Parameters:
@@ -34,7 +33,7 @@ class MCQbuiler(UseLogger):
         if not all(isinstance(q, (Question, CustomQuestion)) for q in questions):
             raise TypeError("All questions must be instances of Question or CustomQuestion")
         
-        super().__init__(logger)
+        super().__init__()
         self.questions = questions
         self.iterator = (i for i in self.questions)
         self.root = root
@@ -227,7 +226,7 @@ class MCQbuiler(UseLogger):
         next_button.place(relx=0.5, rely=0.6, anchor=tk.CENTER)
         self.root.mainloop()
     
-    def begin(self, **kwargs):
+    def begin(self, **kwargs) -> list:
         """Wrapper for creating start screen, going through questions, and creating end screen
         """        
         if self.include_start:

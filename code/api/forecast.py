@@ -1,31 +1,43 @@
 import requests
 import json
+from utils import constants
+
 
 # from utils import WeatherInfo, UseLogger
 
 
+
+
 # class WeatherData(UseLogger):
 class WeatherData:
-    def make_call(self):
-        url = 'https://api.ambeedata.com/latest/pollen/by-lat-lng?lat=37.54068&lng=-77.43367'
-        result = requests.get(
-                url,
-                headers = {
-                    "x-api-key": "4fdc231b972e03b1df86d489299f2c39c62375be477304012f912fae0039a3a8",
-                    "Content-type": "application/json"
-                    }
-            )
+    def weather(self):
+        url = 'https://api.openweathermap.org/data/2.5/weather?lat=37.43&lon=-78.66&units=metric&appid=ae87b8e94884025fe72320419bba15eb'
+       
         try:
-            result.json()
+            weatherResult = requests.get(
+                url
+            )
         except requests.exceptions.JSONDecodeError as e:
-            print(result.content)
             exit(0)
-        
-        with open("json/pollen.json", "w") as f:
-            f.write(json.dumps(result, indent=4))
-    
 
-            
+
+        with open(constants.WEATHER_DATA, "w") as f:
+            f.write(json.dumps(weatherResult.json(), indent=4))
+
+        url = 'http://api.openweathermap.org/data/2.5/air_pollution?lat=-78.66&lon=37.43&appid=ae87b8e94884025fe72320419bba15eb'
+
+        try:
+            airQuality = requests.get(
+                url
+            )
+        except requests.exceptions.JSONDecodeError as e:
+            exit(0)
+
+        with open(constants.AIR_QUALITY, "w") as f:
+            f.write(json.dumps(airQuality.json(), indent=4))
+
+
+           
         # print('Grass Pollen Count: ' + str(eval(result)['data'][0]['Count']['grass_pollen']))
         # print('Tree Pollen Count: ' + str(eval(result)['data'][0]['Count']['tree_pollen']))
         # print('Weed Pollen Count: ' + str(eval(result)['data'][0]['Count']['weed_pollen']))
@@ -33,5 +45,6 @@ class WeatherData:
         # print('Tree Pollen Risk: ' + str(eval(result)['data'][0]['Risk']['tree_pollen']))
         # print('Weed Pollen Risk: ' + str(eval(result)['data'][0]['Risk']['weed_pollen']))
 
+
 if __name__ == "__main__":
-    print(WeatherData().make_call())
+    print(WeatherData().weather())

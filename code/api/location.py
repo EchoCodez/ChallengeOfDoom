@@ -47,12 +47,12 @@ def get_location(geocode: str, logger: Logger) -> Coroutine:
         )
     
 
-def coords_to_address(latitude: float, longitude: float, logger: Logger, *, no_zip: bool = False) -> str:
+def coords_to_address(latitude: float, longitude: float, logger: Logger, *, no_zipcode: bool = False) -> str:
     '''Convert latitude and longitude coords to relative address
     
     Returns:
     --------
-        str: City, County, State, Zip, Country. If `no_zip` is `True`, zip is not included
+        str: City, County, State, Zip, Country. If `no_zipcode` is `True`, zip is not included
             
     Raises:
     -------
@@ -66,7 +66,7 @@ def coords_to_address(latitude: float, longitude: float, logger: Logger, *, no_z
     delimiter = ", "
     datas = str(address).split(delimiter)[3:]
     
-    if no_zip:
+    if no_zipcode:
         try:
             datas.pop(-2)
         except IndexError:

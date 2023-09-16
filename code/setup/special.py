@@ -1,28 +1,33 @@
 from __future__ import annotations
 
-from utils import jsonUtils, InformationSheet, UseLogger, CustomQuestion, SettingsAttr
+from utils import (
+    jsonUtils,
+    InformationSheet,
+    UseLogger,
+    CustomQuestion,
+    SettingsAttr,
+    Logger,
+    FileHandler,
+    constants
+)
 import customtkinter as ctk
 import tkinter as tk
-from logging import Logger
 
 INFORMATION_PAGES = list[InformationSheet | CustomQuestion]
 
 class Settings(ctk.CTkScrollableFrame):
-    def __init__(self, master: ctk.CTk | ctk.CTkScrollableFrame, logger: Logger, **kwargs) -> None:
+    def __init__(self, master: ctk.CTk, **kwargs) -> None:
         super().__init__(master, **kwargs)
-        self.logger = logger
+        self.logger = constants.LOGGER
         self.logger.debug("Settings Clicked")
         self.row = 0
         self.show_settings()
-        self.logger.debug("Done")
     
     def clean(self):
         for w in (i for i in self.master.winfo_children() if i is not self):
             w.destroy()
     
-    def show_settings(self, mainloop=False, font=("", 50)) -> dict | None:
-        from utils import FileHandler
-        self.master.quit()
+    def show_settings(self, font=("", 50)) -> None:
         self.clean()
         self.setting_vars = {}
         
@@ -39,7 +44,7 @@ class Settings(ctk.CTkScrollableFrame):
         )
         
         # TODO: create bar for button colors
-        files = FileHandler(self.logger)
+        files = FileHandler()
         button_settings: tuple[SettingsAttr] = (
             SettingsAttr(
                 "Reset API Username",
@@ -72,18 +77,12 @@ class Settings(ctk.CTkScrollableFrame):
                 )
         
         for setting in button_settings:
-            self.setting_vars[setting.name] = self._create_button_setting(
+            self._create_button_setting(
                     setting.name,
                     font=font,
                     command=setting.command,
                     **setting.kwargs
                 )
-        
-        if mainloop:
-            self.pack()
-            self.mainloop()
-        else:
-            return self.setting_vars
     
     def _create_switch_setting(self, name: str, **kwargs) -> tk.Variable:
         """Create a setting button controlled by a switch
@@ -365,7 +364,7 @@ class InformationPages(UseLogger):
         return self.__copy__()
     
     def __copy__(self) -> InformationPages:
-        return InformationPages(*self.logger).add_pages(*self.pages)
+        return InformationPages().add_pages(*self.pages)
             
     def __iadd__(self, __o: InformationSheet, /) -> InformationSheet:
         self.pages += [ __o ]
