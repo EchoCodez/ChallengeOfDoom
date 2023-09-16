@@ -2,1406 +2,1406 @@
     {
         "ID": 9,
         "Name": "Headache",
-        "body_part": "Upper Body"
+        "body_part": ["Upper Body"]
     },
     {
         "ID": 10,
         "Name": "Abdominal pain",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 11,
         "Name": "Fever",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 12,
         "Name": "Pain in the limbs",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 13,
         "Name": "Sore throat",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 14,
         "Name": "Runny nose",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 15,
         "Name": "Cough",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 16,
         "Name": "Tiredness",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 17,
         "Name": "Chest pain",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 21,
         "Name": "Itching of skin",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 22,
         "Name": "Weight loss",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 23,
         "Name": "Weight gain",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 24,
         "Name": "Blackhead",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 25,
         "Name": "Skin nodules",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 26,
         "Name": "Skin lesion",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 27,
         "Name": "Joint pain",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 28,
         "Name": "Stuffy nose",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 29,
         "Name": "Shortness of breath",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 30,
         "Name": "Wheezing",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 31,
         "Name": "Chest tightness",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 33,
         "Name": "Eye redness",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 34,
         "Name": "Skin wheal",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 35,
         "Name": "Lip swelling",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 37,
         "Name": "Palpitations",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 38,
         "Name": "Nosebleed",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 39,
         "Name": "Increased urine quantity",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 40,
         "Name": "Increased thirst",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 43,
         "Name": "Drowsiness",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 44,
         "Name": "Nausea",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 45,
         "Name": "Heartburn",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 46,
         "Name": "Burning in the throat",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 47,
         "Name": "Joylessness",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 48,
         "Name": "Bloated feeling in the stomach",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 49,
         "Name": "Cravings",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 50,
         "Name": "Diarrhea",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 52,
         "Name": "Sleeplessness",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 53,
         "Name": "Difficulty to concentrate",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 54,
         "Name": "Reduced appetite",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 57,
         "Name": "Blackening of vision",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 59,
         "Name": "Frequent urination",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 60,
         "Name": "Sensitivity to cold",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 61,
         "Name": "Skin redness",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 62,
         "Name": "Blisters",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 63,
         "Name": "Non-healing skin wound",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 64,
         "Name": "Sputum",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 65,
         "Name": "Irregular mole",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 66,
         "Name": "Visual field loss",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 68,
         "Name": "Vision impairment",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 69,
         "Name": "Sensitivity to glare",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 70,
         "Name": "Impaired light-dark adaptation",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 71,
         "Name": "Double vision",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 72,
         "Name": "Halo",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 73,
         "Name": "Itching eyes",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 75,
         "Name": "Burning eyes",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 76,
         "Name": "Feeling of foreign body in the eye",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 77,
         "Name": "Blurred vision",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 78,
         "Name": "Ringing in the ear",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 79,
         "Name": "Difficult defecation",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 80,
         "Name": "Hard defecation",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 81,
         "Name": "Incomplete defecation",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 82,
         "Name": "Less than 3 defecations per week",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 83,
         "Name": "Fatty defecation",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 84,
         "Name": "Foul smelling defecation",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 85,
         "Name": "Mood swings",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 86,
         "Name": "Pressure in the ear",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 87,
         "Name": "Earache",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 88,
         "Name": "Itching in the ear",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 89,
         "Name": "Cold feet",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 90,
         "Name": "Impaired hearing",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 91,
         "Name": "Changes in the nails",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 92,
         "Name": "Early satiety",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 93,
         "Name": "Difficulty in swallowing",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 94,
         "Name": "Cramps",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 95,
         "Name": "Sneezing",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 96,
         "Name": "Itching in the nose",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 97,
         "Name": "Mouth ulcers",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 98,
         "Name": "Difficulty in speaking",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 101,
         "Name": "Vomiting",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 102,
         "Name": "Sensitivity to noise",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 103,
         "Name": "Pain radiating to the leg",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 104,
         "Name": "Back pain",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 105,
         "Name": "Yellow colored skin",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 106,
         "Name": "Yellowish discoloration of the white part of the eye",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 107,
         "Name": "Burning sensation when urinating",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 108,
         "Name": "Dark urine",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 109,
         "Name": "Painful urination",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 110,
         "Name": "Genital warts",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 112,
         "Name": "Menstruation disorder",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 113,
         "Name": "Impairment of male potency",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 114,
         "Name": "Nervousness",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 115,
         "Name": "Tremor at rest",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 116,
         "Name": "Underweight",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 118,
         "Name": "Physical inactivity",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 119,
         "Name": "Muscle stiffness",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 120,
         "Name": "Impaired balance",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 121,
         "Name": "Hoarseness",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 122,
         "Name": "Hiccups",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 123,
         "Name": "Missed period",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 124,
         "Name": "Skin rash",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 125,
         "Name": "Forgetfulness",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 126,
         "Name": "Difficulty in finding words",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 128,
         "Name": "Disorientation regarding time or place",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 129,
         "Name": "Problems with the sense of touch in the face",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 130,
         "Name": "Problems with the sense of touch in the feet",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 131,
         "Name": "Increased appetite",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 132,
         "Name": "Tremor on movement",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 133,
         "Name": "Night cough",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 134,
         "Name": "Crusting",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 135,
         "Name": "Mouth pain",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 136,
         "Name": "Neck pain",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 137,
         "Name": "Oversensitivity to light",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 138,
         "Name": "Sweating",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 139,
         "Name": "Cold sweats",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 140,
         "Name": "Paralysis",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 142,
         "Name": "Pain in the calves",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 143,
         "Name": "Leg ulcer",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 144,
         "Name": "Unconsciousness, short",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 145,
         "Name": "Feeling of tension in the legs",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 146,
         "Name": "Leg cramps",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 147,
         "Name": "Ankle swelling",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 148,
         "Name": "Hand swelling",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 149,
         "Name": "Hot flushes",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 150,
         "Name": "Pallor",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 151,
         "Name": "Dry skin",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 152,
         "Name": "Hair loss",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 153,
         "Name": "Fast, deepened breathing",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 154,
         "Name": "Flatulence",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 155,
         "Name": "Pain in the bones",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 156,
         "Name": "Bone fracture",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 157,
         "Name": "Overweight",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 160,
         "Name": "Urge to urinate",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 161,
         "Name": "Urination during the night",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 162,
         "Name": "Dribbling after urination",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 163,
         "Name": "Decreased urine stream",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 164,
         "Name": "Feeling of residual urine",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 165,
         "Name": "Delayed start to urination",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 166,
         "Name": "Vision impairment for near objects",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 167,
         "Name": "Limited mobility of the back",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 168,
         "Name": "Muscular weakness in the arm",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 169,
         "Name": "Swollen glands in the neck",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 170,
         "Name": "Cheek swelling",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 172,
         "Name": "Purulent discharge from the urethra",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 173,
         "Name": "Purulent discharge from the vagina",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 174,
         "Name": "Lower abdominal pain",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 175,
         "Name": "Chills",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 176,
         "Name": "Bleeding in the conjunctiva of the eye",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 177,
         "Name": "Muscle pain",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 178,
         "Name": "Limited mobility of the fingers",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 179,
         "Name": "Stomach burning",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 180,
         "Name": "Black stools",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 181,
         "Name": "Vomiting blood",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 183,
         "Name": "Side pain",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 184,
         "Name": "Hardening of the skin",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 185,
         "Name": "Stress-related leg pain",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 186,
         "Name": "Hand pain",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 187,
         "Name": "Wound",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 188,
         "Name": "Abdominal guarding",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 189,
         "Name": "Painful defecation",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 190,
         "Name": "Blood in stool",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 191,
         "Name": "Rebound tenderness",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 192,
         "Name": "Bulging abdominal wall",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 193,
         "Name": "Joint swelling",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 194,
         "Name": "Joint effusion",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 195,
         "Name": "Limited mobility of the leg",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 196,
         "Name": "Hip pain",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 197,
         "Name": "Immobilization",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 198,
         "Name": "Joint instability",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 200,
         "Name": "Numbness of the hands",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 201,
         "Name": "Tingling",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 202,
         "Name": "Muscular atrophy of the arm",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 203,
         "Name": "Pain on swallowing",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 204,
         "Name": "Increased salivation",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 205,
         "Name": "Lockjaw",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 206,
         "Name": "Hearing loss",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 207,
         "Name": "Dizziness",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 208,
         "Name": "Eyelid swelling",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 209,
         "Name": "Eyelids sticking together",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 210,
         "Name": "Loss of eye lashes",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 211,
         "Name": "Tears",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 213,
         "Name": "Vision impairment for far objects",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 214,
         "Name": "Flaking skin",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 215,
         "Name": "Moist and softened skin",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 216,
         "Name": "Discoloration of nails",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 217,
         "Name": "Skin thickening",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 218,
         "Name": "Coarsening of the skin structure",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 219,
         "Name": "Face pain",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 220,
         "Name": "Increased touch sensitivity",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 221,
         "Name": "Numbness in the arm",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 222,
         "Name": "Testicular pain",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 223,
         "Name": "Abdominal pain associated with menstruation",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 228,
         "Name": "Cough with sputum",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 230,
         "Name": "Joint redness",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 231,
         "Name": "Leg swelling",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 232,
         "Name": "Marked veins",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 233,
         "Name": "Bloody cough",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 234,
         "Name": "Neck stiffness",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 235,
         "Name": "Memory gap",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 236,
         "Name": "Swelling in the genital area",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 238,
         "Name": "Anxiety",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 239,
         "Name": "Bold area among hair on the head",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 240,
         "Name": "Blue spot on skin",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 241,
         "Name": "Sleepiness with spontaneous falling asleep",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 242,
         "Name": "Eye blinking",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 243,
         "Name": "Tic",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 244,
         "Name": "Drooping eyelid",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 245,
         "Name": "Flaking skin on the head",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 246,
         "Name": "Facial paralysis",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 247,
         "Name": "Itching on head",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 248,
         "Name": "Swollen glands in the armpit",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 249,
         "Name": "Swollen glands in the groin",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 250,
         "Name": "Breathing-related pains",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 251,
         "Name": "Pain radiating to the arm",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 252,
         "Name": "Muscular atrophy in the leg",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 253,
         "Name": "Muscular weakness in the leg",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 254,
         "Name": "Numbness in the leg",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 255,
         "Name": "Foot pain",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 256,
         "Name": "Knee pain",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 257,
         "Name": "Involuntary movements",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 258,
         "Name": "Protrusion of the eyes",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 260,
         "Name": "Curvature of the spine",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 261,
         "Name": "Lump in the breast",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 262,
         "Name": "Increased drive",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 263,
         "Name": "Lower-back pain",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 264,
         "Name": "Shiny red tongue",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 265,
         "Name": "Uncontrolled defecation",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 266,
         "Name": "Malposition of the testicles",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 267,
         "Name": "Swelling of the testicles",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 268,
         "Name": "Itching or burning in the genital area",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 269,
         "Name": "Scalp redness",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 270,
         "Name": "Double vision, acute-onset",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 272,
         "Name": "Dry mouth",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 273,
         "Name": "Dry eyes",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 284,
         "Name": "Bleeding from vagina",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 286,
         "Name": "Pain when chewing",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 287,
         "Name": "Eye pain",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 288,
         "Name": "Burning nose",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 970,
         "Name": "Facial swelling",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 971,
         "Name": "Arm swelling",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 972,
         "Name": "Weakness/numbness on a side of body",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 973,
         "Name": "Itching in the mouth or throat",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 974,
         "Name": "Aggressiveness",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 975,
         "Name": "Sadness",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 976,
         "Name": "Hallucination",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 977,
         "Name": "Tongue swelling",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 978,
         "Name": "Cold hands",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 979,
         "Name": "Brittleness of nails",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 980,
         "Name": "Tongue burning",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 981,
         "Name": "Agitation",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 982,
         "Name": "Feeling faint",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 983,
         "Name": "Morning stiffness",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 984,
         "Name": "Absence of a pulse",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 985,
         "Name": "Heart murmur",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 986,
         "Name": "Irregular heartbeat",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 987,
         "Name": "Muscle weakness",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 988,
         "Name": "Trouble understanding speech",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 989,
         "Name": "Distended abdomen",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 990,
         "Name": "Pain of the anus",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 991,
         "Name": "Blue colored skin",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 992,
         "Name": "Limited mobility of the ankle",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 993,
         "Name": "Hip deformity",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 994,
         "Name": "Knee deformity",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 995,
         "Name": "Finger deformity",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 996,
         "Name": "Ankle deformity",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 997,
         "Name": "Toe deformity",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 998,
         "Name": "Back deformity",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 999,
         "Name": "Itching of the anus",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 1000,
         "Name": "Limited mobility of the hip",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 1001,
         "Name": "Scar",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 1002,
         "Name": "Foot swelling",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 1003,
         "Name": "Toe swelling",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 1004,
         "Name": "Night sweats",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 1005,
         "Name": "Difficulty with gait",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 1006,
         "Name": "Enlarged calf",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 1007,
         "Name": "Difficulty to learn",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 1008,
         "Name": "Toothache",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 1009,
         "Name": "Arm pain",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 1010,
         "Name": "Leg pain",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 1011,
         "Name": "Elbow pain",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 1012,
         "Name": "Finger swelling",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 1013,
         "Name": "Finger pain",
-        "body_part": null
+        "body_part": []
     },
     {
         "ID": 1014,
         "Name": "Feeling ill",
-        "body_part": null
+        "body_part": []
     }
 ]

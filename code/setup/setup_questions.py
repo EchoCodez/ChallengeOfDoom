@@ -2,9 +2,9 @@ import re
 import webbrowser
 import tkinter as tk
 import customtkinter as ctk
-from datetime import datetime, date
+from datetime import datetime
 from CTkMessagebox import CTkMessagebox
-from typing import Callable
+from typing import Callable, Iterator
 
 from api import Diagnosis, get_location
 from setup.special import InformationPages
@@ -13,7 +13,7 @@ from utils import *
 
 class Questions(ctk.CTk):
     '''Setup questions for application'''
-    def __init__(self, fg: str = None) -> None:
+    def __init__(self, fg: str | None = None) -> None:
         super().__init__(fg_color=fg)
         
         self.__appearance = tk.StringVar(value="light")
@@ -22,7 +22,7 @@ class Questions(ctk.CTk):
         self.total_condition_pages = None
     
     def raise_exception(self, mainloop: bool = False, **kwargs) -> CTkMessagebox:
-        return CTkMessagebox(self, **kwargs) if not mainloop else CTkMessagebox(self, **kwargs).mainloop()
+        return CTkMessagebox(self, **kwargs) if not mainloop else CTkMessagebox(self, **kwargs).mainloop() # type: ignore
     
     def on_closing(self) -> None:
         '''Confirm if user wanted to end application'''
@@ -58,7 +58,6 @@ class Questions(ctk.CTk):
         prequiz = MCQbuiler(
             self,
             "Let's set up the program!", # title
-            self.logger,
             CustomQuestion(self.set_appearance if not set_theme() else lambda: None),
             Question("What is your gender?", ["Male", "Female"]),
             CustomQuestion(self.get_year_of_birth),
@@ -70,17 +69,16 @@ class Questions(ctk.CTk):
         
         l = get_location(answers[4], self.logger)
         try:
-            lat, long = l.latitude, l.longitude
-        except Exception:
+            lat, long = l.latitude, l.longitude # type: ignore
+        except AttributeError:
             self.logger.warning("Failed to get location")
         else:
             jsonUtils.write({
-                    "location": {"latitude": lat, "longitude": long}
-                })
-        finally:
-            jsonUtils.write({
-                    "gender": answers[1],
-                })
+                "location": {"latitude": lat, "longitude": long}
+            })
+        jsonUtils.write({
+            "gender": answers[1],
+        })
         
         self.clean()
     
@@ -145,7 +143,7 @@ class Questions(ctk.CTk):
             year = datetime.now().year
             self.logger.info(f"User typed {typed} as input for date of birth")
             
-            birth_year = re.sub("\D", "", typed)
+            birth_year = re.sub(r"\D", "", typed)
             
             if birth_year == "":
                 CTkMessagebox(
@@ -295,6 +293,7 @@ class Questions(ctk.CTk):
         sheets = InformationPages()
         
         for d in apimedic_txt_config:
+            d: dict
             buttons, commands = d.pop("buttons", ()), d.pop("commands", ())
             
             if len(buttons) != len(commands):
@@ -369,13 +368,21 @@ class Questions(ctk.CTk):
 class ApiParent:
     '''Parent class to put UI diagnosis code for APImedic'''
     logger: Logger
+    # for linting
+    home: Callable
+    quit: Callable
+    clean: Callable
+    mainloop: Callable
+    raise_exception: Callable
+    winfo_width: Callable
+    winfo_height: Callable
     # TODO: Add disclaimer
     # improve API quiz by sorting through symptoms list
     # A) Ask how they're feeling on 1-10 scale. 7+ means we tell them to go to doctor right away (don't deal with that case)
     # B) Add data for each condition about part of body it's from (digestive, respiratory, etc.)
     # C) Ask user where pain is coming from (checkboxes)
     # D) Filter symptoms list by part (C) to make it shorter.
-    def _diagnose(self: ctk.CTk) -> None:
+    def _diagnose(self) -> None:
         if not jsonUtils.read(constants.USER_DATA).get("disclaimer_read", False):
             self.disclaimer()
             self.clean()
@@ -392,7 +399,7 @@ class ApiParent:
         self._get_filtered_medical_conditions(conditions, filter_by_parts)
         self.clean()
     
-    def disclaimer(self: ctk.CTk) -> None:
+    def disclaimer(self) -> None:
         ctk.CTkLabel(self, text="DISCLAIMER", font=("", 50)).pack(pady=20)
         ctk.CTkLabel(
             self,
@@ -411,7 +418,7 @@ class ApiParent:
         self.mainloop()
         jsonUtils.add({"disclaimer_read": True})
     
-    def scale_question(self: ctk.CTk) -> None:
+    def scale_question(self) -> int:
         ctk.CTkLabel(self, text="How are you feeling on a scale of 1-10?", font=(None, 40)).pack(pady=20)
         scale = ctk.CTkSlider(
             self,
@@ -424,16 +431,16 @@ class ApiParent:
         scale.set(1)
         scale.pack(pady=80)
         
-        l = ctk.CTkLabel(self, text=int(scale.get()), font=(None, 20))
+        l = ctk.CTkLabel(self, text=str(int(scale.get())), font=(None, 20))
         l.pack(pady=80)
         
         ctk.CTkButton(self, text="Continue", font=(None, 30), command=self.quit).pack(pady=40)
         
         self.mainloop()
-        return scale.get()
+        return int(scale.get())
     
     
-    def _stop_if_dangerous(self: ctk.CTk, rating: int) -> int:
+    def _stop_if_dangerous(self, rating: int) -> None:
         '''Stops if user rated more than a 7'''
         if rating >= 7:
             ctk.CTkLabel(self, text="Please consult a Medical Professional", font=(None, 40)).pack(pady=self.winfo_height()//5)
@@ -443,7 +450,7 @@ class ApiParent:
             exit(0)
             
     
-    def body_parts(self: ctk.CTk) -> BodyParts:
+    def body_parts(self) -> BodyParts:
         ctk.CTkLabel(self, text="Where are you feeling pain from?", font=(None, 40)).pack(pady=40)
         
         # set up checkboxes
@@ -463,12 +470,14 @@ class ApiParent:
         self.mainloop()
         return BodyParts(*(k for k, v in selected.items() if v.get()))
     
-    @staticmethod
-    def get_filtered_conditions(parts: BodyParts) -> None:
-        conditions = tuple(x for x in jsonUtils.read(constants.CONDITIONS_LIST) if x["body_part"] in parts)
-        return conditions
+    def get_filtered_conditions(self, parts: BodyParts) -> tuple[dict]:
+        conditions = tuple(x for x in jsonUtils.read(constants.CONDITIONS_LIST) if self.filtermethod(x["body_part"], parts))
+        return conditions # type: ignore
         
-    
+    @staticmethod
+    def filtermethod(condition_parts: list[str], parts: BodyParts) -> bool:
+        return any(condition in parts for condition in condition_parts)
+
     def diagnosis_quiz(self) -> None:
         '''Gather diagnosis data and use it to call API'''
         def call_api(user):
@@ -477,7 +486,7 @@ class ApiParent:
                 testing=False
             ).make_call()
             
-            if results == "":
+            if isinstance(results, str) and results == "":
                 self.raise_exception(
                     title="API Token Error",
                     message="An error occured while fetching diagnosis results.\nPlease check username and password",
@@ -491,7 +500,7 @@ class ApiParent:
             
             f = constants.TODAY_DATE_FILE
             jsonUtils.overwrite(
-                data = results,
+                data = results, # type: ignore
                 file = f
                 )
             self.logger.info(f"Writing to log file {f} completed successfully")
@@ -499,7 +508,7 @@ class ApiParent:
         self.clean()
         
         x = MCQbuiler(
-            self,
+            self, # type: ignore
             "Daily Checkup",
             CustomQuestion(self._diagnose)
         ).begin(
@@ -518,7 +527,7 @@ class ApiParent:
             return
         
         # get keys user clicked on
-        test_results = [key for key, val in self._selected_conditions.items() if val.get()]
+        test_results: list[str] = [key for key, val in self._selected_conditions.items() if val.get()] # type: ignore
         user = jsonUtils.get_values()
         
         conditions = user.conditions.copy()
@@ -562,7 +571,7 @@ class ApiParent:
         tabview.pack(padx=20, pady=20)
         
         
-        diseases = jsonUtils.read(constants.TODAY_DATE_FILE)
+        diseases: list[dict] = jsonUtils.read(constants.TODAY_DATE_FILE) # type: ignore
         self.get_diagnosis_info(diseases, tabview, font)
         self.mainloop()
         
@@ -598,7 +607,7 @@ class ApiParent:
             ctk.CTkButton(
                 tab,
                 text="What is this?",
-                command=lambda name=name: webbrowser.open_new_tab(f"https://www.google.com/search?q={name.replace(' ', '%20')}")
+                command=lambda name=name: webbrowser.open_new_tab(f"https://www.google.com/search?q={name.replace(' ', '%20')}") # type: ignore
             ).pack(pady=50)
         
         ctk.CTkButton(
@@ -610,14 +619,14 @@ class ApiParent:
         if loop:
             self.mainloop()
         
-    def _get_filtered_medical_conditions(self, conditions: tuple[str], parts: BodyParts):
+    def _get_filtered_medical_conditions(self, conditions: tuple[dict], parts: BodyParts):
         self.clean()
         
         rows, columns = 15, 3
         
         total_names = len(conditions)
         
-        gender = jsonUtils.read("json/user-data.json").get("gender", "male").lower()
+        gender = jsonUtils.read(Path("json/user-data.json")).get("gender", "male").lower()
         
         for i in range(ceil(total_names/(rows*columns))):
             def continue_button():
@@ -649,11 +658,11 @@ class ApiParent:
             
             self._checkboxes(
                 gender=gender,
-                font=(None, 30),
+                font=(None, 30), # type: ignore
                 columns=columns,
                 rows=rows,
-                conditions=conditions,
-                condition_func=lambda n: n["body_part"] in parts
+                conditions=iter(conditions),
+                condition_func=lambda n: self.filtermethod(n["body_part"], parts) # type: ignore
             )
             
             next_button.grid(row=rows+1, column=columns-1, sticky = tk.W, pady=30)
@@ -665,15 +674,13 @@ class ApiParent:
     def _checkboxes(
             self,
             gender: str,
-            conditions: tuple[str],
+            conditions: Iterator,
             condition_func: Callable[[str], bool],
             font: tuple[str, int] = ("Arial", 25),
             rows: int = 15,
             columns: int = 3
         ) -> None:
         '''Creates the checkboxes'''
-        conditions = iter(conditions)
-        
         if gender == "male":
             male = True
         elif gender == "female":
@@ -693,14 +700,14 @@ class ApiParent:
             
             func = lambda n: condition_func(n) and gender_filter(n["Name"])
             
-            _condition = next(conditions, None)
+            _condition: dict | None = next(conditions, None)
             
             if _condition is None:
                 return None
             
             while _condition is not None and not func(_condition):
                 _condition = next(conditions, None)
-            return _condition["Name"]
+            return _condition["Name"] # type: ignore
         
         # make column outer loop so that things with long names get grouped into one column, saving space
         for j in range(columns):

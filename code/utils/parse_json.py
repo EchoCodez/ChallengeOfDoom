@@ -164,7 +164,7 @@ def get_values() -> UserInfo:
             api_password=data.get("api_password", "")
         )
 
-def read(file: Path) -> list[dict] | dict:
+def read(file: Path) -> dict:
     """returns the json loaded file of a file path
 
     Parameters:
@@ -186,7 +186,7 @@ def read(file: Path) -> list[dict] | dict:
     with open(file, encoding="utf-8") as f:
         return json.load(f)
     
-def search(file: Path, sentinal: int, **kwargs) -> str | dict:
+def search(file: Path, sentinal: Any, **kwargs) -> Any:
     '''
     Search for a given string in a json file
     
@@ -323,22 +323,22 @@ def delete_file(path: Path) -> None:
 
 class OPEN_JSON:
     '''Context manager for opening json files'''
-    def __init__(self, path: str, action: str = "r", kwargs: dict[str, Any] = None) -> None:
+    def __init__(self, path: Path, action: str = "r", kwargs: dict | None = None) -> None:
         self.path = path
         self.action = action
         self.return_file = ("r" not in self.action)
-        self.kwargs = kwargs
+        self.kwargs = kwargs if kwargs is not None else {}
     
     def __enter__(self):
         if self.return_file:
-            self.file = open(self.path, self.action, encoding="utf-8", **self.kwargs)
+            self.file = self.path.open(self.action, encoding="utf-8", **self.kwargs)
             return (json.load(self.file), self.file)
         
         with open(self.path, self.action, encoding="utf-8") as f:
             return json.load(f)
         
     
-    def __exit__(self, exception_type, exception_value, traceback) -> None:
+    def __exit__(self, *_) -> None:
         if self.return_file:
             self.file.close()
     
