@@ -1,6 +1,4 @@
 import requests
-from logging import Logger
-from datetime import date
 from utils import jsonUtils, UserInfo, Path, constants
 
 
@@ -9,6 +7,7 @@ class Diagnosis:
         self.user = user
         self.logger = constants.LOGGER
         self.testing = testing
+        self.token = self._get_token()
 
     def _get_token(self) -> str:
         '''Make call to APImedic to get token'''
@@ -21,7 +20,7 @@ class Diagnosis:
         api_key = "1000438@lcps.org" if self.testing else self.user.api_username
         secret_key = "a7N8Dxe9BAd4n6S3M" if self.testing else self.user.api_password
         
-        hashed: hmac.HMAC = hmac.new(
+        hashed = hmac.new(
             bytes(secret_key, encoding="utf-8"),
             url.encode("utf-8"),
             digestmod=hashlib.md5
@@ -42,8 +41,9 @@ class Diagnosis:
             token = response.json()['Token']
             return token
 
-    def make_call(self, file: Path = None):
-        token = self._get_token()
+    def make_call(self, file: Path | None = None):
+        """Make Diagnosis Call"""
+        token = self.token
         file = Path(file) if file is not None else constants.TODAY_DATE_FILE
         
         if token == "":
@@ -70,7 +70,51 @@ class Diagnosis:
                 params["format"],
                 params["language"]
             )
-            )
+        )
         jsonUtils.overwrite(response.json(), file)
         return jsonUtils.read(file)
     
+    def get_locations(self, file: Path = constants.BODY_LOCATIONS):
+        """Get's Body Locations and writes to file."""
+        response = requests.get(
+                "https://{0}healthservice.priaid.ch/body/locations?token={1}&language={2}&format=json".format(
+                'sandbox-' if self.testing else '',
+                self.token,
+                "en-gb"
+            )
+        )
+        jsonUtils.overwrite(response.json(), file)
+
+    def get_all_sublocations(self, file: Path = constants.BODY_LOCATIONS):
+        locations = jsonUtils.read(file)
+        for idx, location in enumerate(locations):
+            temp = requests.get(
+                "https://{0}healthservice.priaid.ch/body/locations/{1}?token={2}&language=en-gb&format=json".format(
+                    'sandbox-' if self.testing else '',
+                    location["ID"],
+                    self.token
+                )
+            )
+            temp = temp.json()
+            location["sublocations"] = temp
+            locations[idx] = location
+
+        jsonUtils.overwrite(locations, file)
+
+    def get_symptoms_by_sublocation(self, location_id: int, file: Path = constants.CONDITIONS_LIST):
+        previous_symptoms = jsonUtils.read(file)
+        if previous_symptoms.get(location_id, False):
+            return previous_symptoms[location_id]
+
+        previous_symptoms[location_id] = requests.get(
+                "https://{0}healthservice.priaid.ch/symptoms/{1}/{2}?token={3}&language=en-gb&format=json".format(
+                    'sandbox-' if self.testing else '',
+                    location_id,
+                    self.user.selector_status,
+                    self.token
+            )
+        ).json()
+        print(self.user.selector_status)
+        jsonUtils.overwrite(previous_symptoms, file)
+        return jsonUtils.read(file)
+

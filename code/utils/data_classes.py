@@ -1,7 +1,6 @@
 import dataclasses
 import typing
-from logging import Logger
-from utils.constants import LOGGER
+from utils.constants import LOGGER, TODAY
 
 __all__ = (
     "Question",
@@ -74,6 +73,15 @@ class UserInfo:
     birthyear: str
     api_username: str
     api_password: str
+
+    @property
+    def selector_status(self) -> typing.Literal["man", "woman", "boy", "girl"]:
+        is_adult = (TODAY.year-int(self.birthyear)) >= 18
+        
+        if is_adult:
+            return "man" if self.gender.lower() == "male" else 'woman'
+        else:
+            return "boy" if self.gender.lower() == "male" else "girl"
 
 @dataclasses.dataclass(frozen=True, slots=True)
 class ActionButton:
