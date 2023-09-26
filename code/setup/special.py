@@ -274,8 +274,8 @@ class InformationPages(UseLogger):
         self._pages = pages
         return self
     
-    def add_pages(self, *pages: InformationSheet) -> InformationPages:
-        self.pages = self.pages+pages
+    def add_pages(self, *pages: InformationSheet | CustomQuestion) -> InformationPages:
+        self.pages.extend(pages)
         return self
     
     def create_pages(self, master: ctk.CTk, **content_kwargs) -> list:
@@ -366,7 +366,7 @@ class InformationPages(UseLogger):
     def __copy__(self) -> InformationPages:
         return InformationPages().add_pages(*self.pages)
             
-    def __iadd__(self, __o: InformationSheet, /) -> InformationSheet:
+    def __iadd__(self, __o: InformationSheet | CustomQuestion, /) -> InformationPages:
         self.pages += [ __o ]
         return self
         

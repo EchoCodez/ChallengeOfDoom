@@ -26,3 +26,7 @@ TODAY_DATE_FILE = HEALTH_LOGS / Path(date.today().strftime("%d_%m_%y")).with_suf
 LOGGER_NAME = "CongressionalAppChallenge"
 LOGGER = getLogger(LOGGER_NAME)
 
+
+# Other
+IS_TESTING = False
+

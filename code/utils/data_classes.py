@@ -1,6 +1,10 @@
 import dataclasses
 import typing
-from utils.constants import LOGGER, TODAY
+import itertools as it
+
+from apscheduler.job import Iterable
+import utils.parse_json as jsonUtils
+from utils.constants import TODAY, BODY_LOCATIONS
 
 __all__ = (
     "Question",
@@ -10,7 +14,8 @@ __all__ = (
     "InformationSheet",
     "SettingsAttr",
     "WeatherInfo",
-    "BodyParts"
+    "BodyParts",
+    "Symptoms"
 )
 
 @dataclasses.dataclass(frozen=True, slots=True)
@@ -138,20 +143,20 @@ class WeatherInfo:
     weed_pollen_risk: float
     
 class BodyParts:
-    allowed_parts = [
-        "Upper Body",
-        "Lower Body",
-        "Respiratory",
-        "Other"
-    ]
     def __init__(self, *parts: str) -> None:
-        self.parts = set() # sets for O(1) lookup
-        for part in (p.lower() for p in parts):
-            if part.title() in self.allowed_parts:
-                self.parts.add(part.title())
-            else:
-                LOGGER.warning(f"{part.title()} not in {self.allowed_parts}")
+        self.parts = {x.title() for x in parts}
+
+    def subparts_to_ids(self) -> tuple[int]:
+        data = it.chain(*[d["sublocations"] for d in jsonUtils.read(BODY_LOCATIONS)])
+        return tuple(d["ID"] for d in data if d["Name"].title() in self) # type: ignore
         
+    def __iadd__(self, item: typing.Iterable[str]):
+        item = tuple(item) 
+        if not all(isinstance(x, str) for x in item):
+            raise TypeError("All items must be of class str")
+        self.parts = {*self.parts, *(x.title() for x in item)}
+        return self
+
     def __iter__(self) -> typing.Iterator[str]:
         return iter(self.parts)
     
@@ -159,3 +164,38 @@ class BodyParts:
     def __contains__(self, arg: typing.Any) -> bool:
         return arg in self.parts
                 
+    def __str__(self) -> str:
+        return f"{self.__class__.__name__}({', '.join(self.parts)})"
+
+
+class Symptoms:
+    def __init__(self, subparts: BodyParts) -> None:
+        self._symptoms = {part: self.get_id_by_subpart(part) for part in subparts}
+
+    @staticmethod
+    def get_id_by_subpart(subpart: str):
+        for d in jsonUtils.read(BODY_LOCATIONS):
+            for part in d["subparts"]:
+                if subpart == part["Name"]:
+                    return part["ID"]
+
+        raise ValueError(f"{subpart} not found!")
+
+    def __getitem__(self, *args: typing.Any):
+        return self._symptoms.__getitem__(*args)
+
+    def __delitem__(self, *args: typing.Any):
+        return self._symptoms.__delitem__(*args)
+
+    def __str__(self) -> str:
+        return f"{type(self).__name__}({', '.join(self._symptoms)})"
+
+    def __iadd__(self, __o: Iterable[str] | str):
+        if isinstance(__o, Iterable):
+            self._symptoms.update({x: self.get_id_by_subpart(x) for x in __o})
+        else:
+            self._symptoms[str(__o)] = self.get_id_by_subpart(__o)
+        return self
+        
+
+

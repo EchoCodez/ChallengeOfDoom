@@ -73,9 +73,11 @@ class Diagnosis:
         )
         jsonUtils.overwrite(response.json(), file)
         return jsonUtils.read(file)
-    
+   
+    # DO NOT USE THESE METHODS UNLESS DATA IS LOST (SOMEHOW)
+
     def get_locations(self, file: Path = constants.BODY_LOCATIONS):
-        """Get's Body Locations and writes to file."""
+        """Get's Body Locations and writes to file. Should only be called again if data is lost"""
         response = requests.get(
                 "https://{0}healthservice.priaid.ch/body/locations?token={1}&language={2}&format=json".format(
                 'sandbox-' if self.testing else '',
@@ -114,7 +116,11 @@ class Diagnosis:
                     self.token
             )
         ).json()
-        print(self.user.selector_status)
+
         jsonUtils.overwrite(previous_symptoms, file)
         return jsonUtils.read(file)
+    
+    def get_symptoms_by_sublocations(self, *location_ids: int, f: Path = constants.CONDITIONS_LIST):
+        return tuple(self.get_symptoms_by_sublocation(id_, file=f) for id_ in location_ids)
+
 
