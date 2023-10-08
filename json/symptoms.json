@@ -928,65 +928,8 @@
             ]
         },
         {
-            "ID": 54,
-            "Name": "Reduced appetite",
-            "HasRedFlag": false,
-            "HealthSymptomLocationIDs": [
-                6,
-                25,
-                17,
-                47,
-                36
-            ],
-            "ProfName": "",
-            "Synonyms": []
-        },
-        {
-            "ID": 92,
-            "Name": "Early satiety",
-            "HasRedFlag": false,
-            "HealthSymptomLocationIDs": [
-                16,
-                36
-            ],
-            "ProfName": "",
-            "Synonyms": []
-        },
-        {
-            "ID": 101,
-            "Name": "Vomiting",
-            "HasRedFlag": false,
-            "HealthSymptomLocationIDs": [
-                6,
-                25,
-                16,
-                36
-            ],
-            "ProfName": "",
-            "Synonyms": []
-        },
-        {
-            "ID": 153,
-            "Name": "Fast, deepened breathing",
-            "HasRedFlag": false,
-            "HealthSymptomLocationIDs": [
-                6,
-                24,
-                25,
-                15,
-                31,
-                16,
-                36
-            ],
-            "ProfName": "",
-            "Synonyms": [
-                "Fast breathing",
-                "Hyperventilation"
-            ]
-        },
-        {
-            "ID": 179,
-            "Name": "Stomach burning",
+            "ID": 48,
+            "Name": "Bloated feeling in the stomach",
             "HasRedFlag": false,
             "HealthSymptomLocationIDs": [
                 16,
@@ -994,14 +937,13 @@
             ],
             "ProfName": "",
             "Synonyms": [
-                "Burning abdominal pain",
-                "Burning stomach ache"
+                "Feeling full"
             ]
         },
         {
-            "ID": 181,
-            "Name": "Vomiting blood",
-            "HasRedFlag": true,
+            "ID": 49,
+            "Name": "Cravings",
+            "HasRedFlag": false,
             "HealthSymptomLocationIDs": [
                 6,
                 25,
@@ -1009,55 +951,24 @@
                 36
             ],
             "ProfName": "",
-            "Synonyms": []
-        }
-    ],
-    "36": [
-        {
-            "ID": 10,
-            "Name": "Abdominal pain",
-            "HasRedFlag": false,
-            "HealthSymptomLocationIDs": [
-                16,
-                36
-            ],
-            "ProfName": "",
             "Synonyms": [
-                " Stomach ache"
+                "Binge eating"
             ]
         },
         {
-            "ID": 44,
-            "Name": "Nausea",
+            "ID": 50,
+            "Name": "Diarrhea",
             "HasRedFlag": false,
             "HealthSymptomLocationIDs": [
-                6,
-                22,
-                15,
-                31,
                 16,
                 36,
-                17,
-                47
-            ],
-            "ProfName": "",
-            "Synonyms": []
-        },
-        {
-            "ID": 45,
-            "Name": "Heartburn",
-            "HasRedFlag": false,
-            "HealthSymptomLocationIDs": [
-                6,
-                24,
-                15,
-                31,
-                16,
-                36
+                40
             ],
             "ProfName": "",
             "Synonyms": [
-                "Pyrosis"
+                "Diarrhoea",
+                "Loose stool",
+                "Watery stool"
             ]
         },
         {
@@ -1072,7 +983,11 @@
                 36
             ],
             "ProfName": "",
-            "Synonyms": []
+            "Synonyms": [
+                "Loss of appetite",
+                "Decreased appetite",
+                "Decrease in hunger"
+            ]
         },
         {
             "ID": 92,
@@ -1096,7 +1011,25 @@
                 36
             ],
             "ProfName": "",
-            "Synonyms": []
+            "Synonyms": [
+                "Throwing up"
+            ]
+        },
+        {
+            "ID": 131,
+            "Name": "Increased appetite",
+            "HasRedFlag": false,
+            "HealthSymptomLocationIDs": [
+                6,
+                25,
+                17,
+                47,
+                36
+            ],
+            "ProfName": "",
+            "Synonyms": [
+                "Increase in hunger"
+            ]
         },
         {
             "ID": 153,
@@ -1115,6 +1048,19 @@
             "Synonyms": [
                 "Fast breathing",
                 "Hyperventilation"
+            ]
+        },
+        {
+            "ID": 154,
+            "Name": "Flatulence",
+            "HasRedFlag": false,
+            "HealthSymptomLocationIDs": [
+                16,
+                36
+            ],
+            "ProfName": "",
+            "Synonyms": [
+                "Wind"
             ]
         },
         {
@@ -1143,6 +1089,63 @@
             ],
             "ProfName": "",
             "Synonyms": []
+        },
+        {
+            "ID": 188,
+            "Name": "Abdominal guarding",
+            "HasRedFlag": false,
+            "HealthSymptomLocationIDs": [
+                16,
+                36
+            ],
+            "ProfName": "",
+            "Synonyms": [
+                "Hard belly",
+                "Tension of abdominal wall muscles"
+            ]
+        },
+        {
+            "ID": 191,
+            "Name": "Rebound tenderness",
+            "HasRedFlag": false,
+            "HealthSymptomLocationIDs": [
+                16,
+                36
+            ],
+            "ProfName": "Blumberg sign",
+            "Synonyms": [
+                "Blumberg sign"
+            ]
+        },
+        {
+            "ID": 192,
+            "Name": "Bulging abdominal wall",
+            "HasRedFlag": false,
+            "HealthSymptomLocationIDs": [
+                16,
+                36
+            ],
+            "ProfName": "",
+            "Synonyms": [
+                "Abdomen deformity",
+                "Stomach deformity",
+                "Stomach bump"
+            ]
+        },
+        {
+            "ID": 989,
+            "Name": "Distended abdomen",
+            "HasRedFlag": false,
+            "HealthSymptomLocationIDs": [
+                16,
+                36
+            ],
+            "ProfName": "",
+            "Synonyms": [
+                "Distended stomach",
+                "Abdominal distension",
+                "Stomach bloating"
+            ]
         }
     ]
 }

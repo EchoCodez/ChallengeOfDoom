@@ -8,6 +8,7 @@ from logging import getLogger
 PREFERENCES = Path("json/preferences.json")
 USER_DATA = Path("json/user-data.json")
 CONDITIONS_LIST = Path("json/symptoms.json")
+SYMPTOM_LOOKUP = Path("json/api-database.json")
 BODY_LOCATIONS = Path("json/body-locations.json")
 MEDICINES = Path("json/medicines.json")
 LOGS = Path("json/logs.json")

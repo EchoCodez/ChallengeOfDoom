@@ -405,7 +405,7 @@ class ApiParent:
         selected_subparts = self.body_parts(parts=subparts)
 
         self.logger.debug(f"IDS: {selected_subparts.subparts_to_ids()}")
-        symptoms = Diagnosis(jsonUtils.get_values()).get_symptoms_by_sublocations(*selected_subparts.subparts_to_ids())
+        symptoms = Diagnosis(jsonUtils.get_values(), testing=constants.IS_TESTING).get_symptoms_by_sublocations(*selected_subparts.subparts_to_ids())
 
         self._get_filtered_medical_conditions(symptoms) # are you feeling any of the above from <list of possible symptoms>
         self.clean()
@@ -501,7 +501,7 @@ class ApiParent:
         def call_api(user):
             results = Diagnosis(
                 user=user,
-                testing=False
+                testing=constants.IS_TESTING
             ).make_call()
             
             if isinstance(results, str) and results == "":
@@ -552,8 +552,9 @@ class ApiParent:
         
         for condition in test_results:
             # search for ID of condition
+            self.logger.debug(f"Looking for ID of {condition}")
             conditions += [jsonUtils.search(
-                constants.CONDITIONS_LIST,
+                constants.SYMPTOM_LOOKUP,
                 sentinal=condition,
                 search_for="Name",
                 _return="ID"
@@ -643,8 +644,6 @@ class ApiParent:
         rows, columns = 15, 3
         
         total_names = len(conditions)
-
-        constants.LOGGER.warning(f"CONDITIONS: \n{conditions}")
 
         # combine tuple of possible conditions into one
         conditions = itertools.chain(*conditions) # type: ignore
