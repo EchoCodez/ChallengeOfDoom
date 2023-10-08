@@ -1,3 +1,4 @@
+import itertools
 import re
 import webbrowser
 import tkinter as tk
@@ -376,7 +377,6 @@ class ApiParent:
     raise_exception: Callable
     winfo_width: Callable
     winfo_height: Callable
-    # TODO: Add disclaimer
     # improve API quiz by sorting through symptoms list
     # A) Ask how they're feeling on 1-10 scale. 7+ means we tell them to go to doctor right away (don't deal with that case)
     # B) Add data for each condition about part of body it's from (digestive, respiratory, etc.)
@@ -406,7 +406,8 @@ class ApiParent:
 
         self.logger.debug(f"IDS: {selected_subparts.subparts_to_ids()}")
         symptoms = Diagnosis(jsonUtils.get_values()).get_symptoms_by_sublocations(*selected_subparts.subparts_to_ids())
-        self._get_filtered_medical_conditions(symptoms)
+
+        self._get_filtered_medical_conditions(symptoms) # are you feeling any of the above from <list of possible symptoms>
         self.clean()
     
     def disclaimer(self) -> None:
@@ -636,15 +637,18 @@ class ApiParent:
         if loop:
             self.mainloop()
         
-    def _get_filtered_medical_conditions(self, conditions: tuple[dict]):
+    def _get_filtered_medical_conditions(self, conditions: tuple[str]):
         self.clean()
         
         rows, columns = 15, 3
         
         total_names = len(conditions)
-        
-        gender = jsonUtils.read(Path("json/user-data.json")).get("gender", "male").lower()
-        
+
+        constants.LOGGER.warning(f"CONDITIONS: \n{conditions}")
+
+        # combine tuple of possible conditions into one
+        conditions = itertools.chain(*conditions) # type: ignore
+
         for i in range(ceil(total_names/(rows*columns))):
             def continue_button():
                 self.clean()
@@ -674,7 +678,6 @@ class ApiParent:
                 )
             
             self._checkboxes(
-                gender=gender,
                 font=(None, 30), # type: ignore
                 columns=columns,
                 rows=rows,
@@ -689,41 +692,12 @@ class ApiParent:
 
     def _checkboxes(
             self,
-            gender: str,
             conditions: Iterator,
             font: tuple[str, int] = ("Arial", 25),
             rows: int = 15,
             columns: int = 3
         ) -> None:
         '''Creates the checkboxes'''
-        if gender == "male":
-            male = True
-        elif gender == "female":
-            male = False
-        else:
-            raise ValueError("Gender must be provided as either male or female")
-        
-        def new_name():
-            '''Find a name that satisfies `condition_func`'''
-            
-            def gender_filter(name: str):
-                if male and any(word in name for word in ("vagina", "period")):
-                    return False
-                elif not male and any(word in name for word in ("penis", "testicle")):
-                    return False
-                return True
-            
-            func = lambda n: gender_filter(n)
-            
-            _condition: dict | None = next(conditions, None)
-            
-            if _condition is None:
-                return None
-            
-            while _condition is not None and not func(_condition):
-                _condition = next(conditions, None)
-            return _condition # type: ignore
-        
         # make column outer loop so that things with long names get grouped into one column, saving space
         for j in range(columns):
             for i in range(1, rows+1):
@@ -732,6 +706,7 @@ class ApiParent:
                 
                 if name is None:
                     return
+                name = name["Name"]
                 
                 self._selected_conditions[name]=tk.BooleanVar(value=False)
                 checkbox = ctk.CTkCheckBox(

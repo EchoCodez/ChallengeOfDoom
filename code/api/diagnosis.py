@@ -103,7 +103,7 @@ class Diagnosis:
 
         jsonUtils.overwrite(locations, file)
 
-    def get_symptoms_by_sublocation(self, location_id: int, file: Path = constants.CONDITIONS_LIST):
+    def get_symptoms_by_sublocation(self, location_id: int, file: Path = constants.CONDITIONS_LIST) -> list[dict]:
         previous_symptoms = jsonUtils.read(file)
         if previous_symptoms.get(location_id, False):
             return previous_symptoms[location_id]
@@ -118,7 +118,7 @@ class Diagnosis:
         ).json()
 
         jsonUtils.overwrite(previous_symptoms, file)
-        return jsonUtils.read(file)
+        return previous_symptoms[location_id]
     
     def get_symptoms_by_sublocations(self, *location_ids: int, f: Path = constants.CONDITIONS_LIST):
         return tuple(self.get_symptoms_by_sublocation(id_, file=f) for id_ in location_ids)
