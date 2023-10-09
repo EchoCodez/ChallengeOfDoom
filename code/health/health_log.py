@@ -110,9 +110,11 @@ class Log(ctk.CTkToplevel):
     
     def submit(self, elements: list[ctk.CTkEntry]) -> None:
         self.logger.debug([element.get() for element in elements])
+        if int(datetime.now().strftime("%m")) != int(self.master.logged[-1][0:2]):
+            self.master.logged = []
         if self.date not in self.master.logged:
             self.master.logged.append(self.date)
-        self.logger.debug(self.date)
+        self.logger.debug(self.master.logged)
         algorithm = Algorithm(elements[0].get(), int(elements[1].get()), self.logger)
         algorithm.run()
         

@@ -83,6 +83,15 @@ class Program(Questions, ApiParent):
         self.mainloop()
         self.clean()
         self.home()
+
+    def tips(self) -> None:
+        self.clean()
+        self.logger.debug("Tips Accessed")
+        tips = Tips(self)
+        tips.run()
+        self.mainloop()
+        self.clean()
+        self.home()
     
     def home(self) -> None:
         '''Main function that executes the program'''
@@ -121,13 +130,15 @@ class Program(Questions, ApiParent):
             text="Daily Diagnosis",
             command=self.diagnosis_quiz,
             fg_color="#ADD8E6",
-            height=self.winfo_screenheight()*0.55,
-            width=self.winfo_screenwidth()*0.2,
+            height=self.winfo_screenheight()*0.35,
+            width=self.winfo_screenwidth()*0.3,
             text_color="#000000",
             font=("Times New Roman", 30),
             corner_radius=40,
-            placement={"relx":0.85, "rely":0.6, "anchor":tk.CENTER}
+            placement={"relx":0.5, "rely":0.65, "anchor":tk.CENTER}
         )
+
+        
         
         def _weather():
             self.clean()
@@ -272,12 +283,12 @@ class Program(Questions, ApiParent):
             text="Weather",
             command=_weather,
             fg_color="#ADD8E6",
-            height=self.winfo_screenheight()*0.55,
-            width=self.winfo_screenwidth()*0.2,
+            height=self.winfo_screenheight()*0.35,
+            width=self.winfo_screenwidth()*0.3,
             text_color="#000000",
             font=("Times New Roman", 30),
             corner_radius=40,
-            placement={"relx":0.5, "rely":0.5, "anchor":tk.CENTER}
+            placement={"relx":0.5, "rely":0.25, "anchor":tk.CENTER}
             )
         
         def create_settings():
