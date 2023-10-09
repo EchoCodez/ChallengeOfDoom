@@ -38,7 +38,6 @@ class Calendar:
             if (num+1)%7==0:
                 week+=1
         
-        self.logger.debug([element._text for element in self.days])
         if mainloop:
             self.master.mainloop()
 
@@ -53,10 +52,13 @@ class Day(ctk.CTkButton):
                 command=self.open_log
                 )
         self.log, self.win = None, None
+        self.master = master
+        self.logger = master.logger
         self.fulldate = fulldate
         self.calendar = calendar
 
     def open_log(self):
+        self.logger.debug(self.master.logged)
         if self.win:
             if not self.win.winfo_exists():
                 for day in self.calendar.days:
@@ -75,7 +77,9 @@ class Log(ctk.CTkToplevel):
     def __init__(self, master: ctk.CTk, title: str) -> None:
         super().__init__(master)
         self.geometry("400x300")
-        self.logger = master.logger
+        self.master = master
+        self.logger = self.master.logger
+        self.date = title
         super(Log, self).title(title)
         self.label = ctk.CTkLabel(self, text=f"Hello?")
         self.label.pack(padx=20, pady=20)
@@ -106,6 +110,9 @@ class Log(ctk.CTkToplevel):
     
     def submit(self, elements: list[ctk.CTkEntry]) -> None:
         self.logger.debug([element.get() for element in elements])
+        if self.date not in self.master.logged:
+            self.master.logged.append(self.date)
+        self.logger.debug(self.date)
         algorithm = Algorithm(elements[0].get(), int(elements[1].get()), self.logger)
         algorithm.run()
         

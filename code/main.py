@@ -33,6 +33,8 @@ class Program(Questions, ApiParent):
             6: "Dinner Time",
             7: "Before/After Meal",
         }
+        self.logged = []
+
         
         if not jsonUtils.read(constants.PREFERENCES).get("setup_finished", False):
             self.setup()
@@ -113,6 +115,19 @@ class Program(Questions, ApiParent):
             corner_radius=40,
             placement={"relx":0.85, "rely":0.6, "anchor":tk.CENTER}
             )
+        
+        HomepageSection( # bottom right
+            self,
+            text="Daily Diagnosis",
+            command=self.diagnosis_quiz,
+            fg_color="#ADD8E6",
+            height=self.winfo_screenheight()*0.55,
+            width=self.winfo_screenwidth()*0.2,
+            text_color="#000000",
+            font=("Times New Roman", 30),
+            corner_radius=40,
+            placement={"relx":0.85, "rely":0.6, "anchor":tk.CENTER}
+        )
         
         def _weather():
             self.clean()
