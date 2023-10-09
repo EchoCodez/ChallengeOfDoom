@@ -5,7 +5,7 @@ class Tips():
         self.master = master
     
     def run(self, mainloop: bool = True) -> None:
-        with open ("json/food.json"):
-            pass
+        self.label = ctk.CTkLabel(self.master, text="aint no way")
+        self.label.pack()
         if mainloop:
             self.master.mainloop()

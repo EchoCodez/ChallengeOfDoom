@@ -127,8 +127,8 @@ class Program(Questions, ApiParent):
         
         HomepageSection( # bottom right
             self,
-            text="Daily Diagnosis",
-            command=self.diagnosis_quiz,
+            text="Tips",
+            command=self.tips,
             fg_color="#ADD8E6",
             height=self.winfo_screenheight()*0.35,
             width=self.winfo_screenwidth()*0.3,
