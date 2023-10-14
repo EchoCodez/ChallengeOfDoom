@@ -1,4 +1,5 @@
 import customtkinter as ctk
+import json
 from datetime import datetime
 from calendar import monthrange
 from logging import Logger
@@ -110,13 +111,32 @@ class Log(ctk.CTkToplevel):
     
     def submit(self, elements: list[ctk.CTkEntry]) -> None:
         self.logger.debug([element.get() for element in elements])
-        if int(datetime.now().strftime("%m")) != int(self.master.logged[-1][0:2]):
-            self.master.logged = []
         if self.date not in self.master.logged:
             self.master.logged.append(self.date)
         self.logger.debug(self.master.logged)
         algorithm = Algorithm(elements[0].get(), int(elements[1].get()), self.logger)
         algorithm.run()
+        if int(datetime.now().strftime("%m")) != int(self.master.logged[0][0:2]):
+            self.master.logged = []
+            nutrients = {
+                "Protein": [0, "g"],
+                "Fat": [0, "g"],
+                "Carbs": [0, "g"],
+                "Calories": [0, "kcal"],
+                "Sugar": [0, "g"],
+                "Fiber": [0, "g"],
+                "Calcium": [0, "mg"],
+                "Iron": [0, "mg"],
+                "Potassium": [0, "mg"],
+                "Sodium": [0, "mg"],
+                "Vitamin C": [0, "mg"],
+                "Cholesterol": [0, "mg"]
+            }
+            with open("json/food.json", "w") as f:
+                json.dump(nutrients, f, indent=4)
+                print("WHYYYYYYYYY")
+            with open("json/food.json", "r") as f:
+                print(json.load(f))
         
 
 
