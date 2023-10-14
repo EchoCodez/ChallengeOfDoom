@@ -5,8 +5,9 @@ from datetime import datetime
 class Tips():
     def __init__(self, master: ctk.CTk) -> None:
         self.master = master
+        self.logger = master.logger
         self.male = {
-            "Protein": [19.0, 34.0, 56.0],
+            "Protein": [19.0, 52.0, 56.0],
             "Fat": [45, 70, 60],
             "Carbs": [90, 140, 130],
             "Calories": [1700, 2900, 2600],
@@ -20,7 +21,7 @@ class Tips():
             "Cholesterol": [150, 150, 150]
         }
         self.female = {
-            "Protein": [19.0, 34.0, 46.0],
+            "Protein": [19.0, 46.0, 46.0],
             "Fat": [40, 60, 50],
             "Carbs": [80, 120, 100],
             "Calories": [1500, 2400, 2100],
@@ -37,14 +38,25 @@ class Tips():
     def run(self, mainloop: bool = True) -> None:
         self.label = ctk.CTkLabel(self.master, text="aint no way")
         self.label.pack()
+        with open("json/user-data.json", "r") as f:
+            contents = json.load(f)
+            age = int(datetime.today().year) - int(contents["birth_year"])
+            gender = contents["gender"]
+            self.logger.debug(age)
+            self.logger.debug(gender)
         with open("json/food.json", "r") as f:
             try:
                 contents = json.load(f)
+                group = 0
+                if age > 8 and age < 18:
+                    group = 1
+                elif age > 18:
+                    group = 2
+                if gender == "Male":
+                    for nutrient in self.male:
+                        print(nutrient)
             except:
                 pass
-        with open("user-data.json", "r") as f:
-            contents = json.load(f)
-            age = int(datetime.today().year) - int(contents["birth_year"])
 
         if mainloop:
             self.master.mainloop()
