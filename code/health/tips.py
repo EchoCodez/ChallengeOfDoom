@@ -54,7 +54,7 @@ class Tips():
                 if gender == "Male":
                     for nutrient in self.male:
                         txt = str(self.male[nutrient][group]-(contents[nutrient][0]/len(self.master.logged)))
-                        self.label = ctk.CTkLabel(self.master, text=f"{txt}")
+                        self.label = ctk.CTkLabel(self.master, text=f"{nutrient}: {txt} {contents[nutrient][1]}")
                         self.label.pack()
             except:
                 pass
