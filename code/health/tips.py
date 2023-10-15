@@ -54,7 +54,8 @@ class Tips():
                     group = 2
                 if gender == "Male":
                     for nutrient in self.male:
-                        print(nutrient)
+                        print(self.male[nutrient][group]/20)
+                        print((contents[nutrient][0]/len(self.master.logged)))
             except:
                 pass
 

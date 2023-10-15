@@ -13,6 +13,8 @@ class Program(Questions, ApiParent):
         
         
         def quit_app(*_: object):
+            with open("json/logged.json", "w") as f:
+                json.dump(self.logged, f, indent=4,)
             self.logger.info("QUITTING")
             os._exit(0)
             
@@ -33,7 +35,8 @@ class Program(Questions, ApiParent):
             6: "Dinner Time",
             7: "Before/After Meal",
         }
-        self.logged = []
+        with open("json/logged.json", "r") as f:
+            self.logged = json.load(f)
 
         
         if not jsonUtils.read(constants.PREFERENCES).get("setup_finished", False):
