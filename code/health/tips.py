@@ -36,8 +36,7 @@ class Tips():
         }
     
     def run(self, mainloop: bool = True) -> None:
-        self.label = ctk.CTkLabel(self.master, text="aint no way")
-        self.label.pack()
+        
         with open("json/user-data.json", "r") as f:
             contents = json.load(f)
             age = int(datetime.today().year) - int(contents["birth_year"])
@@ -54,9 +53,13 @@ class Tips():
                     group = 2
                 if gender == "Male":
                     for nutrient in self.male:
-                        self.logger.debug((self.male[nutrient][group])-(contents[nutrient][0]/len(self.master.logged)))
+                        txt = str(self.male[nutrient][group]-(contents[nutrient][0]/len(self.master.logged)))
+                        self.label = ctk.CTkLabel(self.master, text=f"{txt}")
+                        self.label.pack()
             except:
                 pass
+        
+        
 
         if mainloop:
             self.master.mainloop()
