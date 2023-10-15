@@ -1,11 +1,12 @@
 import customtkinter as ctk
-import json
+import json, math
 from datetime import datetime
 
 class Tips():
     def __init__(self, master: ctk.CTk) -> None:
         self.master = master
         self.logger = master.logger
+        self.contents = {}
         self.male = {
             "Protein": [24.0, 52.0, 56.0],
             "Fat": [45, 70, 60],
@@ -35,17 +36,22 @@ class Tips():
             "Cholesterol": [150, 150, 150]
         }
     
+    def create_label(self, required: str, nutrient: str):
+        self.label = ctk.CTkLabel(self.master, text=f"{nutrient}: {required} {self.contents[nutrient][1]}")
+        self.label.pack()
+    
     def run(self, mainloop: bool = True) -> None:
         
         with open("json/user-data.json", "r") as f:
-            contents = json.load(f)
-            age = int(datetime.today().year) - int(contents["birth_year"])
-            gender = contents["gender"]
+            data = json.load(f)
+            age = int(datetime.today().year) - int(data["birth_year"])
+            gender = data["gender"]
             self.logger.debug(age)
             self.logger.debug(gender)
+            
         with open("json/food.json", "r") as f:
-            try:
-                contents = json.load(f)
+            # try:
+                self.contents = json.load(f)
                 group = 0
                 if age > 8 and age < 18:
                     group = 1
@@ -53,12 +59,46 @@ class Tips():
                     group = 2
                 if gender == "Male":
                     for nutrient in self.male:
-                        txt = str(self.male[nutrient][group]-(contents[nutrient][0]/len(self.master.logged)))
-                        self.label = ctk.CTkLabel(self.master, text=f"{nutrient}: {txt} {contents[nutrient][1]}")
-                        self.label.pack()
-            except:
-                pass
-        
+                        required = str(self.male[nutrient][group]-(self.contents[nutrient][0]/len(self.master.logged)))
+                        if nutrient == "Protein":
+                            print("quantum")
+                            if abs(float(required)) > 10:
+                                self.create_label(required, nutrient)
+                        elif nutrient == "Fat":
+                            if abs(float(required)) > 10:
+                                self.create_label(required, nutrient)
+                        elif nutrient == "Carbs":
+                            if abs(float(required)) > 25:
+                                self.create_label(required, nutrient)
+                        elif nutrient == "Calories":
+                            if abs(float(required)) > 400:
+                                self.create_label(required, nutrient)
+                        elif nutrient == "Sugar":
+                            if abs(float(required)) > 5:
+                                self.create_label(required, nutrient)
+                        elif nutrient == "Fiber":
+                            if abs(float(required)) > 5:
+                                self.create_label(required, nutrient)
+                        elif nutrient == "Calcium":
+                            if abs(float(required)) > 300:
+                                self.create_label(required, nutrient)
+                        elif nutrient == "Iron":
+                            if abs(float(required)) > 4:
+                                self.create_label(required, nutrient)
+                        elif nutrient == "Potassium":
+                            if abs(float(required)) > 400:
+                                self.create_label(required, nutrient)
+                        elif nutrient == "Sodium":
+                            if abs(float(required)) > 250:
+                                self.create_label(required, nutrient)
+                        elif nutrient == "Vitamin C":
+                            if abs(float(required)) > 15:
+                                self.create_label(required, nutrient)
+                        elif nutrient == "Cholesterol":
+                            if abs(float(required)) > 25:
+                                self.create_label(required, nutrient)
+            # except:
+            #     pass
         
 
         if mainloop:

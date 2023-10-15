@@ -77,24 +77,26 @@ class Day(ctk.CTkButton):
 class Log(ctk.CTkToplevel):
     def __init__(self, master: ctk.CTk, title: str) -> None:
         super().__init__(master)
-        self.geometry("400x300")
+        self.geometry("500x300")
         self.master = master
         self.logger = self.master.logger
         self.date = title
         super(Log, self).title(title)
-        self.label = ctk.CTkLabel(self, text=f"Hello?")
+        self.label = ctk.CTkLabel(self, text=f"Note: if you are doing a log today, please log the ENTIRE DAYS worth of food\nto ensure accurate tips. If you miss a few days, that is fine.")        
         self.label.pack(padx=20, pady=20)
 
         elements = []
         self.entry = ctk.CTkEntry(
                 self,
-                placeholder_text=f"Enter name of food"
+                placeholder_text=f"Enter name of food",
+                width=175
         )
         self.entry.pack()
         elements.append(self.entry)
         self.entry2 = ctk.CTkEntry(
                 self,
-                placeholder_text=f"Enter quantity IN GRAMS"
+                placeholder_text=f"Enter quantity IN GRAMS",
+                width=175
         )
         self.entry2.pack()
         elements.append(self.entry2)
