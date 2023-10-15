@@ -7,7 +7,7 @@ class Tips():
         self.master = master
         self.logger = master.logger
         self.male = {
-            "Protein": [19.0, 52.0, 56.0],
+            "Protein": [24.0, 52.0, 56.0],
             "Fat": [45, 70, 60],
             "Carbs": [90, 140, 130],
             "Calories": [1700, 2900, 2600],
@@ -21,7 +21,7 @@ class Tips():
             "Cholesterol": [150, 150, 150]
         }
         self.female = {
-            "Protein": [19.0, 46.0, 46.0],
+            "Protein": [24.0, 46.0, 46.0],
             "Fat": [40, 60, 50],
             "Carbs": [80, 120, 100],
             "Calories": [1500, 2400, 2100],
@@ -54,8 +54,7 @@ class Tips():
                     group = 2
                 if gender == "Male":
                     for nutrient in self.male:
-                        print(self.male[nutrient][group]/20)
-                        print((contents[nutrient][0]/len(self.master.logged)))
+                        self.logger.debug((self.male[nutrient][group])-(contents[nutrient][0]/len(self.master.logged)))
             except:
                 pass
 
