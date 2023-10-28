@@ -13,6 +13,8 @@ class Program(Questions, ApiParent):
         
         
         def quit_app(*_: object):
+            with open("json/logged.json", "w") as f:
+                json.dump(self.logged, f, indent=4,)
             self.logger.info("QUITTING")
             os._exit(0)
             
@@ -33,6 +35,9 @@ class Program(Questions, ApiParent):
             6: "Dinner Time",
             7: "Before/After Meal",
         }
+        with open("json/logged.json", "r") as f:
+            self.logged = json.load(f)
+
         
         if not jsonUtils.read(constants.PREFERENCES).get("setup_finished", False):
             self.setup()
@@ -81,6 +86,15 @@ class Program(Questions, ApiParent):
         self.mainloop()
         self.clean()
         self.home()
+
+    def tips(self) -> None:
+        self.clean()
+        self.logger.debug("Tips Accessed")
+        tips = Tips(self)
+        tips.run()
+        self.mainloop()
+        self.clean()
+        self.home()
     
     def home(self) -> None:
         '''Main function that executes the program'''
@@ -113,6 +127,21 @@ class Program(Questions, ApiParent):
             corner_radius=40,
             placement={"relx":0.85, "rely":0.6, "anchor":tk.CENTER}
             )
+        
+        HomepageSection( # bottom right
+            self,
+            text="Tips",
+            command=self.tips,
+            fg_color="#ADD8E6",
+            height=self.winfo_screenheight()*0.35,
+            width=self.winfo_screenwidth()*0.3,
+            text_color="#000000",
+            font=("Times New Roman", 30),
+            corner_radius=40,
+            placement={"relx":0.5, "rely":0.65, "anchor":tk.CENTER}
+        )
+
+        
         
         def _weather():
             self.clean()
@@ -257,12 +286,12 @@ class Program(Questions, ApiParent):
             text="Weather",
             command=_weather,
             fg_color="#ADD8E6",
-            height=self.winfo_screenheight()*0.55,
-            width=self.winfo_screenwidth()*0.2,
+            height=self.winfo_screenheight()*0.35,
+            width=self.winfo_screenwidth()*0.3,
             text_color="#000000",
             font=("Times New Roman", 30),
             corner_radius=40,
-            placement={"relx":0.5, "rely":0.5, "anchor":tk.CENTER}
+            placement={"relx":0.5, "rely":0.25, "anchor":tk.CENTER}
             )
         
         def create_settings():

@@ -3,7 +3,6 @@ from __future__ import annotations
 import json
 from typing import Callable, Any
 from io import StringIO
-from utils.data_classes import UserInfo
 from utils.constants import *
 
 
@@ -136,7 +135,7 @@ def get(file: StringIO, sentinal: str|int, *, func: Callable[[Any], None] = lamb
         raise ValueError(f"data in file must be a dictionary: got {type(data).__name__} instead")
     return False
 
-def get_values() -> UserInfo:
+def get_values():
     """Get all user preferences and user conditions as an instance of class UserInfo
 
     Returns:
@@ -152,7 +151,8 @@ def get_values() -> UserInfo:
     print(data.preferences)
     ```
     """
-    
+    from utils.data_classes import UserInfo
+
     prefs, data = read(PREFERENCES), read(USER_DATA)
     
     return UserInfo(

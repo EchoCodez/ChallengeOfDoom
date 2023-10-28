@@ -1,10 +1,11 @@
+import itertools
 import re
 import webbrowser
 import tkinter as tk
 import customtkinter as ctk
 from datetime import datetime
 from CTkMessagebox import CTkMessagebox
-from typing import Callable, Iterator
+from typing import Callable, Iterator, Iterable
 
 from api import Diagnosis, get_location
 from setup.special import InformationPages
@@ -376,12 +377,12 @@ class ApiParent:
     raise_exception: Callable
     winfo_width: Callable
     winfo_height: Callable
-    # TODO: Add disclaimer
     # improve API quiz by sorting through symptoms list
     # A) Ask how they're feeling on 1-10 scale. 7+ means we tell them to go to doctor right away (don't deal with that case)
     # B) Add data for each condition about part of body it's from (digestive, respiratory, etc.)
     # C) Ask user where pain is coming from (checkboxes)
-    # D) Filter symptoms list by part (C) to make it shorter.
+    # D) Filter further by sublocations
+    # E) Filter symptoms list by sublocations to make it shorter.
     def _diagnose(self) -> None:
         if not jsonUtils.read(constants.USER_DATA).get("disclaimer_read", False):
             self.disclaimer()
@@ -394,9 +395,19 @@ class ApiParent:
         
         filter_by_parts = self.body_parts()
         self.clean()
-        conditions = self.get_filtered_conditions(filter_by_parts)
-        
-        self._get_filtered_medical_conditions(conditions, filter_by_parts)
+        # Get sublocations of filter_by_parts
+        subparts = BodyParts()
+        for part in jsonUtils.read(constants.BODY_LOCATIONS):
+            if part["Name"].title() in filter_by_parts:
+                subparts+=(x["Name"] for x in part["sublocations"])
+
+
+        selected_subparts = self.body_parts(parts=subparts)
+
+        self.logger.debug(f"IDS: {selected_subparts.subparts_to_ids()}")
+        symptoms = Diagnosis(jsonUtils.get_values(), testing=constants.IS_TESTING).get_symptoms_by_sublocations(*selected_subparts.subparts_to_ids())
+
+        self._get_filtered_medical_conditions(symptoms) # are you feeling any of the above from <list of possible symptoms>
         self.clean()
     
     def disclaimer(self) -> None:
@@ -419,7 +430,7 @@ class ApiParent:
         jsonUtils.add({"disclaimer_read": True})
     
     def scale_question(self) -> int:
-        ctk.CTkLabel(self, text="How are you feeling on a scale of 1-10?", font=(None, 40)).pack(pady=20)
+        ctk.CTkLabel(self, text="How much pain are you in on a scale of 1-10?", font=(None, 40)).pack(pady=20)
         scale = ctk.CTkSlider(
             self,
             from_=1,
@@ -450,12 +461,15 @@ class ApiParent:
             exit(0)
             
     
-    def body_parts(self) -> BodyParts:
+    def body_parts(self, parts: Iterable[str] | None = None) -> BodyParts:
         ctk.CTkLabel(self, text="Where are you feeling pain from?", font=(None, 40)).pack(pady=40)
         
+        if parts is None:
+            parts = [x["Name"] for x in jsonUtils.read(constants.BODY_LOCATIONS)]
+
         # set up checkboxes
         selected = {}
-        for part in BodyParts.allowed_parts:
+        for part in parts:
             selected[part] = tk.BooleanVar(value=False)
             ctk.CTkCheckBox(
                 self,
@@ -471,7 +485,11 @@ class ApiParent:
         return BodyParts(*(k for k, v in selected.items() if v.get()))
     
     def get_filtered_conditions(self, parts: BodyParts) -> tuple[dict]:
-        conditions = tuple(x for x in jsonUtils.read(constants.CONDITIONS_LIST) if self.filtermethod(x["body_part"], parts))
+        ids = []
+        for part in parts:
+            # get ID of subpart
+           pass 
+        conditions = Diagnosis(jsonUtils.get_values(), testing=constants.IS_TESTING).get_symptoms_by_sublocation() 
         return conditions # type: ignore
         
     @staticmethod
@@ -483,7 +501,7 @@ class ApiParent:
         def call_api(user):
             results = Diagnosis(
                 user=user,
-                testing=False
+                testing=constants.IS_TESTING
             ).make_call()
             
             if isinstance(results, str) and results == "":
@@ -534,8 +552,9 @@ class ApiParent:
         
         for condition in test_results:
             # search for ID of condition
+            self.logger.debug(f"Looking for ID of {condition}")
             conditions += [jsonUtils.search(
-                constants.CONDITIONS_LIST,
+                constants.SYMPTOM_LOOKUP,
                 sentinal=condition,
                 search_for="Name",
                 _return="ID"
@@ -619,15 +638,16 @@ class ApiParent:
         if loop:
             self.mainloop()
         
-    def _get_filtered_medical_conditions(self, conditions: tuple[dict], parts: BodyParts):
+    def _get_filtered_medical_conditions(self, conditions: tuple[str]):
         self.clean()
         
         rows, columns = 15, 3
         
         total_names = len(conditions)
-        
-        gender = jsonUtils.read(Path("json/user-data.json")).get("gender", "male").lower()
-        
+
+        # combine tuple of possible conditions into one
+        conditions = itertools.chain(*conditions) # type: ignore
+
         for i in range(ceil(total_names/(rows*columns))):
             def continue_button():
                 self.clean()
@@ -657,12 +677,10 @@ class ApiParent:
                 )
             
             self._checkboxes(
-                gender=gender,
                 font=(None, 30), # type: ignore
                 columns=columns,
                 rows=rows,
                 conditions=iter(conditions),
-                condition_func=lambda n: self.filtermethod(n["body_part"], parts) # type: ignore
             )
             
             next_button.grid(row=rows+1, column=columns-1, sticky = tk.W, pady=30)
@@ -673,49 +691,21 @@ class ApiParent:
 
     def _checkboxes(
             self,
-            gender: str,
             conditions: Iterator,
-            condition_func: Callable[[str], bool],
             font: tuple[str, int] = ("Arial", 25),
             rows: int = 15,
             columns: int = 3
         ) -> None:
         '''Creates the checkboxes'''
-        if gender == "male":
-            male = True
-        elif gender == "female":
-            male = False
-        else:
-            raise ValueError("Gender must be provided as either male or female")
-        
-        def new_name():
-            '''Find a name that satisfies `condition_func`'''
-            
-            def gender_filter(name: str):
-                if male and any(word in name for word in ("vagina", "period")):
-                    return False
-                elif not male and any(word in name for word in ("penis", "testicle")):
-                    return False
-                return True
-            
-            func = lambda n: condition_func(n) and gender_filter(n["Name"])
-            
-            _condition: dict | None = next(conditions, None)
-            
-            if _condition is None:
-                return None
-            
-            while _condition is not None and not func(_condition):
-                _condition = next(conditions, None)
-            return _condition["Name"] # type: ignore
-        
         # make column outer loop so that things with long names get grouped into one column, saving space
         for j in range(columns):
             for i in range(1, rows+1):
-                name = new_name()
+                name = next(conditions, None)
+                self.logger.debug(name)
                 
                 if name is None:
                     return
+                name = name["Name"]
                 
                 self._selected_conditions[name]=tk.BooleanVar(value=False)
                 checkbox = ctk.CTkCheckBox(

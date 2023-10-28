@@ -1,0 +1,21 @@
+[tool.poetry]
+name = 'Congressional App Challenge'
+version = '1.0'
+description = "Congressional App Challenge 2023"
+authors = []
+
+[tool.poetry.dependencies]
+python = '^3.10'
+customtkinter = '>=5.2'
+CTkMessagebox = ">=2.0"
+google = ">=3.0"
+schedule = ">=1.2"
+plyer = ">=2.1"
+apscheduler = ">=3.9"
+google-auth-oauthlib = ">=1.0"
+google-api-python-client = ">=2.89"
+geopy = ">=2.4"
+
+[build-system]
+requires = ['poetry-core~=1.0']
+build-backend = 'poetry.core.masonry.api'

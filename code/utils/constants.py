@@ -8,6 +8,8 @@ from logging import getLogger
 PREFERENCES = Path("json/preferences.json")
 USER_DATA = Path("json/user-data.json")
 CONDITIONS_LIST = Path("json/symptoms.json")
+SYMPTOM_LOOKUP = Path("json/api-database.json")
+BODY_LOCATIONS = Path("json/body-locations.json")
 MEDICINES = Path("json/medicines.json")
 LOGS = Path("json/logs.json")
 HEALTH_LOGS = Path("json/health")
@@ -18,9 +20,14 @@ AIR_QUALITY = Path('json/air-quality.json')
 RUNLOG = Path("logs/runlog.log")
 
 # computed every day
+TODAY = date.today()
 TODAY_DATE_FILE = HEALTH_LOGS / Path(date.today().strftime("%d_%m_%y")).with_suffix(".json")
 
 # Logging
 LOGGER_NAME = "CongressionalAppChallenge"
 LOGGER = getLogger(LOGGER_NAME)
+
+
+# Other
+IS_TESTING = False
 

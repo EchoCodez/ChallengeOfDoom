@@ -1,4 +1,5 @@
 import customtkinter as ctk
+import json
 from datetime import datetime
 from calendar import monthrange
 from logging import Logger
@@ -38,7 +39,6 @@ class Calendar:
             if (num+1)%7==0:
                 week+=1
         
-        self.logger.debug([element._text for element in self.days])
         if mainloop:
             self.master.mainloop()
 
@@ -53,10 +53,13 @@ class Day(ctk.CTkButton):
                 command=self.open_log
                 )
         self.log, self.win = None, None
+        self.master = master
+        self.logger = master.logger
         self.fulldate = fulldate
         self.calendar = calendar
 
     def open_log(self):
+        self.logger.debug(self.master.logged)
         if self.win:
             if not self.win.winfo_exists():
                 for day in self.calendar.days:
@@ -74,22 +77,26 @@ class Day(ctk.CTkButton):
 class Log(ctk.CTkToplevel):
     def __init__(self, master: ctk.CTk, title: str) -> None:
         super().__init__(master)
-        self.geometry("400x300")
-        self.logger = master.logger
+        self.geometry("500x300")
+        self.master = master
+        self.logger = self.master.logger
+        self.date = title
         super(Log, self).title(title)
-        self.label = ctk.CTkLabel(self, text=f"Hello?")
+        self.label = ctk.CTkLabel(self, text=f"Note: if you are doing a log today, please log the ENTIRE DAYS worth of food\nto ensure accurate tips. If you miss a few days, that is fine.")        
         self.label.pack(padx=20, pady=20)
 
         elements = []
         self.entry = ctk.CTkEntry(
                 self,
-                placeholder_text=f"Enter name of food"
+                placeholder_text=f"Enter name of food",
+                width=175
         )
         self.entry.pack()
         elements.append(self.entry)
         self.entry2 = ctk.CTkEntry(
                 self,
-                placeholder_text=f"Enter quantity IN GRAMS"
+                placeholder_text=f"Enter quantity IN GRAMS",
+                width=175
         )
         self.entry2.pack()
         elements.append(self.entry2)
@@ -106,8 +113,32 @@ class Log(ctk.CTkToplevel):
     
     def submit(self, elements: list[ctk.CTkEntry]) -> None:
         self.logger.debug([element.get() for element in elements])
+        if self.date not in self.master.logged:
+            self.master.logged.append(self.date)
+        self.logger.debug(self.master.logged)
         algorithm = Algorithm(elements[0].get(), int(elements[1].get()), self.logger)
         algorithm.run()
+        if int(datetime.now().strftime("%m")) != int(self.master.logged[0][0:2]):
+            self.master.logged = []
+            nutrients = {
+                "Protein": [0, "g"],
+                "Fat": [0, "g"],
+                "Carbs": [0, "g"],
+                "Calories": [0, "kcal"],
+                "Sugar": [0, "g"],
+                "Fiber": [0, "g"],
+                "Calcium": [0, "mg"],
+                "Iron": [0, "mg"],
+                "Potassium": [0, "mg"],
+                "Sodium": [0, "mg"],
+                "Vitamin C": [0, "mg"],
+                "Cholesterol": [0, "mg"]
+            }
+            with open("json/food.json", "w") as f:
+                json.dump(nutrients, f, indent=4)
+                print("WHYYYYYYYYY")
+            with open("json/food.json", "r") as f:
+                print(json.load(f))
         
 
 
