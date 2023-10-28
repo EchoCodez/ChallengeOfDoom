@@ -430,7 +430,7 @@ class ApiParent:
         jsonUtils.add({"disclaimer_read": True})
     
     def scale_question(self) -> int:
-        ctk.CTkLabel(self, text="How are you feeling on a scale of 1-10?", font=(None, 40)).pack(pady=20)
+        ctk.CTkLabel(self, text="How much pain are you in on a scale of 1-10?", font=(None, 40)).pack(pady=20)
         scale = ctk.CTkSlider(
             self,
             from_=1,
