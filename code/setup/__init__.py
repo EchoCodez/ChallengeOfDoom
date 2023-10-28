@@ -7,7 +7,7 @@ from CTkMessagebox import CTkMessagebox
 import tkinter as tk
 import customtkinter as ctk
 import re
-import sys, os
+import sys, os, json
 import time, schedule
 
 # folder imports
