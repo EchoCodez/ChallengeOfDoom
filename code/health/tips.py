@@ -37,10 +37,11 @@ class Tips():
         }
     
     def create_label(self, required: str, nutrient: str):
-        self.label = ctk.CTkLabel(self.master, text=f"{nutrient}: {required} {self.contents[nutrient][1]}")
+        self.label = ctk.CTkLabel(self.master, text=f"You should eat {required} {self.contents[nutrient][1]} more of {nutrient}")
         self.label.pack()
     
     def run(self, mainloop: bool = True) -> None:
+        
         
         with open("json/user-data.json", "r") as f:
             data = json.load(f)
@@ -99,7 +100,11 @@ class Tips():
                                 self.create_label(required, nutrient)
             # except:
             #     pass
-        
+        ctk.CTkButton(
+            self.master,
+            text="Back to Homepage",
+            command=self.master.quit
+        ).pack()
 
         if mainloop:
             self.master.mainloop()

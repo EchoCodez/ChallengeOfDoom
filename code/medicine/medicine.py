@@ -114,5 +114,11 @@ class Medicine:
             command=lambda: self.submit(elements)
         ).grid(row=2, column=4, padx=20, pady=20)
 
+        ctk.CTkButton(
+            self.master,
+            text="Back to Homepage",
+            command=self.master.quit
+        ).grid(row=3, column=4, padx=20, pady=20)
+
         
         self.master.mainloop()

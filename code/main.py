@@ -83,6 +83,7 @@ class Program(Questions, ApiParent):
         self.logger.debug("Medicine Log Accessed")
         medicine = Medicine(self)
         medicine.run()
+        
         self.mainloop()
         self.clean()
         self.home()
@@ -92,6 +93,9 @@ class Program(Questions, ApiParent):
         self.logger.debug("Tips Accessed")
         tips = Tips(self)
         tips.run()
+
+        
+
         self.mainloop()
         self.clean()
         self.home()
