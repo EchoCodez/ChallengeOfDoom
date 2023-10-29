@@ -105,10 +105,10 @@ class Diagnosis:
 
     def get_symptoms_by_sublocation(self, location_id: int, file: Path = constants.CONDITIONS_LIST) -> list[dict]:
         previous_symptoms = jsonUtils.read(file)
-        if previous_symptoms.get(location_id, False):
-            return previous_symptoms[location_id]
+        if previous_symptoms.get(str(location_id), False):
+            return previous_symptoms[str(location_id)]
 
-        previous_symptoms[location_id] = requests.get(
+        previous_symptoms[str(location_id)] = requests.get(
                 "https://{0}healthservice.priaid.ch/symptoms/{1}/{2}?token={3}&language=en-gb&format=json".format(
                     'sandbox-' if self.testing else '',
                     location_id,
