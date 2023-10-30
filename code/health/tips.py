@@ -37,7 +37,11 @@ class Tips():
         }
     
     def create_label(self, required: str, nutrient: str):
-        self.label = ctk.CTkLabel(self.master, text=f"You should eat {required} {self.contents[nutrient][1]} more of {nutrient}")
+        if float(required) < 0:
+            moreorless = "less"
+        else:
+            moreorless = "more"
+        self.label = ctk.CTkLabel(self.master, text=f"You should eat {str('{0:.2f}'.format(abs(float(required))))} {self.contents[nutrient][1]} {moreorless} of {nutrient}")
         self.label.pack()
     
     def run(self, mainloop: bool = True) -> None:
@@ -62,7 +66,6 @@ class Tips():
                     for nutrient in self.male:
                         required = str(self.male[nutrient][group]-(self.contents[nutrient][0]/len(self.master.logged)))
                         if nutrient == "Protein":
-                            print("quantum")
                             if abs(float(required)) > 10:
                                 self.create_label(required, nutrient)
                         elif nutrient == "Fat":

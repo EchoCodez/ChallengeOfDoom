@@ -24,7 +24,7 @@ TODAY = date.today()
 TODAY_DATE_FILE = HEALTH_LOGS / Path(date.today().strftime("%d_%m_%y")).with_suffix(".json")
 
 # Logging
-LOGGER_NAME = "CongressionalAppChallenge"
+LOGGER_NAME = "MedicalMentor"
 LOGGER = getLogger(LOGGER_NAME)
 
 

@@ -1,7 +1,7 @@
 [tool.poetry]
-name = 'Congressional App Challenge'
+name = 'Medical Mentor'
 version = '1.0'
-description = "Congressional App Challenge 2023"
+description = "Congressional App Challenge 2023, Health App"
 authors = []
 
 [tool.poetry.dependencies]

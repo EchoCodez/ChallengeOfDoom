@@ -18,7 +18,7 @@ class Program(Questions, ApiParent):
             self.logger.info("QUITTING")
             os._exit(0)
             
-        self.title("Congressional App Challenge 2023")
+        self.title("Medical Mentor")
         self.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.bind("<KeyPress-`>", quit_app) # for testing code faster
         self.bind("<Button-2>", quit_app) # for testing code faster
@@ -41,7 +41,6 @@ class Program(Questions, ApiParent):
         
         if not jsonUtils.read(constants.PREFERENCES).get("setup_finished", False):
             self.setup()
-            self.show_register_api_pages()
             jsonUtils.write({"setup_finished": True}, file=constants.PREFERENCES)
             self.logger.debug(jsonUtils.get_values())
 
@@ -392,12 +391,7 @@ class Program(Questions, ApiParent):
                         self.add_minutes(data, hh, mm, i, minutes),
                         ))
 
-    def execute(self) -> None:    
-        try:
-            os.system("taskkill /im HealthApp.exe")
-        except Exception: # ignore keyboard interrupt
-            pass
-        
+    def execute(self) -> None:
         self.activate_notifs(self.notifications)
         self.after(0, self.update())
         self.home()
@@ -411,7 +405,6 @@ def main(*, erase_data: bool = False) -> None:
     erase_data: bool
         Debugging parameter to erase all data in constants.PREFERENCES.json and user-data.json
     '''
-
     if erase_data: # only for testing purposes; delete in final push
         jsonUtils.clearfiles()
 

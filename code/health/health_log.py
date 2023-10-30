@@ -136,7 +136,6 @@ class Log(ctk.CTkToplevel):
             }
             with open("json/food.json", "w") as f:
                 json.dump(nutrients, f, indent=4)
-                print("WHYYYYYYYYY")
             with open("json/food.json", "r") as f:
                 print(json.load(f))
         

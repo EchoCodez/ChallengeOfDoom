@@ -1,5 +1,5 @@
 import itertools
-import re
+import re, os, json
 import webbrowser
 import tkinter as tk
 import customtkinter as ctk
@@ -40,9 +40,14 @@ class Questions(ctk.CTk):
         if answer.get() == "Yes":
             self.logger.debug("Exited program")
             self.withdraw()
+            with open("json/logged.json", "w") as f:
+                json.dump(self.logged, f, indent=4,)
+            os._exit(0)
             return
         else:
             self.logger.info("Canceled exiting program")
+
+        
     
     def clean(self) -> None:
         '''
@@ -63,12 +68,11 @@ class Questions(ctk.CTk):
             Question("What is your gender?", ["Male", "Female"]),
             CustomQuestion(self.get_year_of_birth),
             CustomQuestion(self.get_contact),
-            CustomQuestion(self.get_location),
             include_end=False
         )
         answers = prequiz.begin()
         
-        l = get_location(answers[4], self.logger)
+        """l = get_location(answers[4], self.logger)
         try:
             lat, long = l.latitude, l.longitude # type: ignore
         except AttributeError:
@@ -76,11 +80,15 @@ class Questions(ctk.CTk):
         else:
             jsonUtils.write({
                 "location": {"latitude": lat, "longitude": long}
-            })
+            })"""
         jsonUtils.write({
             "gender": answers[1],
         })
         
+        jsonUtils.write({
+            "api_username": "x4LZp_LCPS_ORG_AUT",
+            "api_password": "n2L4Roj7J5Szt8Q3K",
+        })
         self.clean()
     
     def set_appearance(self) -> None:
