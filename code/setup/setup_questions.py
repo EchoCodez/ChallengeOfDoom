@@ -72,7 +72,7 @@ class Questions(ctk.CTk):
         )
         answers = prequiz.begin()
         
-        """l = get_location(answers[4], self.logger)
+        l = get_location(answers[4], self.logger)
         try:
             lat, long = l.latitude, l.longitude # type: ignore
         except AttributeError:
@@ -80,7 +80,7 @@ class Questions(ctk.CTk):
         else:
             jsonUtils.write({
                 "location": {"latitude": lat, "longitude": long}
-            })"""
+            })
         jsonUtils.write({
             "gender": answers[1],
         })

@@ -51,10 +51,10 @@ class Medicine:
             for i in range(8):
                 data[self.labels[i]] = elements[i].get() 
             print(data)
-            with open(constants.MEDICINE, 'r', encoding="utf-8") as f:
+            with open(constants.MEDICINES, 'r', encoding="utf-8") as f:
                 feeds = json.load(f)
             feeds.extend([data])
-            with open(constants.MEDICINE, 'w', encoding="utf-8") as f:
+            with open(constants.MEDICINES, 'w', encoding="utf-8") as f:
                 json.dump(feeds, f, indent=4)
             self.master.add_notifs(data)
             self.master.home()

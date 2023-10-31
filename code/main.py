@@ -189,14 +189,15 @@ class Program(Questions, ApiParent):
             
             def _airquality():
                 print("Clicked air quality button")
+                print(airquality_data)
                 ctk.CTkLabel(
                     self,
-                    text=f"Current air quality index: {airquality_data['main']['aqi']}",
+                    text=f"Current air quality index: {airquality_data['list'][0]['main']['aqi']}",
                     width=120,
                     height=32,
                     text_color="#FFFFFF",
                     font=("Times New Roman", 30)
-                ).place(relx=0.5, rely=0.2, anchor=tk.CENTER)
+                ).place(relx=0.7, rely=0.7, anchor=tk.CENTER)
 
             recommendation = ''
 
