@@ -18,7 +18,7 @@ class Program(Questions, ApiParent):
             self.logger.info("QUITTING")
             os._exit(0)
             
-        self.title("Congressional App Challenge 2023")
+        self.title("Medical Mentor")
         self.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.bind("<KeyPress-`>", quit_app) # for testing code faster
         self.bind("<Button-2>", quit_app) # for testing code faster
@@ -41,7 +41,6 @@ class Program(Questions, ApiParent):
         
         if not jsonUtils.read(constants.PREFERENCES).get("setup_finished", False):
             self.setup()
-            self.show_register_api_pages()
             jsonUtils.write({"setup_finished": True}, file=constants.PREFERENCES)
             self.logger.debug(jsonUtils.get_values())
 
@@ -83,6 +82,7 @@ class Program(Questions, ApiParent):
         self.logger.debug("Medicine Log Accessed")
         medicine = Medicine(self)
         medicine.run()
+        
         self.mainloop()
         self.clean()
         self.home()
@@ -92,6 +92,9 @@ class Program(Questions, ApiParent):
         self.logger.debug("Tips Accessed")
         tips = Tips(self)
         tips.run()
+
+        
+
         self.mainloop()
         self.clean()
         self.home()
@@ -145,7 +148,8 @@ class Program(Questions, ApiParent):
         
         def _weather():
             self.clean()
-
+            info = WeatherData()
+            info.weather()
             weather_data = jsonUtils.read(constants.WEATHER_DATA)
             print(weather_data)
 
@@ -186,14 +190,15 @@ class Program(Questions, ApiParent):
             
             def _airquality():
                 print("Clicked air quality button")
+                print(airquality_data)
                 ctk.CTkLabel(
                     self,
-                    text=f"Current air quality index: {airquality_data['main']['aqi']}",
+                    text=f"Current air quality index: {airquality_data['list'][0]['main']['aqi']}",
                     width=120,
                     height=32,
                     text_color="#FFFFFF",
                     font=("Times New Roman", 30)
-                ).place(relx=0.5, rely=0.2, anchor=tk.CENTER)
+                ).place(relx=0.7, rely=0.7, anchor=tk.CENTER)
 
             recommendation = ''
 
@@ -388,12 +393,7 @@ class Program(Questions, ApiParent):
                         self.add_minutes(data, hh, mm, i, minutes),
                         ))
 
-    def execute(self) -> None:    
-        try:
-            os.system("taskkill /im HealthApp.exe")
-        except Exception: # ignore keyboard interrupt
-            pass
-        
+    def execute(self) -> None:
         self.activate_notifs(self.notifications)
         self.after(0, self.update())
         self.home()
@@ -407,7 +407,6 @@ def main(*, erase_data: bool = False) -> None:
     erase_data: bool
         Debugging parameter to erase all data in constants.PREFERENCES.json and user-data.json
     '''
-
     if erase_data: # only for testing purposes; delete in final push
         jsonUtils.clearfiles()
 

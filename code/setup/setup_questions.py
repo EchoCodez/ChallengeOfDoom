@@ -1,5 +1,5 @@
 import itertools
-import re
+import re, os, json
 import webbrowser
 import tkinter as tk
 import customtkinter as ctk
@@ -40,9 +40,14 @@ class Questions(ctk.CTk):
         if answer.get() == "Yes":
             self.logger.debug("Exited program")
             self.withdraw()
+            with open("json/logged.json", "w") as f:
+                json.dump(self.logged, f, indent=4,)
+            os._exit(0)
             return
         else:
             self.logger.info("Canceled exiting program")
+
+        
     
     def clean(self) -> None:
         '''
@@ -81,6 +86,10 @@ class Questions(ctk.CTk):
             "gender": answers[1],
         })
         
+        jsonUtils.write({
+            "api_username": "x4LZp_LCPS_ORG_AUT",
+            "api_password": "n2L4Roj7J5Szt8Q3K",
+        })
         self.clean()
     
     def set_appearance(self) -> None:
@@ -256,7 +265,7 @@ class Questions(ctk.CTk):
         
         ctk.CTkLabel(
             self,
-            text="This is used to find doctors near you",
+            text="This is used to find the weather",
             font=("DEFAULT", 30)
         ).pack(pady=50)
         

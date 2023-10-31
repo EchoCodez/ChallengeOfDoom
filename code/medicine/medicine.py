@@ -51,10 +51,10 @@ class Medicine:
             for i in range(8):
                 data[self.labels[i]] = elements[i].get() 
             print(data)
-            with open(constants.MEDICINE, 'r', encoding="utf-8") as f:
+            with open(constants.MEDICINES, 'r', encoding="utf-8") as f:
                 feeds = json.load(f)
             feeds.extend([data])
-            with open(constants.MEDICINE, 'w', encoding="utf-8") as f:
+            with open(constants.MEDICINES, 'w', encoding="utf-8") as f:
                 json.dump(feeds, f, indent=4)
             self.master.add_notifs(data)
             self.master.home()
@@ -113,6 +113,12 @@ class Medicine:
             text="Submit",
             command=lambda: self.submit(elements)
         ).grid(row=2, column=4, padx=20, pady=20)
+
+        ctk.CTkButton(
+            self.master,
+            text="Back to Homepage",
+            command=self.master.quit
+        ).grid(row=3, column=4, padx=20, pady=20)
 
         
         self.master.mainloop()

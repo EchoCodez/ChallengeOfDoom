@@ -1148,272 +1148,89 @@
             ]
         }
     ],
-    "36": [
+    "41": [
         {
-            "ID": 10,
-            "Name": "Abdominal pain",
+            "ID": 145,
+            "Name": "Feeling of tension in the legs",
             "HasRedFlag": false,
             "HealthSymptomLocationIDs": [
-                16,
-                36
-            ],
-            "ProfName": "",
-            "Synonyms": [
-                " Stomach ache"
-            ]
-        },
-        {
-            "ID": 44,
-            "Name": "Nausea",
-            "HasRedFlag": false,
-            "HealthSymptomLocationIDs": [
-                6,
-                22,
-                15,
-                31,
-                16,
-                36,
-                17,
-                47
+                10,
+                49,
+                43,
+                41
             ],
             "ProfName": "",
             "Synonyms": []
         },
         {
-            "ID": 45,
-            "Name": "Heartburn",
+            "ID": 146,
+            "Name": "Leg cramps",
             "HasRedFlag": false,
             "HealthSymptomLocationIDs": [
-                6,
-                24,
-                15,
-                31,
-                16,
-                36
+                10,
+                44,
+                49,
+                43,
+                41
             ],
             "ProfName": "",
             "Synonyms": [
-                "Pyrosis"
+                "Foot cramps",
+                "Muscle cramps",
+                "Leg muscle cramps"
             ]
         },
         {
-            "ID": 48,
-            "Name": "Bloated feeling in the stomach",
+            "ID": 256,
+            "Name": "Knee pain",
             "HasRedFlag": false,
             "HealthSymptomLocationIDs": [
-                16,
-                36
+                10,
+                41
             ],
             "ProfName": "",
             "Synonyms": [
-                "Feeling full"
+                "Pain in the knee"
             ]
         },
         {
-            "ID": 49,
-            "Name": "Cravings",
-            "HasRedFlag": false,
-            "HealthSymptomLocationIDs": [
-                6,
-                25,
-                16,
-                36
-            ],
-            "ProfName": "",
-            "Synonyms": [
-                "Binge eating"
-            ]
-        },
-        {
-            "ID": 50,
-            "Name": "Diarrhea",
-            "HasRedFlag": false,
-            "HealthSymptomLocationIDs": [
-                16,
-                36,
-                40
-            ],
-            "ProfName": "",
-            "Synonyms": [
-                "Diarrhoea",
-                "Loose stool",
-                "Watery stool"
-            ]
-        },
-        {
-            "ID": 54,
-            "Name": "Reduced appetite",
-            "HasRedFlag": false,
-            "HealthSymptomLocationIDs": [
-                6,
-                25,
-                17,
-                47,
-                36
-            ],
-            "ProfName": "",
-            "Synonyms": [
-                "Loss of appetite",
-                "Decreased appetite",
-                "Decrease in hunger"
-            ]
-        },
-        {
-            "ID": 92,
-            "Name": "Early satiety",
-            "HasRedFlag": false,
-            "HealthSymptomLocationIDs": [
-                16,
-                36
-            ],
-            "ProfName": "",
-            "Synonyms": []
-        },
-        {
-            "ID": 101,
-            "Name": "Vomiting",
-            "HasRedFlag": false,
-            "HealthSymptomLocationIDs": [
-                6,
-                25,
-                16,
-                36
-            ],
-            "ProfName": "",
-            "Synonyms": [
-                "Throwing up"
-            ]
-        },
-        {
-            "ID": 131,
-            "Name": "Increased appetite",
-            "HasRedFlag": false,
-            "HealthSymptomLocationIDs": [
-                6,
-                25,
-                17,
-                47,
-                36
-            ],
-            "ProfName": "",
-            "Synonyms": [
-                "Increase in hunger"
-            ]
-        },
-        {
-            "ID": 153,
-            "Name": "Fast, deepened breathing",
-            "HasRedFlag": false,
-            "HealthSymptomLocationIDs": [
-                6,
-                24,
-                25,
-                15,
-                31,
-                16,
-                36
-            ],
-            "ProfName": "",
-            "Synonyms": [
-                "Fast breathing",
-                "Hyperventilation"
-            ]
-        },
-        {
-            "ID": 154,
-            "Name": "Flatulence",
-            "HasRedFlag": false,
-            "HealthSymptomLocationIDs": [
-                16,
-                36
-            ],
-            "ProfName": "",
-            "Synonyms": [
-                "Wind"
-            ]
-        },
-        {
-            "ID": 179,
-            "Name": "Stomach burning",
-            "HasRedFlag": false,
-            "HealthSymptomLocationIDs": [
-                16,
-                36
-            ],
-            "ProfName": "",
-            "Synonyms": [
-                "Burning abdominal pain",
-                "Burning stomach ache"
-            ]
-        },
-        {
-            "ID": 181,
-            "Name": "Vomiting blood",
+            "ID": 984,
+            "Name": "Absence of a pulse",
             "HasRedFlag": true,
             "HealthSymptomLocationIDs": [
                 6,
-                25,
+                24,
+                22,
+                7,
+                29,
+                10,
+                41,
                 16,
-                36
-            ],
-            "ProfName": "",
-            "Synonyms": []
-        },
-        {
-            "ID": 188,
-            "Name": "Abdominal guarding",
-            "HasRedFlag": false,
-            "HealthSymptomLocationIDs": [
-                16,
-                36
+                38
             ],
             "ProfName": "",
             "Synonyms": [
-                "Hard belly",
-                "Tension of abdominal wall muscles"
+                "Absence of the pulse",
+                "Acrotism",
+                "Pulselessness"
             ]
         },
         {
-            "ID": 191,
-            "Name": "Rebound tenderness",
+            "ID": 1010,
+            "Name": "Leg pain",
             "HasRedFlag": false,
             "HealthSymptomLocationIDs": [
+                10,
+                49,
+                41,
+                43,
                 16,
-                36
-            ],
-            "ProfName": "Blumberg sign",
-            "Synonyms": [
-                "Blumberg sign"
-            ]
-        },
-        {
-            "ID": 192,
-            "Name": "Bulging abdominal wall",
-            "HasRedFlag": false,
-            "HealthSymptomLocationIDs": [
-                16,
-                36
+                39
             ],
             "ProfName": "",
             "Synonyms": [
-                "Abdomen deformity",
-                "Stomach deformity",
-                "Stomach bump"
-            ]
-        },
-        {
-            "ID": 989,
-            "Name": "Distended abdomen",
-            "HasRedFlag": false,
-            "HealthSymptomLocationIDs": [
-                16,
-                36
-            ],
-            "ProfName": "",
-            "Synonyms": [
-                "Distended stomach",
-                "Abdominal distension",
-                "Stomach bloating"
+                "Pain in the leg",
+                "Pain in leg"
             ]
         }
     ]
