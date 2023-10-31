@@ -68,10 +68,10 @@ class Notification:
         try:
             message = (service.users().messages().send(userId="me", body=email)
                     .execute())
-            self.logger.debug('Message sent successfully by email/phone!')
+            self.logger.debug('Message sent successfully by email!')
             return message
         except HttpError as error:
-            self.logger.debug(error)        
+            self.logger.debug(error)
     
     def __repr__(self) -> str:
         return "{0}(title={1}, message={2}, time={3})".format(self.__class__.__name__, self.title, self.message, self.time)
