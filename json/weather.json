@@ -1,46 +1,44 @@
 {
     "coord": {
-        "lon": -78.66,
-        "lat": 37.43
+        "lon": -77.4875,
+        "lat": 39.0437
     },
     "weather": [
         {
             "id": 803,
             "main": "Clouds",
             "description": "broken clouds",
-            "icon": "04d"
+            "icon": "04n"
         }
     ],
     "base": "stations",
     "main": {
-        "temp": 30.39,
-        "feels_like": 30.84,
-        "temp_min": 27.88,
-        "temp_max": 31.84,
-        "pressure": 1013,
-        "humidity": 45,
-        "sea_level": 1013,
-        "grnd_level": 992
+        "temp": 11.06,
+        "feels_like": 10,
+        "temp_min": 10.14,
+        "temp_max": 12.18,
+        "pressure": 1014,
+        "humidity": 68
     },
     "visibility": 10000,
     "wind": {
-        "speed": 3.82,
-        "deg": 214,
-        "gust": 6.1
+        "speed": 5.66,
+        "deg": 350,
+        "gust": 8.75
     },
     "clouds": {
-        "all": 70
+        "all": 75
     },
-    "dt": 1692033694,
+    "dt": 1698719128,
     "sys": {
-        "type": 1,
-        "id": 4157,
+        "type": 2,
+        "id": 2004257,
         "country": "US",
-        "sunrise": 1692008985,
-        "sunset": 1692058151
+        "sunrise": 1698665689,
+        "sunset": 1698703934
     },
     "timezone": -14400,
-    "id": 4749652,
-    "name": "Buckingham",
+    "id": 4744870,
+    "name": "Ashburn",
     "cod": 200
 }

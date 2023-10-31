@@ -148,7 +148,8 @@ class Program(Questions, ApiParent):
         
         def _weather():
             self.clean()
-
+            info = WeatherData()
+            info.weather()
             weather_data = jsonUtils.read(constants.WEATHER_DATA)
             print(weather_data)
 

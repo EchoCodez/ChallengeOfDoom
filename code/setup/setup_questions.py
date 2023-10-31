@@ -68,6 +68,7 @@ class Questions(ctk.CTk):
             Question("What is your gender?", ["Male", "Female"]),
             CustomQuestion(self.get_year_of_birth),
             CustomQuestion(self.get_contact),
+            CustomQuestion(self.get_location),
             include_end=False
         )
         answers = prequiz.begin()
@@ -264,7 +265,7 @@ class Questions(ctk.CTk):
         
         ctk.CTkLabel(
             self,
-            text="This is used to find doctors near you",
+            text="This is used to find the weather",
             font=("DEFAULT", 30)
         ).pack(pady=50)
         

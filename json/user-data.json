@@ -4,5 +4,9 @@
     "gender": "Male",
     "api_username": "x4LZp_LCPS_ORG_AUT",
     "api_password": "n2L4Roj7J5Szt8Q3K",
-    "disclaimer_read": true
+    "disclaimer_read": true,
+    "location": {
+        "latitude": 39.0437192,
+        "longitude": -77.4874899
+    }
 }

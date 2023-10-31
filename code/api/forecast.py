@@ -10,13 +10,21 @@ from utils import constants
 
 # class WeatherData(UseLogger):
 class WeatherData:
-    def weather(self):
-        url = 'https://api.openweathermap.org/data/2.5/weather?lat=37.43&lon=-78.66&units=metric&appid=ae87b8e94884025fe72320419bba15eb'
+    def __init__(self) -> None:
+        pass
+    def weather(self) -> None:
+        with open ("json/user-data.json", "r") as f:
+            contents = json.load(f)
+            lat = contents["location"]["latitude"]
+            lon = contents["location"]["longitude"]
+
+        url = f'https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&units=metric&appid=ae87b8e94884025fe72320419bba15eb'
        
         try:
             weatherResult = requests.get(
                 url
             )
+            
         except requests.exceptions.JSONDecodeError as e:
             exit(0)
 
@@ -24,7 +32,7 @@ class WeatherData:
         with open(constants.WEATHER_DATA, "w") as f:
             f.write(json.dumps(weatherResult.json(), indent=4))
 
-        url = 'http://api.openweathermap.org/data/2.5/air_pollution?lat=-78.66&lon=37.43&appid=ae87b8e94884025fe72320419bba15eb'
+        url = f'http://api.openweathermap.org/data/2.5/air_pollution?lat={lat}&lon={lon}&appid=ae87b8e94884025fe72320419bba15eb'
 
         try:
             airQuality = requests.get(
